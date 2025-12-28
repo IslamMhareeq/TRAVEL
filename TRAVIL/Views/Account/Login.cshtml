@@ -9,132 +9,452 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Travel Agency</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
         body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
         }
 
-        .card {
+        .navbar-brand {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            font-weight: 700;
+            font-size: 20px;
+            color: white;
+            text-decoration: none;
+        }
+
+            .navbar-brand i {
+                margin-right: 8px;
+                font-size: 24px;
+            }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            padding: 60px 40px;
             border: none;
-            border-radius: 15px;
             overflow: hidden;
+            position: relative;
         }
 
-        .card-header {
-            padding: 2rem;
-            border-radius: 15px 15px 0 0 !important;
+            .login-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 45px;
         }
+
+        .login-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 32px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .login-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            font-size: 14px;
+            color: #7c8db0;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+            .form-group label {
+                display: block;
+                font-size: 13px;
+                font-weight: 600;
+                color: #2d3748;
+                margin-bottom: 8px;
+                letter-spacing: 0.3px;
+            }
 
         .form-control {
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            border: 1px solid #e0e0e0;
-            transition: all 0.3s ease;
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: #f8fafc;
+            font-weight: 500;
         }
+
+            .form-control::placeholder {
+                color: #cbd5e0;
+            }
 
             .form-control:focus {
                 border-color: #667eea;
-                box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+                background-color: white;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+                outline: none;
             }
 
-        .btn-primary {
-            background-color: #667eea;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            .form-control:hover:not(:focus) {
+                border-color: #cbd5e0;
+            }
+
+        .password-wrapper {
+            position: relative;
         }
 
-            .btn-primary:hover {
-                background-color: #764ba2;
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #cbd5e0;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s ease;
+        }
+
+            .toggle-password:hover {
+                color: #667eea;
+            }
+
+        .form-check {
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-check-input {
+            width: 18px;
+            height: 18px;
+            border: 1.5px solid #cbd5e0;
+            border-radius: 6px;
+            cursor: pointer;
+            background: white;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+            .form-check-input:hover {
+                border-color: #667eea;
+            }
+
+            .form-check-input:checked {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border-color: transparent;
+            }
+
+        .form-check-label {
+            font-size: 14px;
+            color: #4a5568;
+            cursor: pointer;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 24px;
+        }
+
+            .forgot-password a {
+                font-size: 13px;
+                color: #667eea;
+                text-decoration: none;
+                font-weight: 600;
+                transition: color 0.3s ease;
+            }
+
+                .forgot-password a:hover {
+                    color: #764ba2;
+                    text-decoration: underline;
+                }
+
+        .btn-login {
+            width: 100%;
+            padding: 13px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: 0.3px;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+            .btn-login:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+            }
+
+            .btn-login:active {
+                transform: translateY(0);
+            }
+
+            .btn-login:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 32px 0;
+            gap: 12px;
+        }
+
+            .divider::before,
+            .divider::after {
+                content: '';
+                flex: 1;
+                height: 1px;
+                background-color: #e2e8f0;
+            }
+
+            .divider span {
+                font-size: 12px;
+                color: #a0aec0;
+                font-weight: 600;
+                letter-spacing: 0.5px;
+            }
+
+        .social-login {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        .social-btn {
+            padding: 13px 12px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .social-btn:hover {
+                border-color: #667eea;
+                background-color: #f0f3ff;
                 transform: translateY(-2px);
             }
 
-        .invalid-feedback {
-            color: #dc3545;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-        }
-
-        a {
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-            a:hover {
-                opacity: 0.8;
+            .social-btn:active {
+                transform: translateY(0);
             }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 28px;
+            font-size: 14px;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+            .signup-link a {
+                color: #667eea;
+                text-decoration: none;
+                font-weight: 700;
+                transition: color 0.3s ease;
+            }
+
+                .signup-link a:hover {
+                    color: #764ba2;
+                }
+
+        .alert {
+            border-radius: 12px;
+            border: 1.5px solid;
+            margin-bottom: 24px;
+            font-size: 13px;
+            padding: 12px 16px;
+            font-weight: 500;
+        }
+
+        .alert-danger {
+            background-color: #fef2f2;
+            border-color: #fecaca;
+            color: #dc2626;
+        }
+
+        .alert-success {
+            background-color: #f0fdf4;
+            border-color: #bbf7d0;
+            color: #16a34a;
+        }
+
+        .d-none {
+            display: none !important;
+        }
+
+        .spinner-border {
+            width: 16px;
+            height: 16px;
+            border-width: 2px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card shadow-lg">
-                    <div class="card-header bg-primary text-white">
-                        <h3 class="mb-0">Login to Travel Agency</h3>
-                    </div>
-                    <div class="card-body p-4">
-                        <form id="loginForm">
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email Address</label>
-                                <input type="email" class="form-control" id="email" name="email"
-                                       placeholder="Enter your email" required>
-                                <div class="invalid-feedback d-block" id="emailError"></div>
-                            </div>
+    <a href="#" class="navbar-brand">
+        <i class="fas fa-paper-plane"></i>TRAVIL
+    </a>
 
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" name="password"
-                                       placeholder="Enter your password" required>
-                                <div class="invalid-feedback d-block" id="passwordError"></div>
-                            </div>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-icon">
+                    <i class="fas fa-arrow-right-to-bracket"></i>
+                </div>
+                <h1>Sign in with email</h1>
+                <p>Welcome back to your travel adventures</p>
+            </div>
 
-                            <div class="mb-3 form-check">
-                                <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
-                                <label class="form-check-label" for="rememberMe">
-                                    Remember me
-                                </label>
-                            </div>
+            <div id="errorAlert" class="alert alert-danger d-none" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <span id="errorMessage"></span>
+            </div>
 
-                            <div id="errorAlert" class="alert alert-danger d-none" role="alert"></div>
+            <div id="successAlert" class="alert alert-success d-none" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
+                <span id="successMessage"></span>
+            </div>
 
-                            <div id="successAlert" class="alert alert-success d-none" role="alert"></div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required>
+                </div>
 
-                            <button type="submit" class="btn btn-primary w-100 py-2">
-                                <span id="loginBtn">Login</span>
-                                <span id="loginLoader" class="d-none">
-                                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                                    Logging in...
-                                </span>
-                            </button>
-                        </form>
-
-                        <hr class="my-4">
-
-                        <p class="text-center">
-                            Don't have an account?
-                            <a href="/account/register" class="text-primary fw-bold">Register here</a>
-                        </p>
-
-                        <p class="text-center">
-                            <a href="#" class="text-muted small">Forgot your password?</a>
-                        </p>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required style="padding-right: 45px;">
+                        <button type="button" class="toggle-password" onclick="loginApp.togglePassword()">
+                            <i class="fas fa-eye"></i>
+                        </button>
                     </div>
                 </div>
 
-                <div class="alert alert-info mt-4" role="alert">
-                    <h5>Demo Credentials</h5>
-                    <p class="mb-0">
-                        <strong>Email:</strong> john@example.com<br>
-                        <strong>Password:</strong> Password123!
-                    </p>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
+                    <label class="form-check-label" for="rememberMe">Remember me</label>
                 </div>
+
+                <div class="forgot-password">
+                    <a href="#">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn-login" id="submitBtn">
+                    <span id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Get Started
+                    </span>
+                    <span id="loginLoader" class="d-none">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Signing in...
+                    </span>
+                </button>
+            </form>
+
+            <div class="divider">
+                <span>Or sign in with</span>
+            </div>
+
+            <div class="social-login">
+                <button type="button" class="social-btn" title="Sign in with Google">
+                    <i class="fab fa-google" style="color: #4285f4;"></i>
+                </button>
+                <button type="button" class="social-btn" title="Sign in with Facebook">
+                    <i class="fab fa-facebook" style="color: #1877f2;"></i>
+                </button>
+                <button type="button" class="social-btn" title="Sign in with Apple">
+                    <i class="fab fa-apple" style="color: #000;"></i>
+                </button>
+            </div>
+
+            <div class="signup-link">
+                Don't have an account? <a href="/account/register">Create one</a>
             </div>
         </div>
+    </div>
+
+    <div class="footer">
+        © 2025 TRAVIL - All rights reserved
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
