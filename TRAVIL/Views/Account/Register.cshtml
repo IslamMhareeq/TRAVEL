@@ -2,260 +2,267 @@
     ViewData["Title"] = "Register";
 }
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Travel Agency</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-<style>
-    body {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    .register-container {
-        width: 100%;
-        padding: 20px;
-        max-width: 700px;
-    }
+        .register-container {
+            width: 100%;
+            padding: 20px;
+            max-width: 700px;
+        }
 
-    .card {
-        border: none;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-    }
+        .card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
 
-    .card-header {
-        padding: 2rem;
-        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-        text-align: center;
-    }
+        .card-header {
+            padding: 2rem;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            text-align: center;
+        }
 
-    .card-header h3 {
-        margin: 0;
-        font-weight: 700;
-        font-size: 1.8rem;
-        color: #ffffff;
-    }
+        .card-header h3 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: #ffffff;
+        }
 
-    .card-body {
-        padding: 2rem;
-        background-color: #ffffff;
-    }
+        .card-body {
+            padding: 2rem;
+            background-color: #ffffff;
+        }
 
-    .form-label {
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 0.5rem;
-        font-size: 0.95rem;
-    }
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
 
-    .form-control {
-        border-radius: 8px;
-        padding: 0.75rem 1rem;
-        border: 1px solid #e0e0e0;
-        transition: all 0.3s ease;
-        font-size: 0.95rem;
-        background-color: #f8f9fa;
-    }
+        .form-control {
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            background-color: #f8f9fa;
+        }
 
-    .form-control:focus {
-        background-color: #ffffff;
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-        outline: none;
-    }
+        .form-control:focus {
+            background-color: #ffffff;
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            outline: none;
+        }
 
-    .form-control::placeholder {
-        color: #999;
-        font-size: 0.85rem;
-    }
+        .form-control::placeholder {
+            color: #999;
+            font-size: 0.85rem;
+        }
 
-    .invalid-feedback {
-        color: #dc3545;
-        font-size: 0.85rem;
-        margin-top: 0.25rem;
-        display: block;
-        font-weight: 500;
-    }
+        .invalid-feedback {
+            color: #dc3545;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            display: block;
+            font-weight: 500;
+        }
 
-    .form-check-input {
-        width: 1.25em;
-        height: 1.25em;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
+        .form-check-input {
+            width: 1.25em;
+            height: 1.25em;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-    .form-check-input:checked {
-        background-color: #28a745;
-        border-color: #28a745;
-        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
-    }
+        .form-check-input:checked {
+            background-color: #28a745;
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
 
-    .form-check-label {
-        cursor: pointer;
-        margin-left: 0.5rem;
-        color: #555;
-        font-size: 0.95rem;
-    }
+        .form-check-label {
+            cursor: pointer;
+            margin-left: 0.5rem;
+            color: #555;
+            font-size: 0.95rem;
+        }
 
-    .form-check-label a {
-        color: #667eea;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
+        .form-check-label a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
 
-    .form-check-label a:hover {
-        color: #764ba2;
-        text-decoration: underline;
-    }
+        .form-check-label a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
 
-    .btn-success {
-        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-        border: none;
-        border-radius: 8px;
-        font-weight: 700;
-        padding: 0.75rem 1.5rem;
-        transition: all 0.3s ease;
-        color: #ffffff;
-        font-size: 1rem;
-    }
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+            color: #ffffff;
+            font-size: 1rem;
+        }
 
-    .btn-success:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
-        color: #ffffff;
-        background: linear-gradient(135deg, #218838 0%, #1aa179 100%);
-    }
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+            color: #ffffff;
+            background: linear-gradient(135deg, #218838 0%, #1aa179 100%);
+        }
 
-    .btn-success:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
+        .btn-success:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
 
-    .alert {
-        border-radius: 8px;
-        border: none;
-        margin-bottom: 1rem;
-    }
+        .alert {
+            border-radius: 8px;
+            border: none;
+            margin-bottom: 1rem;
+        }
 
-    .alert-danger {
-        background-color: #f8d7da;
-        color: #721c24;
-    }
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
 
-    .alert-success {
-        background-color: #d4edda;
-        color: #155724;
-    }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
 
-    .d-none {
-        display: none !important;
-    }
+        .d-none {
+            display: none !important;
+        }
 
-    hr {
-        border: none;
-        border-top: 1px solid #e0e0e0;
-        margin: 2rem 0;
-    }
+        hr {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 2rem 0;
+        }
 
-    .text-center {
-        text-align: center;
-    }
+        .text-center {
+            text-align: center;
+        }
 
-    .text-center p {
-        color: #666;
-        font-size: 0.95rem;
-    }
+        .text-center p {
+            color: #666;
+            font-size: 0.95rem;
+        }
 
-    .text-center a {
-        color: #667eea;
-        text-decoration: none;
-        font-weight: 600;
-    }
+        .text-center a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
 
-    .text-center a:hover {
-        color: #764ba2;
-        text-decoration: underline;
-    }
+        .text-center a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
 
-    .password-strength {
-        margin-top: 0.5rem;
-    }
+        .password-strength {
+            margin-top: 0.5rem;
+        }
 
-    .password-strength-bar {
-        height: 4px;
-        border-radius: 2px;
-        margin-bottom: 0.5rem;
-        background-color: #e0e0e0;
-        overflow: hidden;
-    }
+        .password-strength-bar {
+            height: 4px;
+            border-radius: 2px;
+            margin-bottom: 0.5rem;
+            background-color: #e0e0e0;
+            overflow: hidden;
+        }
 
-    .password-strength-bar-fill {
-        height: 100%;
-        width: 0%;
-        transition: width 0.3s ease, background-color 0.3s ease;
-        border-radius: 2px;
-    }
+        .password-strength-bar-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease, background-color 0.3s ease;
+            border-radius: 2px;
+        }
 
-    .password-strength-text {
-        font-size: 0.85rem;
-        font-weight: 600;
-    }
+        .password-strength-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
 
-    .password-strength-weak {
-        color: #dc3545;
-    }
+        .password-strength-weak {
+            color: #dc3545;
+        }
 
-    .password-strength-fair {
-        color: #ffc107;
-    }
+        .password-strength-fair {
+            color: #ffc107;
+        }
 
-    .password-strength-good {
-        color: #17a2b8;
-    }
+        .password-strength-good {
+            color: #17a2b8;
+        }
 
-    .password-strength-strong {
-        color: #28a745;
-    }
+        .password-strength-strong {
+            color: #28a745;
+        }
 
-    .toggle-password {
-        cursor: pointer;
-        color: #667eea;
-        transition: all 0.3s ease;
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
+        .toggle-password {
+            cursor: pointer;
+            color: #667eea;
+            transition: all 0.3s ease;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
 
-    .toggle-password:hover {
-        color: #764ba2;
-    }
+        .toggle-password:hover {
+            color: #764ba2;
+        }
 
-    .input-group {
-        position: relative;
-    }
+        .input-group {
+            position: relative;
+        }
 
-    .form-text {
-        color: #999;
-        font-size: 0.85rem;
-    }
+        .form-text {
+            color: #999;
+            font-size: 0.85rem;
+        }
 
-    .row {
-        margin: 0 -0.75rem;
-    }
+        .row {
+            margin: 0 -0.75rem;
+        }
 
-    .row > [class*="col-"] {
-        padding: 0 0.75rem;
-    }
-</style>
-
+        .row > [class*="col-"] {
+            padding: 0 0.75rem;
+        }
+    </style>
+</head>
+<body>
 <div class="register-container">
     <div class="card">
         <div class="card-header">
@@ -357,7 +364,7 @@
                 <div class="mb-3 form-check">
                     <input type="checkbox" class="form-check-input" id="agreeTerms" name="agreeTerms" required>
                     <label class="form-check-label" for="agreeTerms">
-                        I agree to the <a href="/account/terms" target="_blank">Terms & Conditions</a> and
+                        I agree to the <a href="/account/terms" target="_blank">Terms &amp; Conditions</a> and
                         <a href="/account/privacy" target="_blank">Privacy Policy</a> <span style="color: #dc3545;">*</span>
                     </label>
                     <div class="invalid-feedback" id="agreeTermsError"></div>
@@ -394,7 +401,13 @@
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script>
+    function isValidEmail(email) {
+        var pattern = new RegExp(/^[a-zA-Z0-9._%-]+\@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
+        return pattern.test(email);
+    }
+
     function togglePassword(fieldId) {
         const field = document.getElementById(fieldId);
         const icon = event.target.closest('.toggle-password').querySelector('i');
@@ -559,7 +572,6 @@
         }
     });
 
-   
     document.getElementById('email').addEventListener('blur', function() {
         if (this.value && !isValidEmail(this.value)) {
             document.getElementById('emailError').textContent = 'Please enter a valid email address';
@@ -577,3 +589,5 @@
         }
     });
 </script>
+</body>
+</html>

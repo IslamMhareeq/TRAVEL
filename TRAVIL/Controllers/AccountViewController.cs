@@ -5,35 +5,52 @@ namespace TRAVEL.Controllers
     /// <summary>
     /// Controller for Account Views (Login and Register pages)
     /// </summary>
+    [Route("account")]
     public class AccountViewController : Controller
     {
         /// <summary>
         /// Login page
         /// </summary>
-        [HttpGet]
+        [HttpGet("login")]
         public IActionResult Login()
         {
-            return View();
+            return View("~/Views/Account/Login.cshtml");
         }
 
         /// <summary>
         /// Register page
         /// </summary>
-        [HttpGet]
+        [HttpGet("register")]
         public IActionResult Register()
         {
-            return View();
+            return View("~/Views/Account/Register.cshtml");
         }
 
         /// <summary>
         /// User dashboard page
         /// </summary>
-        [HttpGet]
+        [HttpGet("dashboard")]
         public IActionResult Dashboard()
         {
-            // Check if user is authenticated by checking localStorage token
-            // For now, just return the view
-            return View();
+            return View("~/Views/Account/Dashboard.cshtml");
+        }
+
+        /// <summary>
+        /// User profile page
+        /// </summary>
+        [HttpGet("profile")]
+        public IActionResult Profile()
+        {
+            return View("~/Views/Account/Profile.cshtml");
+        }
+
+        /// <summary>
+        /// User bookings page
+        /// </summary>
+        [HttpGet("bookings")]
+        public IActionResult MyBookings()
+        {
+            return View("~/Views/Account/MyBookings.cshtml");
         }
     }
 }
