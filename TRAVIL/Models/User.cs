@@ -96,7 +96,7 @@ namespace TRAVEL.Models
 
         [StringLength(500)]
         [Display(Name = "Profile Image URL")]
-        public string ProfileImageUrl { get; set; }
+        public string? ProfileImageUrl { get; set; } // NULLABLE - Can be null
 
         [Display(Name = "Email Verified")]
         public bool EmailVerified { get; set; } = false;
@@ -220,13 +220,13 @@ namespace TRAVEL.Models
         public int UserId { get; set; }
 
         [Display(Name = "First Name")]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
 
         [Display(Name = "Last Name")]
-        public string LastName { get; set; }
+        public string LastName { get; set; } = string.Empty;
 
         [Display(Name = "Email")]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [Display(Name = "Role")]
         public UserRole Role { get; set; }
@@ -235,7 +235,7 @@ namespace TRAVEL.Models
         public UserStatus Status { get; set; }
 
         [Display(Name = "Phone Number")]
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } = string.Empty;
 
         [Display(Name = "Created Date")]
         public DateTime CreatedAt { get; set; }

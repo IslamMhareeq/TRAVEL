@@ -40,12 +40,12 @@
             text-align: center;
         }
 
-        .card-header h3 {
-            margin: 0;
-            font-weight: 700;
-            font-size: 1.8rem;
-            color: #ffffff;
-        }
+            .card-header h3 {
+                margin: 0;
+                font-weight: 700;
+                font-size: 1.8rem;
+                color: #ffffff;
+            }
 
         .card-body {
             padding: 2rem;
@@ -68,17 +68,17 @@
             background-color: #f8f9fa;
         }
 
-        .form-control:focus {
-            background-color: #ffffff;
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-            outline: none;
-        }
+            .form-control:focus {
+                background-color: #ffffff;
+                border-color: #667eea;
+                box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+                outline: none;
+            }
 
-        .form-control::placeholder {
-            color: #999;
-            font-size: 0.85rem;
-        }
+            .form-control::placeholder {
+                color: #999;
+                font-size: 0.85rem;
+            }
 
         .invalid-feedback {
             color: #dc3545;
@@ -96,11 +96,11 @@
             transition: all 0.3s ease;
         }
 
-        .form-check-input:checked {
-            background-color: #28a745;
-            border-color: #28a745;
-            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
-        }
+            .form-check-input:checked {
+                background-color: #28a745;
+                border-color: #28a745;
+                box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+            }
 
         .form-check-label {
             cursor: pointer;
@@ -109,17 +109,17 @@
             font-size: 0.95rem;
         }
 
-        .form-check-label a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
+            .form-check-label a {
+                color: #667eea;
+                text-decoration: none;
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
 
-        .form-check-label a:hover {
-            color: #764ba2;
-            text-decoration: underline;
-        }
+                .form-check-label a:hover {
+                    color: #764ba2;
+                    text-decoration: underline;
+                }
 
         .btn-success {
             background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
@@ -132,17 +132,17 @@
             font-size: 1rem;
         }
 
-        .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
-            color: #ffffff;
-            background: linear-gradient(135deg, #218838 0%, #1aa179 100%);
-        }
+            .btn-success:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+                color: #ffffff;
+                background: linear-gradient(135deg, #218838 0%, #1aa179 100%);
+            }
 
-        .btn-success:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+            .btn-success:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
 
         .alert {
             border-radius: 8px;
@@ -174,21 +174,21 @@
             text-align: center;
         }
 
-        .text-center p {
-            color: #666;
-            font-size: 0.95rem;
-        }
+            .text-center p {
+                color: #666;
+                font-size: 0.95rem;
+            }
 
-        .text-center a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-        }
+            .text-center a {
+                color: #667eea;
+                text-decoration: none;
+                font-weight: 600;
+            }
 
-        .text-center a:hover {
-            color: #764ba2;
-            text-decoration: underline;
-        }
+                .text-center a:hover {
+                    color: #764ba2;
+                    text-decoration: underline;
+                }
 
         .password-strength {
             margin-top: 0.5rem;
@@ -240,9 +240,9 @@
             transform: translateY(-50%);
         }
 
-        .toggle-password:hover {
-            color: #764ba2;
-        }
+            .toggle-password:hover {
+                color: #764ba2;
+            }
 
         .input-group {
             position: relative;
@@ -257,337 +257,151 @@
             margin: 0 -0.75rem;
         }
 
-        .row > [class*="col-"] {
-            padding: 0 0.75rem;
-        }
+            .row > [class*="col-"] {
+                padding: 0 0.75rem;
+            }
     </style>
 </head>
 <body>
-<div class="register-container">
-    <div class="card">
-        <div class="card-header">
-            <h3>✈️ Create Your Account</h3>
-        </div>
+    <div class="register-container">
+        <div class="card">
+            <div class="card-header">
+                <h3>✈️ Create Your Account</h3>
+            </div>
 
-        <div class="card-body">
-            <form id="registerForm">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="firstName" class="form-label">First Name <span style="color: #dc3545;">*</span></label>
-                        <input type="text" class="form-control" id="firstName" name="firstName"
-                               placeholder="John" required minlength="2" maxlength="50">
-                        <div class="invalid-feedback" id="firstNameError"></div>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="lastName" class="form-label">Last Name <span style="color: #dc3545;">*</span></label>
-                        <input type="text" class="form-control" id="lastName" name="lastName"
-                               placeholder="Doe" required minlength="2" maxlength="50">
-                        <div class="invalid-feedback" id="lastNameError"></div>
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email Address <span style="color: #dc3545;">*</span></label>
-                    <input type="email" class="form-control" id="email" name="email"
-                           placeholder="john@example.com" required>
-                    <div class="invalid-feedback" id="emailError"></div>
-                    <small class="form-text">We'll never share your email with anyone.</small>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="password" class="form-label">Password <span style="color: #dc3545;">*</span></label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" id="password" name="password"
-                                   placeholder="Min 6 characters" required minlength="6">
-                            <span class="toggle-password" onclick="togglePassword('password')">
-                                <i class="fas fa-eye"></i>
-                            </span>
+            <div class="card-body">
+                <form id="registerForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName" class="form-label">First Name <span style="color: #dc3545;">*</span></label>
+                            <input type="text" class="form-control" id="firstName" name="firstName"
+                                   placeholder="John" required minlength="2" maxlength="50">
+                            <div class="invalid-feedback" id="firstNameError"></div>
                         </div>
-                        <div class="password-strength">
-                            <div class="password-strength-bar">
-                                <div class="password-strength-bar-fill" id="passwordStrengthBar"></div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="lastName" class="form-label">Last Name <span style="color: #dc3545;">*</span></label>
+                            <input type="text" class="form-control" id="lastName" name="lastName"
+                                   placeholder="Doe" required minlength="2" maxlength="50">
+                            <div class="invalid-feedback" id="lastNameError"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address <span style="color: #dc3545;">*</span></label>
+                        <input type="email" class="form-control" id="email" name="email"
+                               placeholder="john@example.com" required>
+                        <div class="invalid-feedback" id="emailError"></div>
+                        <small class="form-text">We'll never share your email with anyone.</small>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label">Password <span style="color: #dc3545;">*</span></label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="password" name="password"
+                                       placeholder="Min 6 characters" required minlength="6">
+                                <span class="toggle-password" onclick="registerApp.togglePassword('password')">
+                                    <i class="fas fa-eye"></i>
+                                </span>
                             </div>
-                            <small class="password-strength-text" id="passwordStrengthText"></small>
+                            <div class="password-strength">
+                                <div class="password-strength-bar">
+                                    <div class="password-strength-bar-fill" id="passwordStrengthBar"></div>
+                                </div>
+                                <small class="password-strength-text" id="passwordStrengthText"></small>
+                            </div>
+                            <div class="invalid-feedback" id="passwordError"></div>
+                            <small class="form-text">At least 6 characters, mix uppercase, lowercase, numbers, symbols.</small>
                         </div>
-                        <div class="invalid-feedback" id="passwordError"></div>
-                        <small class="form-text">At least 6 characters, mix uppercase, lowercase, numbers, symbols.</small>
-                    </div>
 
-                    <div class="col-md-6 mb-3">
-                        <label for="confirmPassword" class="form-label">Confirm Password <span style="color: #dc3545;">*</span></label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
-                                   placeholder="Confirm password" required minlength="6">
-                            <span class="toggle-password" onclick="togglePassword('confirmPassword')">
-                                <i class="fas fa-eye"></i>
-                            </span>
+                        <div class="col-md-6 mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm Password <span style="color: #dc3545;">*</span></label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                                       placeholder="Confirm password" required minlength="6">
+                                <span class="toggle-password" onclick="registerApp.togglePassword('confirmPassword')">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                            <div class="invalid-feedback" id="confirmPasswordError"></div>
                         </div>
-                        <div class="invalid-feedback" id="confirmPasswordError"></div>
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="phoneNumber" class="form-label">Phone Number <span style="color: #999;">(Optional)</span></label>
-                    <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber"
-                           placeholder="+1 (123) 456-7890">
-                    <small class="form-text">For booking confirmations and support.</small>
-                </div>
-
-                <div class="mb-3">
-                    <label for="address" class="form-label">Street Address <span style="color: #999;">(Optional)</span></label>
-                    <input type="text" class="form-control" id="address" name="address"
-                           placeholder="123 Main Street" maxlength="100">
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label for="city" class="form-label">City <span style="color: #999;">(Optional)</span></label>
-                        <input type="text" class="form-control" id="city" name="city"
-                               placeholder="New York" maxlength="50">
                     </div>
 
-                    <div class="col-md-4 mb-3">
-                        <label for="country" class="form-label">Country <span style="color: #999;">(Optional)</span></label>
-                        <input type="text" class="form-control" id="country" name="country"
-                               placeholder="USA" maxlength="50">
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">Phone Number <span style="color: #999;">(Optional)</span></label>
+                        <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber"
+                               placeholder="+1 (123) 456-7890">
+                        <small class="form-text">For booking confirmations and support.</small>
                     </div>
 
-                    <div class="col-md-4 mb-3">
-                        <label for="postalCode" class="form-label">Postal Code <span style="color: #999;">(Optional)</span></label>
-                        <input type="text" class="form-control" id="postalCode" name="postalCode"
-                               placeholder="10001" maxlength="20">
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Street Address <span style="color: #999;">(Optional)</span></label>
+                        <input type="text" class="form-control" id="address" name="address"
+                               placeholder="123 Main Street" maxlength="100">
                     </div>
-                </div>
 
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="agreeTerms" name="agreeTerms" required>
-                    <label class="form-check-label" for="agreeTerms">
-                        I agree to the <a href="/account/terms" target="_blank">Terms &amp; Conditions</a> and
-                        <a href="/account/privacy" target="_blank">Privacy Policy</a> <span style="color: #dc3545;">*</span>
-                    </label>
-                    <div class="invalid-feedback" id="agreeTermsError"></div>
-                </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="city" class="form-label">City <span style="color: #999;">(Optional)</span></label>
+                            <input type="text" class="form-control" id="city" name="city"
+                                   placeholder="New York" maxlength="50">
+                        </div>
 
-                <div id="errorAlert" class="alert alert-danger d-none" role="alert">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    <span id="errorMessage"></span>
-                </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="country" class="form-label">Country <span style="color: #999;">(Optional)</span></label>
+                            <input type="text" class="form-control" id="country" name="country"
+                                   placeholder="USA" maxlength="50">
+                        </div>
 
-                <div id="successAlert" class="alert alert-success d-none" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>
-                    <span id="successMessage"></span>
-                </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="postalCode" class="form-label">Postal Code <span style="color: #999;">(Optional)</span></label>
+                            <input type="text" class="form-control" id="postalCode" name="postalCode"
+                                   placeholder="10001" maxlength="20">
+                        </div>
+                    </div>
 
-                <button type="submit" class="btn btn-success w-100 py-2" id="submitBtn">
-                    <span id="registerBtn">
-                        <i class="fas fa-user-plus me-2"></i>Create Account
-                    </span>
-                    <span id="registerLoader" class="d-none">
-                        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                        Creating account...
-                    </span>
-                </button>
-            </form>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="agreeTerms" name="agreeTerms" required>
+                        <label class="form-check-label" for="agreeTerms">
+                            I agree to the <a href="/account/terms" target="_blank">Terms &amp; Conditions</a> and
+                            <a href="/account/privacy" target="_blank">Privacy Policy</a> <span style="color: #dc3545;">*</span>
+                        </label>
+                        <div class="invalid-feedback" id="agreeTermsError"></div>
+                    </div>
 
-            <hr>
+                    <div id="errorAlert" class="alert alert-danger d-none" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <span id="errorMessage"></span>
+                    </div>
 
-            <p class="text-center">
-                Already have an account?
-                <a href="/account/login">Login here</a>
-            </p>
+                    <div id="successAlert" class="alert alert-success d-none" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <span id="successMessage"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 py-2" id="submitBtn">
+                        <span id="registerBtn">
+                            <i class="fas fa-user-plus me-2"></i>Create Account
+                        </span>
+                        <span id="registerLoader" class="d-none">
+                            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                            Creating account...
+                        </span>
+                    </button>
+                </form>
+
+                <hr>
+
+                <p class="text-center">
+                    Already have an account?
+                    <a href="/account/login">Login here</a>
+                </p>
+            </div>
         </div>
     </div>
-</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script>
-    function isValidEmail(email) {
-        var pattern = new RegExp(/^[a-zA-Z0-9._%-]+\@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
-        return pattern.test(email);
-    }
-
-    function togglePassword(fieldId) {
-        const field = document.getElementById(fieldId);
-        const icon = event.target.closest('.toggle-password').querySelector('i');
-
-        if (field.type === 'password') {
-            field.type = 'text';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        } else {
-            field.type = 'password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-        }
-    }
-
-    function checkPasswordStrength(password) {
-        let strength = 0;
-        const strengthBar = document.getElementById('passwordStrengthBar');
-        const strengthText = document.getElementById('passwordStrengthText');
-
-        if (!password) {
-            strengthBar.style.width = '0%';
-            strengthText.textContent = '';
-            return;
-        }
-
-        if (password.length >= 6) strength++;
-        if (password.length >= 8) strength++;
-        if (password.length >= 12) strength++;
-        if (/[a-z]/.test(password)) strength++;
-        if (/[A-Z]/.test(password)) strength++;
-        if (/[0-9]/.test(password)) strength++;
-        if (/[^a-zA-Z0-9]/.test(password)) strength++;
-
-        const percentWidth = (strength / 7) * 100;
-        strengthBar.style.width = percentWidth + '%';
-
-        if (strength <= 2) {
-            strengthBar.style.backgroundColor = '#dc3545';
-            strengthText.className = 'password-strength-text password-strength-weak';
-            strengthText.textContent = 'Weak';
-        } else if (strength <= 4) {
-            strengthBar.style.backgroundColor = '#ffc107';
-            strengthText.className = 'password-strength-text password-strength-fair';
-            strengthText.textContent = 'Fair';
-        } else if (strength <= 5) {
-            strengthBar.style.backgroundColor = '#17a2b8';
-            strengthText.className = 'password-strength-text password-strength-good';
-            strengthText.textContent = 'Good';
-        } else {
-            strengthBar.style.backgroundColor = '#28a745';
-            strengthText.className = 'password-strength-text password-strength-strong';
-            strengthText.textContent = 'Strong';
-        }
-    }
-
-    document.getElementById('password').addEventListener('input', function() {
-        checkPasswordStrength(this.value);
-    });
-
-    document.getElementById('registerForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-
-        document.querySelectorAll('.invalid-feedback').forEach(el => el.textContent = '');
-        document.getElementById('errorAlert').classList.add('d-none');
-        document.getElementById('successAlert').classList.add('d-none');
-
-        const firstName = document.getElementById('firstName').value.trim();
-        const lastName = document.getElementById('lastName').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
-        const phoneNumber = document.getElementById('phoneNumber').value.trim();
-        const address = document.getElementById('address').value.trim();
-        const city = document.getElementById('city').value.trim();
-        const country = document.getElementById('country').value.trim();
-        const postalCode = document.getElementById('postalCode').value.trim();
-        const agreeTerms = document.getElementById('agreeTerms').checked;
-
-        let hasErrors = false;
-
-        if (firstName.length < 2) {
-            document.getElementById('firstNameError').textContent = 'First name must be at least 2 characters';
-            hasErrors = true;
-        }
-
-        if (lastName.length < 2) {
-            document.getElementById('lastNameError').textContent = 'Last name must be at least 2 characters';
-            hasErrors = true;
-        }
-
-        if (!isValidEmail(email)) {
-            document.getElementById('emailError').textContent = 'Please enter a valid email address';
-            hasErrors = true;
-        }
-
-        if (password.length < 6) {
-            document.getElementById('passwordError').textContent = 'Password must be at least 6 characters';
-            hasErrors = true;
-        }
-
-        if (password !== confirmPassword) {
-            document.getElementById('confirmPasswordError').textContent = 'Passwords do not match';
-            hasErrors = true;
-        }
-
-        if (!agreeTerms) {
-            document.getElementById('agreeTermsError').textContent = 'You must agree to the terms and conditions';
-            hasErrors = true;
-        }
-
-        if (hasErrors) return;
-
-        document.getElementById('registerBtn').classList.add('d-none');
-        document.getElementById('registerLoader').classList.remove('d-none');
-        document.getElementById('submitBtn').disabled = true;
-
-        try {
-            const response = await fetch('/api/account/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: email,
-                    password: password,
-                    confirmPassword: confirmPassword,
-                    phoneNumber: phoneNumber,
-                    address: address,
-                    city: city,
-                    country: country,
-                    postalCode: postalCode
-                })
-            });
-
-            const data = await response.json();
-
-            if (data.success) {
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('user', JSON.stringify(data.user));
-
-                document.getElementById('successMessage').textContent = 'Account created successfully! Redirecting...';
-                document.getElementById('successAlert').classList.remove('d-none');
-
-                setTimeout(() => {
-                    window.location.href = '/account/dashboard';
-                }, 2000);
-            } else {
-                document.getElementById('errorMessage').textContent = data.message || 'Registration failed. Please try again.';
-                document.getElementById('errorAlert').classList.remove('d-none');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            document.getElementById('errorMessage').textContent = 'An error occurred. Please try again.';
-            document.getElementById('errorAlert').classList.remove('d-none');
-        } finally {
-            document.getElementById('registerBtn').classList.remove('d-none');
-            document.getElementById('registerLoader').classList.add('d-none');
-            document.getElementById('submitBtn').disabled = false;
-        }
-    });
-
-    document.getElementById('email').addEventListener('blur', function() {
-        if (this.value && !isValidEmail(this.value)) {
-            document.getElementById('emailError').textContent = 'Please enter a valid email address';
-        } else {
-            document.getElementById('emailError').textContent = '';
-        }
-    });
-
-    document.getElementById('confirmPassword').addEventListener('input', function() {
-        const password = document.getElementById('password').value;
-        if (this.value && password !== this.value) {
-            document.getElementById('confirmPasswordError').textContent = 'Passwords do not match';
-        } else {
-            document.getElementById('confirmPasswordError').textContent = '';
-        }
-    });
-</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/register.js"></script>
 </body>
 </html>

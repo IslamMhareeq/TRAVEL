@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using TRAVEL.Data;
 using TRAVEL.Models;
@@ -28,15 +29,18 @@ namespace TRAVEL.Services
         private readonly TravelDbContext _context;
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
+        private readonly ILogger<AuthenticationService> _logger;
 
         public AuthenticationService(
             TravelDbContext context,
             IConfiguration configuration,
-            IEmailService emailService)
+            IEmailService emailService,
+            ILogger<AuthenticationService> logger)
         {
             _context = context;
             _configuration = configuration;
             _emailService = emailService;
+            _logger = logger;
         }
 
         public async Task<LoginResponse> LoginAsync(LoginRequest request)
@@ -66,7 +70,16 @@ namespace TRAVEL.Services
 
                 user.LastLoginAt = DateTime.UtcNow;
                 _context.Users.Update(user);
-                await _context.SaveChangesAsync();
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateException dbEx)
+                {
+                    _logger.LogError($"Database error during login: {dbEx.InnerException?.Message}");
+                    // Still continue - update last login is not critical
+                }
 
                 var token = GenerateToken(user);
                 var userDto = MapToUserDto(user);
@@ -81,10 +94,11 @@ namespace TRAVEL.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Login error: {ex.Message}");
                 return new LoginResponse
                 {
                     Success = false,
-                    Message = $"Login failed: {ex.Message}"
+                    Message = $"Login failed: {ex.InnerException?.Message ?? ex.Message}"
                 };
             }
         }
@@ -116,13 +130,27 @@ namespace TRAVEL.Services
                     City = request.City,
                     Country = request.Country,
                     PostalCode = request.PostalCode,
+                    ProfileImageUrl = null,
                     Role = UserRole.User,
                     Status = UserStatus.Active,
                     CreatedAt = DateTime.UtcNow
                 };
 
                 _context.Users.Add(user);
-                await _context.SaveChangesAsync();
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateException dbEx)
+                {
+                    _logger.LogError($"Database error during registration: {dbEx.InnerException?.Message}");
+                    return new LoginResponse
+                    {
+                        Success = false,
+                        Message = $"Registration failed: {dbEx.InnerException?.Message ?? dbEx.Message}"
+                    };
+                }
 
                 await _emailService.SendWelcomeEmailAsync(user.Email, user.FirstName);
 
@@ -139,10 +167,11 @@ namespace TRAVEL.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Registration error: {ex.Message}");
                 return new LoginResponse
                 {
                     Success = false,
-                    Message = $"Registration failed: {ex.Message}"
+                    Message = $"Registration failed: {ex.InnerException?.Message ?? ex.Message}"
                 };
             }
         }
@@ -264,18 +293,26 @@ namespace TRAVEL.Services
 
                 return Task.FromResult(true);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError($"Token validation error: {ex.Message}");
                 return Task.FromResult(false);
             }
         }
 
         public async Task LogoutAsync(int userId)
         {
-            var user = await _context.Users.FindAsync(userId);
-            if (user != null)
+            try
             {
-                await _context.SaveChangesAsync();
+                var user = await _context.Users.FindAsync(userId);
+                if (user != null)
+                {
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Logout error: {ex.Message}");
             }
         }
 
@@ -284,12 +321,12 @@ namespace TRAVEL.Services
             return new UserDto
             {
                 UserId = user.UserId,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
+                FirstName = user.FirstName ?? string.Empty,
+                LastName = user.LastName ?? string.Empty,
+                Email = user.Email ?? string.Empty,
                 Role = user.Role,
                 Status = user.Status,
-                PhoneNumber = user.PhoneNumber,
+                PhoneNumber = user.PhoneNumber ?? string.Empty,
                 CreatedAt = user.CreatedAt,
                 LastLoginAt = user.LastLoginAt,
                 EmailVerified = user.EmailVerified

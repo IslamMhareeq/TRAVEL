@@ -32,6 +32,8 @@ namespace TRAVEL.Controllers
         [HttpGet("dashboard")]
         public IActionResult Dashboard()
         {
+            // Check if user is authenticated by checking localStorage token
+            // For now, just return the view
             return View("~/Views/Account/Dashboard.cshtml");
         }
 
