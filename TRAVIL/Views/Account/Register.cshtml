@@ -1,213 +1,230 @@
-﻿@{
-    ViewData["Title"] = "Register";
-    Layout = null;
+@{
+    ViewData["Title"] = "Create Account";
+    ViewData["BodyClass"] = "auth-page";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account - TRAVIL</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="~/css/auth.css" rel="stylesheet" asp-append-version="true" />
-</head>
-<body>
-    <!-- Left Visual Panel -->
-    <div class="visual-panel fixed-panel">
-        <div class="visual-bg visual-bg-register"></div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" />
+}
+
+<div class="auth-container">
+    <!-- Visual Panel -->
+    <div class="auth-visual">
         <div class="visual-content">
-            <div class="brand-logo">
-                <div class="icon">
-                    <i class="fas fa-paper-plane"></i>
+            <a href="/" class="visual-brand">
+                <div class="logo">
+                    <i class="fas fa-compass"></i>
                 </div>
                 <span>TRAVIL</span>
+            </a>
+            
+            <div class="visual-quote">
+                <blockquote>
+                    "Adventure awaits those who dare to dream."
+                </blockquote>
+                <cite>— TRAVIL</cite>
             </div>
-
+            
             <div class="visual-features">
                 <div class="feature-item">
                     <div class="feature-icon">
-                        <i class="fas fa-globe"></i>
+                        <i class="fas fa-plane"></i>
                     </div>
-                    <div class="feature-content">
-                        <h3>Worldwide Destinations</h3>
-                        <p>Explore 500+ handpicked destinations across all continents</p>
-                    </div>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <div class="feature-content">
-                        <h3>Secure Booking</h3>
-                        <p>Your data is protected with enterprise-grade security</p>
+                    <div class="feature-text">
+                        <h4>Exclusive Deals</h4>
+                        <p>Access member-only prices</p>
                     </div>
                 </div>
                 <div class="feature-item">
                     <div class="feature-icon">
-                        <i class="fas fa-headset"></i>
+                        <i class="fas fa-bookmark"></i>
                     </div>
-                    <div class="feature-content">
-                        <h3>24/7 Support</h3>
-                        <p>Our travel experts are always here to help you</p>
+                    <div class="feature-text">
+                        <h4>Save Favorites</h4>
+                        <p>Bookmark your dream trips</p>
                     </div>
                 </div>
-            </div>
-
-            <div class="visual-testimonial">
-                <p class="testimonial-text">"TRAVIL made our honeymoon absolutely perfect. The attention to detail and personalized service exceeded all expectations."</p>
-                <div class="testimonial-author">
-                    <div class="author-avatar">JM</div>
-                    <div class="author-info">
-                        <span class="author-name">Jessica & Michael</span>
-                        <span class="author-role">Verified Travelers</span>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="feature-text">
+                        <h4>Price Alerts</h4>
+                        <p>Get notified of price drops</p>
                     </div>
                 </div>
             </div>
         </div>
+        
+        <div class="visual-decor">
+            <div class="decor-circle"></div>
+            <div class="decor-circle"></div>
+        </div>
     </div>
-
-    <!-- Right Form Panel -->
-    <div class="form-panel with-fixed-visual">
-        <div class="decoration decoration-1"></div>
-        <div class="decoration decoration-2"></div>
-
-        <div class="form-container wide">
-            <div class="mobile-brand">
-                <div class="icon">
-                    <i class="fas fa-paper-plane"></i>
+    
+    <!-- Form Panel -->
+    <div class="auth-form-panel">
+        <div class="mobile-brand">
+            <a href="/" class="visual-brand">
+                <div class="logo">
+                    <i class="fas fa-compass"></i>
                 </div>
                 <span>TRAVIL</span>
-            </div>
-
-            <div class="form-header">
-                <h1>Create Your Account</h1>
-                <p>Join thousands exploring the world with us</p>
-            </div>
-
-            <div class="form-progress">
-                <div class="progress-step active"></div>
-                <div class="progress-step active"></div>
-                <div class="progress-step"></div>
-            </div>
-
-            <div id="errorAlert" class="alert alert-danger d-none" role="alert">
-                <i class="fas fa-exclamation-circle"></i>
-                <span id="errorMessage"></span>
-            </div>
-
-            <div id="successAlert" class="alert alert-success d-none" role="alert">
-                <i class="fas fa-check-circle"></i>
-                <span id="successMessage"></span>
-            </div>
-
-            <form id="registerForm">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="firstName">First Name</label>
-                        <div class="input-wrapper">
-                            <input type="text" class="form-control no-icon" id="firstName" name="firstName" placeholder="John" required>
-                        </div>
-                        <div class="invalid-feedback" id="firstNameError"></div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="lastName">Last Name</label>
-                        <div class="input-wrapper">
-                            <input type="text" class="form-control no-icon" id="lastName" name="lastName" placeholder="Doe" required>
-                        </div>
-                        <div class="invalid-feedback" id="lastNameError"></div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <div class="input-wrapper">
-                        <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required>
-                        <i class="fas fa-envelope input-icon"></i>
-                    </div>
-                    <div class="invalid-feedback" id="emailError"></div>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <div class="input-wrapper">
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Create a strong password" required style="padding-right: 50px;">
-                        <i class="fas fa-lock input-icon"></i>
-                        <button type="button" class="toggle-password" id="togglePassword">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                    <div class="password-strength" id="passwordStrength">
-                        <div class="strength-bar"></div>
-                        <div class="strength-bar"></div>
-                        <div class="strength-bar"></div>
-                        <div class="strength-bar"></div>
-                    </div>
-                    <div class="strength-text" id="strengthText"></div>
-                    <div class="invalid-feedback" id="passwordError"></div>
-                </div>
-
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm Password</label>
-                    <div class="input-wrapper">
-                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required style="padding-right: 50px;">
-                        <i class="fas fa-lock input-icon"></i>
-                        <button type="button" class="toggle-password" id="toggleConfirmPassword">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                    <div class="invalid-feedback" id="confirmPasswordError"></div>
-                </div>
-
-                <label class="checkbox-wrapper" style="margin-bottom: 28px;">
-                    <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
-                    <span class="checkbox-custom"><i class="fas fa-check"></i></span>
-                    <span class="checkbox-label">
-                        I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
-                    </span>
-                </label>
-                <div class="invalid-feedback" id="agreeTermsError" style="margin-top: -20px; margin-bottom: 24px;"></div>
-
-                <button type="submit" class="btn-submit" id="submitBtn">
-                    <span id="registerBtn">
-                        Create Account
-                        <i class="fas fa-arrow-right"></i>
-                    </span>
-                    <span id="registerLoader" class="d-none">
-                        <span class="spinner-border"></span>
-                        Creating account...
-                    </span>
-                </button>
-            </form>
-
-            <div class="divider">
-                <span>or sign up with</span>
-            </div>
-
-            <div class="social-buttons">
-                <button type="button" class="social-btn" title="Sign up with Google">
-                    <i class="fab fa-google"></i>
-                </button>
-                <button type="button" class="social-btn" title="Sign up with Facebook">
-                    <i class="fab fa-facebook-f"></i>
-                </button>
-                <button type="button" class="social-btn" title="Sign up with Apple">
-                    <i class="fab fa-apple"></i>
-                </button>
-            </div>
-
-            <div class="login-link">
-                Already have an account? <a href="/account/login">Sign in</a>
-            </div>
-
-            <div class="form-footer static">
-                © 2025 TRAVIL. All rights reserved.
-            </div>
+            </a>
         </div>
+        
+        <div class="form-header">
+            <h1>Create Account</h1>
+            <p>Start your journey with us today</p>
+        </div>
+        
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-circle"></i>
+                @ViewBag.ErrorMessage
+            </div>
+        }
+        
+        <form method="post" action="/Account/Register" class="auth-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="firstName" name="firstName" placeholder="John" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="lastName" name="lastName" placeholder="Doe" required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-phone"></i>
+                    <input type="tel" id="phone" name="phone" placeholder="+1 (555) 123-4567">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" name="password" placeholder="Create a strong password" required minlength="8">
+                    <button type="button" class="password-toggle" onclick="togglePassword('password')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="password-strength" id="passwordStrength">
+                    <div class="strength-bar"><span></span></div>
+                    <span class="strength-text">Password strength</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="form-options">
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" name="agreeTerms" required>
+                    <span class="checkmark"></span>
+                    I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                </label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-lg btn-block">
+                Create Account
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+        
+        <div class="auth-divider">
+            <span>or sign up with</span>
+        </div>
+        
+        <div class="social-auth">
+            <button type="button" class="social-btn google">
+                <i class="fab fa-google"></i>
+                Google
+            </button>
+            <button type="button" class="social-btn facebook">
+                <i class="fab fa-facebook-f"></i>
+                Facebook
+            </button>
+        </div>
+        
+        <p class="auth-switch">
+            Already have an account? 
+            <a href="/Account/Login">Sign In</a>
+        </p>
     </div>
+</div>
 
-    <script src="~/js/register.js" asp-append-version="true"></script>
-</body>
-</html>
+@section Scripts {
+    <script>
+        function togglePassword(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleBtn = passwordInput.parentElement.querySelector('.password-toggle i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.classList.remove('fa-eye');
+                toggleBtn.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.classList.remove('fa-eye-slash');
+                toggleBtn.classList.add('fa-eye');
+            }
+        }
+        
+        // Password strength indicator
+        const passwordInput = document.getElementById('password');
+        const strengthBar = document.querySelector('.strength-bar span');
+        const strengthText = document.querySelector('.strength-text');
+        
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            let strength = 0;
+            
+            if (password.length >= 8) strength++;
+            if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+            if (password.match(/[0-9]/)) strength++;
+            if (password.match(/[^a-zA-Z0-9]/)) strength++;
+            
+            strengthBar.style.width = (strength * 25) + '%';
+            
+            const strengthLabels = ['Weak', 'Fair', 'Good', 'Strong'];
+            const strengthColors = ['#ef4444', '#f59e0b', '#3b82f6', '#22c55e'];
+            
+            if (password.length === 0) {
+                strengthBar.style.width = '0%';
+                strengthText.textContent = 'Password strength';
+            } else {
+                strengthText.textContent = strengthLabels[strength - 1] || 'Weak';
+                strengthBar.style.backgroundColor = strengthColors[strength - 1] || strengthColors[0];
+            }
+        });
+    </script>
+}

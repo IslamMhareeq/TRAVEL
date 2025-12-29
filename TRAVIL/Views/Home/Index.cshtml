@@ -1,598 +1,633 @@
-﻿@{
-    ViewData["Title"] = "Home";
-    Layout = null;
+@{
+    ViewData["Title"] = "Explore the World";
+    ViewData["BodyClass"] = "home-page";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRAVIL - Your Gateway to Amazing Travel</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --color-primary: #1a1a2e;
-            --color-accent: #e94560;
-            --color-gold: #c9a962;
-            --color-success: #00b894;
-            --font-display: 'Playfair Display', serif;
-            --font-body: 'DM Sans', sans-serif;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: var(--font-body);
-            background: #fff;
-        }
-
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding: 20px 60px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            transition: all 0.3s;
-        }
-
-            .navbar.scrolled {
-                background: var(--color-primary);
-                padding: 12px 60px;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            }
-
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: white;
-            text-decoration: none;
-        }
-
-            .nav-brand .logo {
-                width: 45px;
-                height: 45px;
-                background: var(--color-accent);
-                border-radius: 12px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 20px;
-            }
-
-            .nav-brand span {
-                font-family: var(--font-display);
-                font-size: 24px;
-                font-weight: 600;
-                letter-spacing: 2px;
-            }
-
-        .nav-links {
-            display: flex;
-            gap: 40px;
-        }
-
-            .nav-links a {
-                color: rgba(255,255,255,0.85);
-                text-decoration: none;
-                font-size: 14px;
-                font-weight: 500;
-            }
-
-        .nav-auth {
-            display: flex;
-            gap: 16px;
-        }
-
-        .btn {
-            padding: 12px 28px;
-            border-radius: 8px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-ghost {
-            background: transparent;
-            color: white;
-        }
-
-        .btn-accent {
-            background: var(--color-accent);
-            color: white;
-        }
-
-            .btn-accent:hover {
-                background: #d63850;
-            }
-
-        .hero {
-            min-height: 100vh;
-            background: linear-gradient(135deg, rgba(26,26,46,0.9), rgba(22,33,62,0.85)), url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920') center/cover;
-            display: flex;
-            align-items: center;
-            padding: 0 60px;
-        }
-
-        .hero-content {
-            max-width: 700px;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(233,69,96,0.2);
-            color: var(--color-accent);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            margin-bottom: 24px;
-        }
-
-        .hero h1 {
-            font-family: var(--font-display);
-            font-size: 72px;
-            color: white;
-            line-height: 1.1;
-            margin-bottom: 24px;
-        }
-
-        .hero p {
-            font-size: 18px;
-            color: rgba(255,255,255,0.8);
-            line-height: 1.7;
-            margin-bottom: 40px;
-        }
-
-        .hero-stats {
-            display: flex;
-            gap: 48px;
-            margin-top: 60px;
-        }
-
-        .stat-value {
-            font-family: var(--font-display);
-            font-size: 42px;
-            color: var(--color-gold);
-            font-weight: 600;
-        }
-
-        .stat-label {
-            color: rgba(255,255,255,0.6);
-            font-size: 14px;
-        }
-
-        .section {
-            padding: 100px 60px;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-            .section-header h2 {
-                font-family: var(--font-display);
-                font-size: 42px;
-                color: var(--color-primary);
-                margin-bottom: 16px;
-            }
-
-            .section-header p {
-                color: #6c757d;
-                font-size: 18px;
-            }
-
-        .packages-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .package-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            transition: all 0.4s;
-        }
-
-            .package-card:hover {
-                transform: translateY(-12px);
-                box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-            }
-
-        .package-image {
-            height: 240px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
-        .package-badge {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: var(--color-accent);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-            .package-badge.sale {
-                background: var(--color-success);
-            }
-
-        .package-content {
-            padding: 24px;
-        }
-
-        .package-location {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: #6c757d;
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-
-        .package-title {
-            font-family: var(--font-display);
-            font-size: 22px;
-            color: var(--color-primary);
-            margin-bottom: 16px;
-        }
-
-        .package-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 16px;
-            border-top: 1px solid #eee;
-        }
-
-        .package-price .original {
-            text-decoration: line-through;
-            color: #6c757d;
-            font-size: 14px;
-        }
-
-        .package-price .current {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--color-accent);
-        }
-
-        .btn-view {
-            padding: 12px 24px;
-            background: var(--color-primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            text-decoration: none;
-        }
-
-            .btn-view:hover {
-                background: var(--color-accent);
-            }
-
-        .reviews-section {
-            background: #f8f9fa;
-        }
-
-        .reviews-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .review-card {
-            background: white;
-            border-radius: 20px;
-            padding: 32px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-        }
-
-        .review-stars {
-            color: var(--color-gold);
-            font-size: 18px;
-            margin-bottom: 16px;
-        }
-
-        .review-text {
-            font-size: 16px;
-            line-height: 1.7;
-            color: #555;
-            margin-bottom: 24px;
-            font-style: italic;
-        }
-
-        .review-author {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .review-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--color-accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 18px;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .feature-card {
-            text-align: center;
-            padding: 40px;
-        }
-
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--color-accent), #ff6b6b);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 24px;
-            font-size: 32px;
-            color: white;
-        }
-
-        .feature-card h3 {
-            font-family: var(--font-display);
-            font-size: 22px;
-            color: var(--color-primary);
-            margin-bottom: 12px;
-        }
-
-        .feature-card p {
-            color: #6c757d;
-        }
-
-        .cta-section {
-            background: linear-gradient(135deg, var(--color-primary), #16213e);
-            text-align: center;
-            color: white;
-        }
-
-            .cta-section h2 {
-                font-family: var(--font-display);
-                font-size: 48px;
-                margin-bottom: 16px;
-            }
-
-            .cta-section p {
-                font-size: 18px;
-                opacity: 0.8;
-                margin-bottom: 40px;
-            }
-
-        .footer {
-            background: #0a0a14;
-            color: white;
-            padding: 60px;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 40px;
-            max-width: 1400px;
-            margin: 0 auto 40px;
-        }
-
-        .footer-links ul {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 12px;
-        }
-
-        .footer-links a {
-            color: rgba(255,255,255,0.6);
-            text-decoration: none;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 24px;
-            text-align: center;
-            color: rgba(255,255,255,0.4);
-        }
-
-        .loading {
-            display: flex;
-            justify-content: center;
-            padding: 60px;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid var(--color-accent);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @@keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @@media (max-width: 768px) {
-            .navbar {
-                padding: 16px 24px;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .hero {
-                padding: 0 24px;
-            }
-
-                .hero h1 {
-                    font-size: 40px;
-                }
-
-            .hero-stats {
-                flex-direction: column;
-                gap: 24px;
-            }
-
-            .section {
-                padding: 60px 24px;
-            }
-
-            .features-grid, .footer-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar" id="navbar">
-        <a href="/" class="nav-brand"><div class="logo"><i class="fas fa-paper-plane"></i></div><span>TRAVIL</span></a>
-        <div class="nav-links"><a href="/">Home</a><a href="/packages">Packages</a><a href="#features">Features</a><a href="#reviews">Reviews</a></div>
-        <div class="nav-auth" id="navAuth"><a href="/account/login" class="btn btn-ghost">Login</a><a href="/account/register" class="btn btn-accent">Get Started</a></div>
-    </nav>
-
-    <section class="hero">
+@section Styles {
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+}
+
+<!-- Navigation -->
+<nav class="navbar" id="navbar">
+    <div class="container">
+        <a href="/" class="nav-brand">
+            <div class="logo">
+                <i class="fas fa-compass"></i>
+            </div>
+            <span>TRAVIL</span>
+        </a>
+        
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/TravelPackage">Packages</a>
+            <a href="#destinations">Destinations</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </div>
+        
+        <div class="nav-auth">
+            <a href="/Account/Login" class="btn btn-ghost">Sign In</a>
+            <a href="/Account/Register" class="btn btn-primary">Get Started</a>
+        </div>
+        
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
         <div class="hero-content">
-            <div class="hero-badge"><i class="fas fa-star"></i> Top Rated Travel Agency</div>
-            <h1>Discover Your Next Adventure</h1>
-            <p>Explore breathtaking destinations around the world. Book amazing travel packages with the best prices and create unforgettable memories.</p>
-            <div style="display: flex; gap: 16px;">
-                <a href="/packages" class="btn btn-accent" style="padding: 16px 32px;">Explore Packages <i class="fas fa-arrow-right"></i></a>
-                <a href="#features" class="btn btn-ghost" style="padding: 16px 32px; border: 1px solid rgba(255,255,255,0.3);">Learn More</a>
+            <div class="hero-tagline">
+                <i class="fas fa-star"></i>
+                <span>Award-Winning Travel Agency</span>
             </div>
+            
+            <h1 class="hero-title">
+                Discover Your Next <span class="highlight">Adventure</span> With Us
+            </h1>
+            
+            <p class="hero-description">
+                Experience extraordinary journeys to the world's most captivating destinations. 
+                Let us craft your perfect escape with curated travel packages designed for the 
+                discerning explorer.
+            </p>
+            
+            <div class="hero-actions">
+                <a href="/TravelPackage" class="btn btn-primary btn-lg">
+                    <i class="fas fa-search"></i>
+                    Explore Packages
+                </a>
+                <a href="#features" class="btn btn-outline btn-lg">
+                    <i class="fas fa-play"></i>
+                    Watch Video
+                </a>
+            </div>
+            
             <div class="hero-stats">
-                <div><div class="stat-value" id="totalPackages">--</div><div class="stat-label">Travel Packages</div></div>
-                <div><div class="stat-value">50K+</div><div class="stat-label">Happy Travelers</div></div>
-                <div><div class="stat-value" id="avgRating">--</div><div class="stat-label">Average Rating</div></div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">500+</div>
+                    <div class="hero-stat-label">Destinations</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">15K+</div>
+                    <div class="hero-stat-label">Happy Travelers</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">98%</div>
+                    <div class="hero-stat-label">Satisfaction</div>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="section">
-        <div class="section-header"><h2>Featured Packages</h2><p>Handpicked destinations for your perfect getaway</p></div>
-        <div class="packages-grid" id="packagesGrid"><div class="loading" style="grid-column: 1/-1;"><div class="spinner"></div></div></div>
-        <div style="text-align: center; margin-top: 40px;"><a href="/packages" class="btn btn-accent">View All Packages <i class="fas fa-arrow-right"></i></a></div>
-    </section>
+<!-- Search Section -->
+<section class="search-section">
+    <div class="search-card">
+        <form class="search-form" action="/TravelPackage" method="get">
+            <div class="search-field">
+                <label>Destination</label>
+                <input type="text" name="destination" placeholder="Where to?">
+            </div>
+            <div class="search-field">
+                <label>Travel Date</label>
+                <input type="date" name="date">
+            </div>
+            <div class="search-field">
+                <label>Duration</label>
+                <select name="duration">
+                    <option value="">Any Duration</option>
+                    <option value="1-3">1-3 Days</option>
+                    <option value="4-7">4-7 Days</option>
+                    <option value="8-14">8-14 Days</option>
+                    <option value="15+">15+ Days</option>
+                </select>
+            </div>
+            <div class="search-field">
+                <label>Travelers</label>
+                <select name="travelers">
+                    <option value="1">1 Person</option>
+                    <option value="2" selected>2 People</option>
+                    <option value="3">3 People</option>
+                    <option value="4">4 People</option>
+                    <option value="5+">5+ People</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-search"></i>
+                Search
+            </button>
+        </form>
+    </div>
+</section>
 
-    <section class="section" id="features" style="background: #f8f9fa;">
-        <div class="section-header"><h2>Why Choose TRAVIL?</h2><p>We make travel planning simple, secure, and affordable</p></div>
+<!-- Features Section -->
+<section class="features-section" id="features">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-tagline">Why Choose Us</div>
+            <h2 class="section-title">Travel With Confidence</h2>
+            <p class="section-description">
+                We combine expertise, passion, and personalized service to create 
+                unforgettable travel experiences tailored just for you.
+            </p>
+        </div>
+        
         <div class="features-grid">
-            <div class="feature-card"><div class="feature-icon"><i class="fas fa-globe"></i></div><h3>Global Destinations</h3><p>Hundreds of curated packages worldwide.</p></div>
-            <div class="feature-card"><div class="feature-icon"><i class="fas fa-shield-alt"></i></div><h3>Secure Booking</h3><p>SSL-encrypted payments. Always protected.</p></div>
-            <div class="feature-card"><div class="feature-icon"><i class="fas fa-tags"></i></div><h3>Best Prices</h3><p>Competitive pricing with exclusive discounts.</p></div>
-            <div class="feature-card"><div class="feature-icon"><i class="fas fa-headset"></i></div><h3>24/7 Support</h3><p>Travel experts always available.</p></div>
-            <div class="feature-card"><div class="feature-icon"><i class="fas fa-bell"></i></div><h3>Smart Reminders</h3><p>Trip and waiting list notifications.</p></div>
-            <div class="feature-card"><div class="feature-icon"><i class="fas fa-undo"></i></div><h3>Easy Cancellation</h3><p>Cancel 3 days before for full refund.</p></div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+                <h3 class="feature-title">Secure Booking</h3>
+                <p class="feature-text">
+                    Book with confidence knowing your payments are protected and your 
+                    reservations are guaranteed.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h3 class="feature-title">24/7 Support</h3>
+                <p class="feature-text">
+                    Our dedicated team is available around the clock to assist you 
+                    before, during, and after your journey.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <h3 class="feature-title">Curated Experiences</h3>
+                <p class="feature-text">
+                    Each package is carefully crafted by travel experts to ensure 
+                    authentic and memorable adventures.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-tags"></i>
+                </div>
+                <h3 class="feature-title">Best Price Guarantee</h3>
+                <p class="feature-text">
+                    Find a lower price elsewhere? We'll match it and give you an 
+                    additional discount on your booking.
+                </p>
+            </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="section reviews-section" id="reviews">
-        <div class="section-header"><h2>What Our Travelers Say</h2><p>Real experiences from real adventurers</p></div>
-        <div class="reviews-grid" id="reviewsGrid"><div class="loading" style="grid-column: 1/-1;"><div class="spinner"></div></div></div>
-    </section>
-
-    <section class="section cta-section">
-        <h2>Ready to Start Your Journey?</h2>
-        <p>Join thousands of happy travelers and book your dream vacation today</p>
-        <a href="/account/register" class="btn btn-accent" style="padding: 16px 40px;">Create Free Account <i class="fas fa-arrow-right"></i></a>
-    </section>
-
-    <footer class="footer">
-        <div class="footer-grid">
-            <div><a href="/" class="nav-brand"><div class="logo"><i class="fas fa-paper-plane"></i></div><span>TRAVIL</span></a><p style="color: rgba(255,255,255,0.6); margin-top: 16px;">Your trusted partner for amazing travel experiences.</p></div>
-            <div class="footer-links"><h4 style="margin-bottom: 20px;">Quick Links</h4><ul><li><a href="/">Home</a></li><li><a href="/packages">Packages</a></li><li><a href="/account/login">Login</a></li></ul></div>
-            <div class="footer-links"><h4 style="margin-bottom: 20px;">Categories</h4><ul><li><a href="/packages">Honeymoon</a></li><li><a href="/packages">Family</a></li><li><a href="/packages">Adventure</a></li></ul></div>
-            <div class="footer-links"><h4 style="margin-bottom: 20px;">Support</h4><ul><li><a href="#">Help Center</a></li><li><a href="#">Contact</a></li><li><a href="#">Privacy</a></li></ul></div>
+<!-- Packages Section -->
+<section class="packages-section" id="packages">
+    <div class="container">
+        <div class="section-header-row">
+            <div class="section-header">
+                <div class="section-tagline">Popular Packages</div>
+                <h2 class="section-title">Trending Destinations</h2>
+                <p class="section-description">
+                    Discover our most sought-after travel packages, handpicked for 
+                    extraordinary experiences.
+                </p>
+            </div>
+            <a href="/TravelPackage" class="btn btn-outline">
+                View All Packages
+                <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
-        <div class="footer-bottom"><p>&copy; 2025 TRAVIL. All rights reserved.</p></div>
-    </footer>
-
-    <script>
-        const packageTypes = ['Family', 'Honeymoon', 'Adventure', 'Cruise', 'Luxury', 'Budget', 'Cultural', 'Beach', 'Mountain'];
-        window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50));
-
-        document.addEventListener('DOMContentLoaded', async () => { checkAuth(); await loadPackages(); await loadReviews(); });
-
-        function checkAuth() {
-            const token = localStorage.getItem('token'), user = localStorage.getItem('user');
-            if (token && user) {
-                const u = JSON.parse(user);
-                document.getElementById('navAuth').innerHTML = `<a href="/booking/my-bookings" class="btn btn-ghost">My Bookings</a><a href="${u.role==='Admin'||u.role===0?'/admin/dashboard':'/account/dashboard'}" class="btn btn-accent">${u.firstName}</a>`;
+        
+        <div class="packages-grid">
+            @if (ViewBag.FeaturedPackages != null)
+            {
+                foreach (var package in ViewBag.FeaturedPackages)
+                {
+                    <div class="package-card">
+                        <div class="package-image">
+                            <img src="@package.ImageUrl" alt="@package.Name">
+                            @if (package.IsFeatured)
+                            {
+                                <span class="package-badge">Featured</span>
+                            }
+                            <button class="package-wishlist">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                        <div class="package-content">
+                            <div class="package-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                @package.Destination
+                            </div>
+                            <h3 class="package-title">
+                                <a href="/TravelPackage/Details/@package.Id">@package.Name</a>
+                            </h3>
+                            <div class="package-meta">
+                                <div class="package-meta-item">
+                                    <i class="far fa-clock"></i>
+                                    @package.Duration Days
+                                </div>
+                                <div class="package-meta-item">
+                                    <i class="far fa-star"></i>
+                                    @package.Rating
+                                </div>
+                            </div>
+                            <p class="package-description">@package.Description</p>
+                            <div class="package-footer">
+                                <div class="package-price">
+                                    <span class="package-price-label">Starting from</span>
+                                    <span class="package-price-value">$@package.Price <span>/ person</span></span>
+                                </div>
+                                <a href="/TravelPackage/Details/@package.Id" class="btn btn-primary btn-sm">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
             }
-        }
+            else
+            {
+                <!-- Placeholder packages for demo -->
+                <div class="package-card">
+                    <div class="package-image">
+                        <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80" alt="Bali">
+                        <span class="package-badge">Featured</span>
+                        <button class="package-wishlist">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="package-content">
+                        <div class="package-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Bali, Indonesia
+                        </div>
+                        <h3 class="package-title">
+                            <a href="/TravelPackage/Details/1">Bali Paradise Escape</a>
+                        </h3>
+                        <div class="package-meta">
+                            <div class="package-meta-item">
+                                <i class="far fa-clock"></i>
+                                7 Days
+                            </div>
+                            <div class="package-meta-item">
+                                <i class="far fa-star"></i>
+                                4.9
+                            </div>
+                        </div>
+                        <p class="package-description">Experience the magic of Bali with temple visits, rice terraces, and pristine beaches.</p>
+                        <div class="package-footer">
+                            <div class="package-price">
+                                <span class="package-price-label">Starting from</span>
+                                <span class="package-price-value">$1,299 <span>/ person</span></span>
+                            </div>
+                            <a href="/TravelPackage/Details/1" class="btn btn-primary btn-sm">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="package-card">
+                    <div class="package-image">
+                        <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800&q=80" alt="Paris">
+                        <button class="package-wishlist">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="package-content">
+                        <div class="package-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Paris, France
+                        </div>
+                        <h3 class="package-title">
+                            <a href="/TravelPackage/Details/2">Romantic Paris Getaway</a>
+                        </h3>
+                        <div class="package-meta">
+                            <div class="package-meta-item">
+                                <i class="far fa-clock"></i>
+                                5 Days
+                            </div>
+                            <div class="package-meta-item">
+                                <i class="far fa-star"></i>
+                                4.8
+                            </div>
+                        </div>
+                        <p class="package-description">Fall in love with the City of Light through iconic landmarks and hidden gems.</p>
+                        <div class="package-footer">
+                            <div class="package-price">
+                                <span class="package-price-label">Starting from</span>
+                                <span class="package-price-value">$1,599 <span>/ person</span></span>
+                            </div>
+                            <a href="/TravelPackage/Details/2" class="btn btn-primary btn-sm">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="package-card">
+                    <div class="package-image">
+                        <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&q=80" alt="Kyoto">
+                        <span class="package-badge">Popular</span>
+                        <button class="package-wishlist">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="package-content">
+                        <div class="package-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Kyoto, Japan
+                        </div>
+                        <h3 class="package-title">
+                            <a href="/TravelPackage/Details/3">Ancient Kyoto Discovery</a>
+                        </h3>
+                        <div class="package-meta">
+                            <div class="package-meta-item">
+                                <i class="far fa-clock"></i>
+                                8 Days
+                            </div>
+                            <div class="package-meta-item">
+                                <i class="far fa-star"></i>
+                                4.9
+                            </div>
+                        </div>
+                        <p class="package-description">Immerse yourself in traditional Japanese culture, temples, and gardens.</p>
+                        <div class="package-footer">
+                            <div class="package-price">
+                                <span class="package-price-label">Starting from</span>
+                                <span class="package-price-value">$2,199 <span>/ person</span></span>
+                            </div>
+                            <a href="/TravelPackage/Details/3" class="btn btn-primary btn-sm">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
 
-        async function loadPackages() {
-            try {
-                const r = await fetch('/api/travelpackage?limit=6');
-                if (r.ok) {
-                    const d = await r.json();
-                    document.getElementById('totalPackages').textContent = d.count + '+';
-                    document.getElementById('packagesGrid').innerHTML = d.data.slice(0,6).map(p => {
-                        const sale = p.discountedPrice && new Date(p.discountStartDate) <= new Date() && new Date(p.discountEndDate) >= new Date();
-                        const price = sale ? p.discountedPrice : p.price;
-                        return `<div class="package-card"><div class="package-image" style="background-image: url('${p.imageUrl||'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800'}')"><span class="package-badge ${sale?'sale':''}">${sale?'🔥 Sale':packageTypes[p.packageType]}</span></div><div class="package-content"><div class="package-location"><i class="fas fa-map-marker-alt"></i> ${p.country}</div><h3 class="package-title">${p.destination}</h3><div class="package-footer"><div class="package-price">${sale?`<span class="original">$${p.price}</span>`:''}<span class="current">$${price}</span></div><a href="/packages/${p.packageId}" class="btn-view">View</a></div></div></div>`;
-                    }).join('');
-                }
-            } catch(e) { console.error(e); }
-        }
+<!-- Destinations Section -->
+<section class="destinations-section" id="destinations">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-tagline">Top Destinations</div>
+            <h2 class="section-title">Explore By Region</h2>
+            <p class="section-description">
+                From tropical beaches to ancient cities, find your perfect destination.
+            </p>
+        </div>
+        
+        <div class="destinations-grid">
+            <div class="destination-card">
+                <img src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&q=80" alt="Maldives">
+                <div class="destination-overlay">
+                    <h3 class="destination-name">Maldives</h3>
+                    <span class="destination-count">24 Packages</span>
+                </div>
+            </div>
+            <div class="destination-card">
+                <img src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=600&q=80" alt="Dubai">
+                <div class="destination-overlay">
+                    <h3 class="destination-name">Dubai</h3>
+                    <span class="destination-count">18 Packages</span>
+                </div>
+            </div>
+            <div class="destination-card">
+                <img src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=600&q=80" alt="Italy">
+                <div class="destination-overlay">
+                    <h3 class="destination-name">Italy</h3>
+                    <span class="destination-count">32 Packages</span>
+                </div>
+            </div>
+            <div class="destination-card">
+                <img src="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=600&q=80" alt="Thailand">
+                <div class="destination-overlay">
+                    <h3 class="destination-name">Thailand</h3>
+                    <span class="destination-count">28 Packages</span>
+                </div>
+            </div>
+            <div class="destination-card">
+                <img src="https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=600&q=80" alt="Greece">
+                <div class="destination-overlay">
+                    <h3 class="destination-name">Greece</h3>
+                    <span class="destination-count">21 Packages</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-        async function loadReviews() {
-            try {
-                const r = await fetch('/api/review/site');
-                if (r.ok) {
-                    const d = await r.json();
-                    document.getElementById('avgRating').textContent = d.averageRating + '★';
-                    const reviews = d.data.slice(0,3);
-                    document.getElementById('reviewsGrid').innerHTML = reviews.length ? reviews.map(v => `<div class="review-card"><div class="review-stars">${'★'.repeat(v.rating)}${'☆'.repeat(5-v.rating)}</div><p class="review-text">"${v.comment}"</p><div class="review-author"><div class="review-avatar">${v.userName.charAt(0)}</div><div><h4 style="color: var(--color-primary);">${v.userName}</h4><span style="font-size: 13px; color: #6c757d;">Verified Traveler</span></div></div></div>`).join('') : '<p style="grid-column: 1/-1; text-align: center; color: #6c757d;">No reviews yet.</p>';
+<!-- Testimonials Section -->
+<section class="testimonials-section">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-tagline">Testimonials</div>
+            <h2 class="section-title">What Our Travelers Say</h2>
+            <p class="section-description">
+                Real experiences from real travelers who trusted us with their adventures.
+            </p>
+        </div>
+        
+        <div class="testimonials-slider">
+            <div class="testimonial-card">
+                <div class="testimonial-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">
+                    "TRAVIL made our honeymoon absolutely magical. Every detail was 
+                    perfectly planned, from the overwater bungalow to the private 
+                    sunset dinner. Couldn't have asked for more!"
+                </p>
+                <div class="testimonial-author">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Sarah" class="testimonial-avatar">
+                    <div class="testimonial-info">
+                        <span class="testimonial-name">Sarah & Michael</span>
+                        <span class="testimonial-trip">Maldives Honeymoon</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">
+                    "As a solo traveler, I was nervous about my first big trip. 
+                    The TRAVIL team's support and attention to detail made me 
+                    feel safe and confident throughout my journey in Japan."
+                </p>
+                <div class="testimonial-author">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="James" class="testimonial-avatar">
+                    <div class="testimonial-info">
+                        <span class="testimonial-name">James Wilson</span>
+                        <span class="testimonial-trip">Japan Adventure</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <p class="testimonial-text">
+                    "Third trip booked through TRAVIL and they never disappoint. 
+                    The local guides they connect you with provide authentic 
+                    experiences you simply can't find elsewhere."
+                </p>
+                <div class="testimonial-author">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" alt="Emily" class="testimonial-avatar">
+                    <div class="testimonial-info">
+                        <span class="testimonial-name">Emily Chen</span>
+                        <span class="testimonial-trip">Morocco Explorer</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <h2 class="cta-title">Ready to Start Your Journey?</h2>
+        <p class="cta-text">
+            Subscribe to our newsletter and be the first to know about exclusive 
+            deals, new destinations, and travel inspiration.
+        </p>
+        <form class="cta-form">
+            <input type="email" placeholder="Enter your email address" required>
+            <button type="submit" class="btn btn-primary">
+                Subscribe
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </form>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-main">
+            <div class="footer-brand">
+                <a href="/" class="footer-logo">
+                    <div class="logo">
+                        <i class="fas fa-compass"></i>
+                    </div>
+                    <span>TRAVIL</span>
+                </a>
+                <p class="footer-description">
+                    Your trusted partner for extraordinary travel experiences. 
+                    We craft personalized journeys that create lasting memories 
+                    and inspire a love for exploration.
+                </p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/TravelPackage">Packages</a></li>
+                    <li><a href="#destinations">Destinations</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Support</h4>
+                <ul class="footer-links">
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="#">Booking Guide</a></li>
+                    <li><a href="#">Travel Insurance</a></li>
+                    <li><a href="#">Cancellation Policy</a></li>
+                    <li><a href="#">Payment Methods</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Contact Us</h4>
+                <div class="footer-contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>123 Travel Street<br>New York, NY 10001</span>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>+1 (555) 123-4567</span>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>hello@travil.com</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p class="footer-copyright">
+                © 2024 TRAVIL. All rights reserved.
+            </p>
+            <div class="footer-legal">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+@section Scripts {
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Scroll reveal animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
                 }
-            } catch(e) { console.error(e); }
-        }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.scroll-reveal').forEach(el => {
+            observer.observe(el);
+        });
     </script>
-</body>
-</html>
+}

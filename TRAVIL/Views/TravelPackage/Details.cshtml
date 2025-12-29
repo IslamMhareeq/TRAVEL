@@ -1,4 +1,405 @@
-﻿@page
-@model TRAVEL.Views.TravelPackage.DetailsModel
 @{
+    ViewData["Title"] = "Bali Paradise Escape";
+    ViewData["BodyClass"] = "package-detail-page";
 }
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+}
+
+<!-- Navigation -->
+<nav class="navbar scrolled" id="navbar">
+    <div class="container">
+        <a href="/" class="nav-brand">
+            <div class="logo">
+                <i class="fas fa-compass"></i>
+            </div>
+            <span>TRAVIL</span>
+        </a>
+        
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/TravelPackage">Packages</a>
+            <a href="/#destinations">Destinations</a>
+            <a href="/#about">About</a>
+            <a href="/#contact">Contact</a>
+        </div>
+        
+        <div class="nav-auth">
+            <a href="/Account/Login" class="btn btn-ghost">Sign In</a>
+            <a href="/Account/Register" class="btn btn-primary">Get Started</a>
+        </div>
+        
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</nav>
+
+<!-- Package Hero -->
+<section class="package-detail-hero" style="background: url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1920&q=85') center/cover no-repeat;">
+    <div class="container">
+        <nav style="margin-bottom: var(--space-4);">
+            <a href="/TravelPackage" style="color: var(--color-gold); text-decoration: none; font-size: 0.875rem;">
+                <i class="fas fa-arrow-left"></i> Back to Packages
+            </a>
+        </nav>
+        
+        <div style="display: flex; gap: var(--space-3); margin-bottom: var(--space-4);">
+            <span class="package-badge">Featured</span>
+            <span style="background: rgba(255,255,255,0.2); padding: var(--space-2) var(--space-3); border-radius: var(--radius-md); font-size: 0.75rem; color: white;">
+                <i class="fas fa-star" style="color: var(--color-gold);"></i> 4.9 (128 Reviews)
+            </span>
+        </div>
+        
+        <h1 style="font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 400; color: white; margin-bottom: var(--space-3);">
+            Bali Paradise Escape
+        </h1>
+        
+        <div style="display: flex; flex-wrap: wrap; gap: var(--space-6); color: var(--color-pearl);">
+            <div style="display: flex; align-items: center; gap: var(--space-2);">
+                <i class="fas fa-map-marker-alt" style="color: var(--color-gold);"></i>
+                Bali, Indonesia
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--space-2);">
+                <i class="far fa-clock" style="color: var(--color-gold);"></i>
+                7 Days / 6 Nights
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--space-2);">
+                <i class="fas fa-users" style="color: var(--color-gold);"></i>
+                Max 12 People
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Package Content -->
+<section class="package-detail-content">
+    <div class="container">
+        <!-- Main Content -->
+        <div class="package-main">
+            <!-- Overview -->
+            <div class="package-section">
+                <h2>Overview</h2>
+                <p>
+                    Experience the enchanting island of Bali with our carefully curated 7-day journey. 
+                    From ancient temples and lush rice terraces to pristine beaches and vibrant culture, 
+                    this package offers the perfect blend of adventure, relaxation, and spiritual discovery.
+                </p>
+                <p style="margin-top: var(--space-4);">
+                    Immerse yourself in Balinese traditions, explore hidden waterfalls, witness breathtaking 
+                    sunsets, and indulge in world-class cuisine. Whether you're seeking adventure or tranquility, 
+                    Bali has something magical waiting for you.
+                </p>
+            </div>
+            
+            <!-- Highlights -->
+            <div class="package-section">
+                <h2>Highlights</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-4); margin-top: var(--space-4);">
+                    <div style="display: flex; align-items: flex-start; gap: var(--space-3);">
+                        <div style="width: 40px; height: 40px; background: rgba(212, 168, 83, 0.15); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-gopuram" style="color: var(--color-gold);"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--color-white); margin-bottom: var(--space-1);">Ancient Temples</h4>
+                            <p style="color: var(--color-pearl); font-size: 0.9375rem;">Visit iconic temples including Tanah Lot and Uluwatu</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: flex-start; gap: var(--space-3);">
+                        <div style="width: 40px; height: 40px; background: rgba(212, 168, 83, 0.15); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-leaf" style="color: var(--color-gold);"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--color-white); margin-bottom: var(--space-1);">Tegallalang Rice Terraces</h4>
+                            <p style="color: var(--color-pearl); font-size: 0.9375rem;">Walk through stunning UNESCO-listed rice paddies</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: flex-start; gap: var(--space-3);">
+                        <div style="width: 40px; height: 40px; background: rgba(212, 168, 83, 0.15); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-umbrella-beach" style="color: var(--color-gold);"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--color-white); margin-bottom: var(--space-1);">Pristine Beaches</h4>
+                            <p style="color: var(--color-pearl); font-size: 0.9375rem;">Relax on world-famous beaches of Seminyak and Nusa Dua</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: flex-start; gap: var(--space-3);">
+                        <div style="width: 40px; height: 40px; background: rgba(212, 168, 83, 0.15); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-water" style="color: var(--color-gold);"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--color-white); margin-bottom: var(--space-1);">Hidden Waterfalls</h4>
+                            <p style="color: var(--color-pearl); font-size: 0.9375rem;">Discover secluded waterfalls in the jungle</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Itinerary -->
+            <div class="package-section">
+                <h2>Itinerary</h2>
+                
+                <div class="itinerary-day">
+                    <div class="itinerary-day-header">
+                        <div class="itinerary-day-number">1</div>
+                        <h3 class="itinerary-day-title">Arrival & Welcome</h3>
+                    </div>
+                    <div class="itinerary-day-content">
+                        <p>Arrive at Ngurah Rai International Airport. Private transfer to your luxury resort in Seminyak. Evening welcome dinner with traditional Balinese dance performance. Free time to explore the area.</p>
+                    </div>
+                </div>
+                
+                <div class="itinerary-day">
+                    <div class="itinerary-day-header">
+                        <div class="itinerary-day-number">2</div>
+                        <h3 class="itinerary-day-title">Ubud Cultural Tour</h3>
+                    </div>
+                    <div class="itinerary-day-content">
+                        <p>Full-day excursion to Ubud. Visit the Sacred Monkey Forest, Ubud Royal Palace, and local art galleries. Explore the Tegallalang Rice Terraces and enjoy lunch with panoramic views. Evening at leisure.</p>
+                    </div>
+                </div>
+                
+                <div class="itinerary-day">
+                    <div class="itinerary-day-header">
+                        <div class="itinerary-day-number">3</div>
+                        <h3 class="itinerary-day-title">Temple Discovery</h3>
+                    </div>
+                    <div class="itinerary-day-content">
+                        <p>Morning visit to Tirta Empul Holy Water Temple for a traditional purification ritual. Afternoon at Tanah Lot Temple, one of Bali's most iconic landmarks. Watch the sunset over the sea temple.</p>
+                    </div>
+                </div>
+                
+                <div class="itinerary-day">
+                    <div class="itinerary-day-header">
+                        <div class="itinerary-day-number">4</div>
+                        <h3 class="itinerary-day-title">Adventure Day</h3>
+                    </div>
+                    <div class="itinerary-day-content">
+                        <p>Early morning Mount Batur sunrise trek (optional). Relax at natural hot springs. Afternoon waterfall exploration including Tegenungan and Tibumana falls. Evening cooking class with local family.</p>
+                    </div>
+                </div>
+                
+                <div class="itinerary-day">
+                    <div class="itinerary-day-header">
+                        <div class="itinerary-day-number">5</div>
+                        <h3 class="itinerary-day-title">Beach & Relaxation</h3>
+                    </div>
+                    <div class="itinerary-day-content">
+                        <p>Transfer to Nusa Dua beach area. Full day at leisure to enjoy beach activities, water sports, or spa treatments. Optional snorkeling trip to nearby islands. Beachside dinner.</p>
+                    </div>
+                </div>
+                
+                <div class="itinerary-day">
+                    <div class="itinerary-day-header">
+                        <div class="itinerary-day-number">6</div>
+                        <h3 class="itinerary-day-title">Uluwatu & Farewell</h3>
+                    </div>
+                    <div class="itinerary-day-content">
+                        <p>Morning free for shopping or spa. Afternoon visit to Uluwatu Temple perched on dramatic cliffs. Watch the famous Kecak Fire Dance at sunset. Farewell dinner at a cliffside restaurant.</p>
+                    </div>
+                </div>
+                
+                <div class="itinerary-day">
+                    <div class="itinerary-day-header">
+                        <div class="itinerary-day-number">7</div>
+                        <h3 class="itinerary-day-title">Departure</h3>
+                    </div>
+                    <div class="itinerary-day-content">
+                        <p>Breakfast at hotel. Free time until departure. Private transfer to airport for your onward journey. Selamat jalan! (Safe travels!)</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- What's Included -->
+            <div class="package-section">
+                <h2>What's Included</h2>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-6); margin-top: var(--space-4);">
+                    <div>
+                        <h4 style="color: var(--color-gold); margin-bottom: var(--space-3); display: flex; align-items: center; gap: var(--space-2);">
+                            <i class="fas fa-check-circle"></i> Included
+                        </h4>
+                        <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: var(--space-2);">
+                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
+                                <i class="fas fa-check" style="color: #22c55e; font-size: 0.75rem;"></i>
+                                6 nights luxury accommodation
+                            </li>
+                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
+                                <i class="fas fa-check" style="color: #22c55e; font-size: 0.75rem;"></i>
+                                Daily breakfast, 3 lunches, 4 dinners
+                            </li>
+                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
+                                <i class="fas fa-check" style="color: #22c55e; font-size: 0.75rem;"></i>
+                                Private airport transfers
+                            </li>
+                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
+                                <i class="fas fa-check" style="color: #22c55e; font-size: 0.75rem;"></i>
+                                English-speaking guide
+                            </li>
+                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
+                                <i class="fas fa-check" style="color: #22c55e; font-size: 0.75rem;"></i>
+                                All entrance fees and activities
+                            </li>
+                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
+                                <i class="fas fa-check" style="color: #22c55e; font-size: 0.75rem;"></i>
+                                Traditional cooking class
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--color-pearl); margin-bottom: var(--space-3); display: flex; align-items: center; gap: var(--space-2);">
+                            <i class="fas fa-times-circle"></i> Not Included
+                        </h4>
+                        <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: var(--space-2);">
+                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
+                                <i class="fas fa-times" style="color: #ef4444; font-size: 0.75rem;"></i>
+                                International flights
+                            </li>
+                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
+                                <i class="fas fa-times" style="color: #ef4444; font-size: 0.75rem;"></i>
+                                Travel insurance
+                            </li>
+                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
+                                <i class="fas fa-times" style="color: #ef4444; font-size: 0.75rem;"></i>
+                                Personal expenses
+                            </li>
+                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
+                                <i class="fas fa-times" style="color: #ef4444; font-size: 0.75rem;"></i>
+                                Optional activities
+                            </li>
+                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
+                                <i class="fas fa-times" style="color: #ef4444; font-size: 0.75rem;"></i>
+                                Tips and gratuities
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Booking Sidebar -->
+        <div class="package-sidebar">
+            <div class="booking-card">
+                <div class="booking-price">
+                    <span class="booking-price-value">$1,299</span>
+                    <span class="booking-price-period">/ person</span>
+                </div>
+                
+                <form class="booking-form" action="/Booking/Create" method="post">
+                    <input type="hidden" name="packageId" value="1">
+                    
+                    <div class="form-group">
+                        <label for="travelDate">Travel Date</label>
+                        <input type="date" id="travelDate" name="travelDate" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="guests">Number of Travelers</label>
+                        <select id="guests" name="guests" class="form-control">
+                            <option value="1">1 Person</option>
+                            <option value="2" selected>2 People</option>
+                            <option value="3">3 People</option>
+                            <option value="4">4 People</option>
+                            <option value="5">5 People</option>
+                            <option value="6">6+ People</option>
+                        </select>
+                    </div>
+                    
+                    <div class="booking-summary">
+                        <div class="booking-summary-row">
+                            <span>$1,299 × 2 travelers</span>
+                            <span>$2,598</span>
+                        </div>
+                        <div class="booking-summary-row">
+                            <span>Service fee</span>
+                            <span>$129</span>
+                        </div>
+                        <div class="booking-summary-row total">
+                            <span>Total</span>
+                            <span>$2,727</span>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">
+                        Book Now
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+                
+                <p style="text-align: center; font-size: 0.875rem; color: var(--color-pearl); margin-top: var(--space-4);">
+                    <i class="fas fa-shield-halved" style="color: var(--color-gold);"></i>
+                    Free cancellation up to 14 days before
+                </p>
+            </div>
+            
+            <!-- Contact Card -->
+            <div style="background: var(--color-charcoal); border: 1px solid var(--color-slate); border-radius: var(--radius-xl); padding: var(--space-6); margin-top: var(--space-5);">
+                <h3 style="font-family: var(--font-display); font-size: 1.125rem; color: var(--color-white); margin-bottom: var(--space-4);">Need Help?</h3>
+                <p style="color: var(--color-pearl); font-size: 0.9375rem; margin-bottom: var(--space-4);">Our travel experts are here to help you plan your perfect trip.</p>
+                <a href="tel:+15551234567" class="btn btn-outline btn-block">
+                    <i class="fas fa-phone"></i>
+                    Call Us
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-main">
+            <div class="footer-brand">
+                <a href="/" class="footer-logo">
+                    <div class="logo"><i class="fas fa-compass"></i></div>
+                    <span>TRAVIL</span>
+                </a>
+                <p class="footer-description">
+                    Your trusted partner for extraordinary travel experiences.
+                </p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/TravelPackage">Packages</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Support</h4>
+                <ul class="footer-links">
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="#">Booking Guide</a></li>
+                    <li><a href="#">Travel Insurance</a></li>
+                    <li><a href="#">Cancellation Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Contact Us</h4>
+                <div class="footer-contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>hello@travil.com</span>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>+1 (555) 123-4567</span>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="footer-copyright">© 2024 TRAVIL. All rights reserved.</p>
+            <div class="footer-legal">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+</footer>

@@ -27,4 +27,8 @@
     <Folder Include="wwwroot\images\travel-packages\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Views\Admin\Index.cshtml" />
+  </ItemGroup>
+
 </Project>

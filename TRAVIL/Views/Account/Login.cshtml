@@ -1,147 +1,148 @@
-﻿@{
-    ViewData["Title"] = "Login";
-    Layout = null;
+@{
+    ViewData["Title"] = "Sign In";
+    ViewData["BodyClass"] = "auth-page";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In - TRAVIL</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="~/css/auth.css" rel="stylesheet" asp-append-version="true" />
-</head>
-<body>
-    <!-- Left Visual Panel -->
-    <div class="visual-panel">
-        <div class="visual-bg visual-bg-login"></div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" />
+}
+
+<div class="auth-container">
+    <!-- Visual Panel -->
+    <div class="auth-visual">
         <div class="visual-content">
-            <div class="brand-logo">
-                <div class="icon">
-                    <i class="fas fa-paper-plane"></i>
+            <a href="/" class="visual-brand">
+                <div class="logo">
+                    <i class="fas fa-compass"></i>
                 </div>
                 <span>TRAVIL</span>
-            </div>
-
+            </a>
+            
             <div class="visual-quote">
-                <blockquote>"The world is a book, and those who do not travel read only one page."</blockquote>
-                <cite>— Saint Augustine</cite>
+                <blockquote>
+                    "Travel is the only thing you buy that makes you richer."
+                </blockquote>
+                <cite>— Anonymous</cite>
             </div>
-
+            
             <div class="visual-stats">
                 <div class="stat-item">
-                    <div class="stat-number">500+</div>
-                    <div class="stat-label">Destinations</div>
+                    <span class="stat-value">500+</span>
+                    <span class="stat-label">Destinations</span>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">50K+</div>
-                    <div class="stat-label">Happy Travelers</div>
+                    <span class="stat-value">15K+</span>
+                    <span class="stat-label">Happy Travelers</span>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">98%</div>
-                    <div class="stat-label">Satisfaction</div>
+                    <span class="stat-value">98%</span>
+                    <span class="stat-label">Satisfaction</span>
                 </div>
             </div>
         </div>
+        
+        <div class="visual-decor">
+            <div class="decor-circle"></div>
+            <div class="decor-circle"></div>
+        </div>
     </div>
-
-    <!-- Right Form Panel -->
-    <div class="form-panel">
-        <div class="decoration decoration-1"></div>
-        <div class="decoration decoration-2"></div>
-
-        <div class="form-container">
-            <div class="mobile-brand">
-                <div class="icon">
-                    <i class="fas fa-paper-plane"></i>
+    
+    <!-- Form Panel -->
+    <div class="auth-form-panel">
+        <div class="mobile-brand">
+            <a href="/" class="visual-brand">
+                <div class="logo">
+                    <i class="fas fa-compass"></i>
                 </div>
                 <span>TRAVIL</span>
-            </div>
-
-            <div class="form-header">
-                <h1>Welcome Back</h1>
-                <p>Sign in to continue your journey</p>
-            </div>
-
-            <div id="errorAlert" class="alert alert-danger d-none" role="alert">
+            </a>
+        </div>
+        
+        <div class="form-header">
+            <h1>Welcome Back</h1>
+            <p>Sign in to continue your journey</p>
+        </div>
+        
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger">
                 <i class="fas fa-exclamation-circle"></i>
-                <span id="errorMessage"></span>
+                @ViewBag.ErrorMessage
             </div>
-
-            <div id="successAlert" class="alert alert-success d-none" role="alert">
-                <i class="fas fa-check-circle"></i>
-                <span id="successMessage"></span>
-            </div>
-
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <div class="input-wrapper">
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
-                        <i class="fas fa-envelope input-icon"></i>
-                    </div>
+        }
+        
+        <form method="post" action="/Account/Login" class="auth-form">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
                 </div>
-
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <div class="input-wrapper">
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required style="padding-right: 50px;">
-                        <i class="fas fa-lock input-icon"></i>
-                        <button type="button" class="toggle-password" id="togglePassword">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword()">
+                        <i class="fas fa-eye"></i>
+                    </button>
                 </div>
-
-                <div class="form-options">
-                    <label class="checkbox-wrapper">
-                        <input type="checkbox" id="rememberMe" name="rememberMe">
-                        <span class="checkbox-custom"><i class="fas fa-check"></i></span>
-                        <span class="checkbox-label">Remember me</span>
-                    </label>
-                    <a href="#" class="forgot-link">Forgot password?</a>
-                </div>
-
-                <button type="submit" class="btn-submit" id="submitBtn">
-                    <span id="loginBtn">
-                        Sign In
-                        <i class="fas fa-arrow-right"></i>
-                    </span>
-                    <span id="loginLoader" class="d-none">
-                        <span class="spinner-border"></span>
-                        Signing in...
-                    </span>
-                </button>
-            </form>
-
-            <div class="divider">
-                <span>or continue with</span>
             </div>
-
-            <div class="social-buttons">
-                <button type="button" class="social-btn" title="Sign in with Google">
-                    <i class="fab fa-google"></i>
-                </button>
-                <button type="button" class="social-btn" title="Sign in with Facebook">
-                    <i class="fab fa-facebook-f"></i>
-                </button>
-                <button type="button" class="social-btn" title="Sign in with Apple">
-                    <i class="fab fa-apple"></i>
-                </button>
+            
+            <div class="form-options">
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" name="rememberMe">
+                    <span class="checkmark"></span>
+                    Remember me
+                </label>
+                <a href="/Account/ForgotPassword" class="forgot-link">Forgot password?</a>
             </div>
-
-            <div class="register-link">
-                Don't have an account? <a href="/account/register">Create one</a>
-            </div>
+            
+            <button type="submit" class="btn btn-primary btn-lg btn-block">
+                Sign In
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+        
+        <div class="auth-divider">
+            <span>or continue with</span>
         </div>
-
-        <div class="form-footer">
-            © 2025 TRAVIL. All rights reserved.
+        
+        <div class="social-auth">
+            <button type="button" class="social-btn google">
+                <i class="fab fa-google"></i>
+                Google
+            </button>
+            <button type="button" class="social-btn facebook">
+                <i class="fab fa-facebook-f"></i>
+                Facebook
+            </button>
         </div>
+        
+        <p class="auth-switch">
+            Don't have an account? 
+            <a href="/Account/Register">Create Account</a>
+        </p>
     </div>
+</div>
 
-    <script src="~/js/login.js" asp-append-version="true"></script>
-</body>
-</html>
+@section Scripts {
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleBtn = document.querySelector('.password-toggle i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.classList.remove('fa-eye');
+                toggleBtn.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.classList.remove('fa-eye-slash');
+                toggleBtn.classList.add('fa-eye');
+            }
+        }
+    </script>
+}
