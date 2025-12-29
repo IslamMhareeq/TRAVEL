@@ -1,0 +1,94 @@
+@{
+    ViewData["Title"] = "My Wishlist";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Wishlist - TRAVIL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        :root{--color-midnight:#0d1117;--color-navy:#161b22;--color-slate:#21262d;--color-charcoal:#30363d;--color-gold:#d4a853;--color-gold-dark:#b8923f;--color-gold-muted:rgba(212,168,83,0.15);--color-white:#fff;--color-silver:#8b949e;--color-mist:#c9d1d9;--font-display:'Cormorant Garamond',serif;--font-body:'Outfit',sans-serif;--radius-md:10px;--radius-lg:16px;--sidebar-width:280px}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:var(--font-body);background:var(--color-midnight);color:var(--color-mist);line-height:1.6}
+        .page-transition{position:fixed;inset:0;background:var(--color-midnight);z-index:10000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all .4s}
+        .page-transition.active{opacity:1;visibility:visible}
+        .loader{width:48px;height:48px;border:3px solid var(--color-slate);border-top-color:var(--color-gold);border-radius:50%;animation:spin .8s linear infinite}
+        .dashboard-layout{display:flex;min-height:100vh}
+        .sidebar{width:var(--sidebar-width);background:var(--color-navy);border-right:1px solid var(--color-slate);position:fixed;top:0;left:0;bottom:0;z-index:100;display:flex;flex-direction:column}
+        .sidebar-header{padding:24px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--color-slate)}
+        .sidebar-header .logo{width:42px;height:42px;background:linear-gradient(135deg,var(--color-gold),var(--color-gold-dark));border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:1.125rem;color:var(--color-midnight)}
+        .sidebar-header h1{font-family:var(--font-display);font-size:1.5rem;font-weight:500;color:var(--color-white);letter-spacing:.1em}
+        .nav-section{padding:16px}
+        .nav-section-title{font-size:.6875rem;font-weight:600;color:#484f58;text-transform:uppercase;letter-spacing:.1em;padding:8px 12px;margin-bottom:8px}
+        .nav-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:var(--radius-md);color:var(--color-silver);text-decoration:none;font-size:.9375rem;font-weight:500;transition:all .15s;margin-bottom:4px;border-left:3px solid transparent}
+        .nav-item:hover{background:var(--color-slate);color:var(--color-white)}
+        .nav-item.active{background:var(--color-gold-muted);color:var(--color-gold);border-left-color:var(--color-gold)}
+        .nav-item i{width:20px;text-align:center}
+        .main-content{flex:1;margin-left:var(--sidebar-width);padding:24px;min-height:100vh}
+        .header{margin-bottom:32px}
+        .header h2{font-family:var(--font-display);font-size:1.75rem;font-weight:500;color:var(--color-white);margin-bottom:4px}
+        .header .subtitle{font-size:.875rem;color:var(--color-silver)}
+        .mobile-menu-btn{display:none;background:var(--color-slate);border:none;color:var(--color-white);padding:12px;border-radius:var(--radius-md);cursor:pointer;font-size:1.125rem}
+        .empty-state{text-align:center;padding:64px 24px;background:var(--color-navy);border:1px solid var(--color-slate);border-radius:var(--radius-lg)}
+        .empty-state i{font-size:4rem;margin-bottom:24px;color:var(--color-gold);opacity:.3}
+        .empty-state h3{font-family:var(--font-display);font-size:1.5rem;color:var(--color-white);margin-bottom:12px}
+        .empty-state p{color:var(--color-silver);margin-bottom:24px}
+        .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border:none;border-radius:var(--radius-md);font-family:var(--font-body);font-size:.875rem;font-weight:600;cursor:pointer;transition:all .3s;text-decoration:none}
+        .btn-primary{background:linear-gradient(135deg,var(--color-gold),var(--color-gold-dark));color:var(--color-midnight)}
+        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(212,168,83,.25)}
+        @@media(max-width:1024px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main-content{margin-left:0}.mobile-menu-btn{display:flex}}
+        @@keyframes spin{to{transform:rotate(360deg)}}
+    </style>
+</head>
+<body>
+    <div class="page-transition" id="pageTransition"><div class="loader"></div></div>
+    <div class="dashboard-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="/" onclick="navigateTo('/',event)" style="display:flex;align-items:center;gap:12px;text-decoration:none">
+                    <div class="logo"><i class="fas fa-compass"></i></div>
+                    <h1>TRAVIL</h1>
+                </a>
+            </div>
+            <nav class="nav-section">
+                <div class="nav-section-title">Main Menu</div>
+                <a href="/account/dashboard" class="nav-item" onclick="navigateTo('/account/dashboard',event)"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                <a href="/account/bookings" class="nav-item" onclick="navigateTo('/account/bookings',event)"><i class="fas fa-suitcase"></i><span>My Bookings</span></a>
+                <a href="/account/wishlist" class="nav-item active" onclick="navigateTo('/account/wishlist',event)"><i class="fas fa-heart"></i><span>Wishlist</span></a>
+            </nav>
+            <nav class="nav-section">
+                <div class="nav-section-title">Account</div>
+                <a href="/account/profile" class="nav-item" onclick="navigateTo('/account/profile',event)"><i class="fas fa-user"></i><span>Profile</span></a>
+                <a href="#" class="nav-item" onclick="logout(event)"><i class="fas fa-sign-out-alt"></i><span>Sign Out</span></a>
+            </nav>
+        </aside>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <main class="main-content">
+            <div class="header">
+                <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+                <h2>My Wishlist</h2>
+                <p class="subtitle">Save your dream destinations for later</p>
+            </div>
+            <div class="empty-state">
+                <i class="fas fa-heart"></i>
+                <h3>Your wishlist is empty</h3>
+                <p>Start exploring and save destinations you love!</p>
+                <a href="/packages" class="btn btn-primary" onclick="navigateTo('/packages',event)"><i class="fas fa-search"></i> Explore Packages</a>
+            </div>
+        </main>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded',function(){if(!localStorage.getItem('token'))navigateTo('/account/login')});
+        function navigateTo(url,event){if(event)event.preventDefault();document.getElementById('pageTransition').classList.add('active');setTimeout(()=>{window.location.href=url},400)}
+        function logout(event){if(event)event.preventDefault();localStorage.removeItem('token');localStorage.removeItem('user');navigateTo('/account/login')}
+        const mobileMenuBtn=document.getElementById('mobileMenuBtn'),sidebar=document.getElementById('sidebar'),sidebarOverlay=document.getElementById('sidebarOverlay');
+        if(mobileMenuBtn)mobileMenuBtn.addEventListener('click',()=>{sidebar.classList.toggle('open');sidebarOverlay.classList.toggle('active')});
+        if(sidebarOverlay)sidebarOverlay.addEventListener('click',()=>{sidebar.classList.remove('open');sidebarOverlay.classList.remove('active')});
+        window.addEventListener('pageshow',()=>document.getElementById('pageTransition').classList.remove('active'));
+    </script>
+</body>
+</html>

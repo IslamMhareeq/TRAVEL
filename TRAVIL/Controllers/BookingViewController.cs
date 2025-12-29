@@ -1,27 +1,29 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace TRAVEL.Controllers
 {
     /// <summary>
     /// Controller for Booking Views
     /// </summary>
-    [Route("booking")]
     public class BookingViewController : Controller
     {
         /// <summary>
-        /// Create Booking
+        /// Create Booking - route: /booking/create/{packageId}
         /// </summary>
-        [HttpGet("create/{packageId}")]
-        public IActionResult Create(int packageId)
+        [HttpGet]
+        [Route("booking/create/{packageId?}")]
+        public IActionResult Create(int? packageId)
         {
-            ViewData["PackageId"] = packageId;
+            ViewData["PackageId"] = packageId ?? 1;
             return View("~/Views/Booking/Create.cshtml");
         }
 
         /// <summary>
-        /// Booking Details
+        /// Booking Details - route: /booking/{id} OR /booking/details/{id}
         /// </summary>
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("booking/{id}")]
+        [Route("booking/details/{id}")]
         public IActionResult Details(int id)
         {
             ViewData["BookingId"] = id;
@@ -29,31 +31,15 @@ namespace TRAVEL.Controllers
         }
 
         /// <summary>
-        /// My Bookings
+        /// Payment page (placeholder)
         /// </summary>
-        [HttpGet("my-bookings")]
-        public IActionResult MyBookings()
+        [HttpGet]
+        [Route("booking/payment/{id}")]
+        public IActionResult Payment(int id)
         {
-            return View("~/Views/Booking/MyBookings.cshtml");
-        }
-
-        /// <summary>
-        /// Payment Page
-        /// </summary>
-        [HttpGet("payment/{bookingId}")]
-        public IActionResult Payment(int bookingId)
-        {
-            ViewData["BookingId"] = bookingId;
-            return View("~/Views/Booking/Payment.cshtml");
-        }
-
-        /// <summary>
-        /// Payment Success
-        /// </summary>
-        [HttpGet("success")]
-        public IActionResult Success()
-        {
-            return View("~/Views/Booking/Success.cshtml");
+            ViewData["BookingId"] = id;
+            // For now, redirect to details
+            return View("~/Views/Booking/Details.cshtml");
         }
     }
 }

@@ -1,435 +1,668 @@
-﻿@{
-    ViewData["Title"] = "Profile";
+@{
+    ViewData["Title"] = "My Profile";
     Layout = null;
 }
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - TRAVIL</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="~/css/dashboard.css" rel="stylesheet" asp-append-version="true" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Profile - TRAVIL</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
+    <style>
+        :root {
+            --color-midnight: #0d1117;
+            --color-navy: #161b22;
+            --color-slate: #21262d;
+            --color-charcoal: #30363d;
+            --color-steel: #484f58;
+            --color-gold: #d4a853;
+            --color-gold-light: #e8c875;
+            --color-gold-dark: #b8923f;
+            --color-gold-muted: rgba(212, 168, 83, 0.15);
+            --color-white: #ffffff;
+            --color-pearl: #f0f3f6;
+            --color-silver: #8b949e;
+            --color-mist: #c9d1d9;
+            --color-success: #3fb950;
+            --color-warning: #d29922;
+            --color-error: #f85149;
+            --font-display: 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --radius-full: 9999px;
+            --shadow-gold: 0 8px 32px rgba(212, 168, 83, 0.25);
+            --transition-fast: 150ms ease;
+            --transition-normal: 300ms ease;
+            --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+            --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
+            --sidebar-width: 280px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-midnight);
+            color: var(--color-mist);
+            line-height: 1.6;
+        }
+
+        .page-transition {
+            position: fixed; inset: 0; background: var(--color-midnight);
+            z-index: 10000; display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+        .page-transition.active { opacity: 1; visibility: visible; }
+        .page-transition .loader {
+            width: 48px; height: 48px; border: 3px solid var(--color-slate);
+            border-top-color: var(--color-gold); border-radius: 50%; animation: spin 0.8s linear infinite;
+        }
+
+        .dashboard-layout { display: flex; min-height: 100vh; }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width); background: var(--color-navy);
+            border-right: 1px solid var(--color-slate);
+            position: fixed; top: 0; left: 0; bottom: 0; z-index: 100;
+            display: flex; flex-direction: column; transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: var(--space-5); display: flex; align-items: center; gap: var(--space-3);
+            border-bottom: 1px solid var(--color-slate);
+        }
+
+        .sidebar-header .logo {
+            width: 42px; height: 42px;
+            background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+            border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;
+            font-size: 1.125rem; color: var(--color-midnight);
+        }
+
+        .sidebar-header h1 {
+            font-family: var(--font-display); font-size: 1.5rem; font-weight: 500;
+            color: var(--color-white); letter-spacing: 0.1em;
+        }
+
+        .nav-section { padding: var(--space-4); }
+
+        .nav-section-title {
+            font-size: 0.6875rem; font-weight: 600; color: var(--color-steel);
+            text-transform: uppercase; letter-spacing: 0.1em;
+            padding: var(--space-2) var(--space-3); margin-bottom: var(--space-2);
+        }
+
+        .nav-item {
+            display: flex; align-items: center; gap: var(--space-3);
+            padding: var(--space-3) var(--space-4); border-radius: var(--radius-md);
+            color: var(--color-silver); text-decoration: none; font-size: 0.9375rem;
+            font-weight: 500; transition: all var(--transition-fast);
+            margin-bottom: var(--space-1); border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover { background: var(--color-slate); color: var(--color-white); }
+        .nav-item.active { background: var(--color-gold-muted); color: var(--color-gold); border-left-color: var(--color-gold); }
+        .nav-item i { width: 20px; text-align: center; }
+
+        .sidebar-footer {
+            margin-top: auto; padding: var(--space-5); border-top: 1px solid var(--color-slate);
+        }
+
+        .user-info { display: flex; align-items: center; gap: var(--space-3); }
+
+        .user-avatar {
+            width: 44px; height: 44px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 600; color: var(--color-midnight);
+        }
+
+        .user-details { flex: 1; }
+        .user-name { font-weight: 600; color: var(--color-white); font-size: 0.9375rem; }
+        .user-email { font-size: 0.8125rem; color: var(--color-silver); }
+
+        .sidebar-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0, 0, 0, 0.5); z-index: 99;
+        }
+        .sidebar-overlay.active { display: block; }
+
+        /* Main Content */
+        .main-content {
+            flex: 1; margin-left: var(--sidebar-width); padding: var(--space-5); min-height: 100vh;
+        }
+
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4);
+        }
+
+        .header h2 {
+            font-family: var(--font-display); font-size: 1.75rem; font-weight: 500;
+            color: var(--color-white); margin-bottom: var(--space-1);
+        }
+
+        .header .subtitle { font-size: 0.875rem; color: var(--color-silver); }
+
+        .mobile-menu-btn {
+            display: none; background: var(--color-slate); border: none;
+            color: var(--color-white); padding: var(--space-3);
+            border-radius: var(--radius-md); cursor: pointer; font-size: 1.125rem;
+        }
+
+        /* Profile Header */
+        .profile-header {
+            display: flex; align-items: center; gap: var(--space-5);
+            padding: var(--space-6); background: var(--color-navy);
+            border: 1px solid var(--color-slate); border-radius: var(--radius-lg);
+            margin-bottom: var(--space-6);
+        }
+
+        .profile-avatar {
+            width: 100px; height: 100px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem; font-weight: 600; color: var(--color-midnight);
+            flex-shrink: 0;
+        }
+
+        .profile-info h1 {
+            font-family: var(--font-display); font-size: 1.75rem; font-weight: 500;
+            color: var(--color-white); margin-bottom: var(--space-2);
+        }
+
+        .profile-meta {
+            display: flex; flex-wrap: wrap; gap: var(--space-4);
+            font-size: 0.9375rem; color: var(--color-silver);
+        }
+
+        .profile-meta span { display: flex; align-items: center; gap: var(--space-2); }
+        .profile-meta i { color: var(--color-gold); }
+
+        /* Profile Grid */
+        .profile-grid {
+            display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-5);
+        }
+
+        /* Form Section */
+        .form-section {
+            background: var(--color-navy); border: 1px solid var(--color-slate);
+            border-radius: var(--radius-lg); overflow: hidden; margin-bottom: var(--space-5);
+        }
+
+        .form-section-header {
+            padding: var(--space-5); border-bottom: 1px solid var(--color-slate);
+        }
+
+        .form-section-header h3 {
+            font-family: var(--font-display); font-size: 1.25rem; font-weight: 500;
+            color: var(--color-white); margin-bottom: var(--space-1);
+        }
+
+        .form-section-header p { font-size: 0.875rem; color: var(--color-silver); margin: 0; }
+
+        .form-section-body { padding: var(--space-5); }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+
+        .form-group { margin-bottom: var(--space-4); }
+        .form-group:last-child { margin-bottom: 0; }
+
+        .form-group label {
+            display: block; font-size: 0.8125rem; font-weight: 500;
+            color: var(--color-mist); margin-bottom: var(--space-2);
+        }
+
+        .form-control {
+            width: 100%; padding: var(--space-3) var(--space-4);
+            background: var(--color-slate); border: 1px solid var(--color-charcoal);
+            border-radius: var(--radius-md); font-family: var(--font-body);
+            font-size: 0.9375rem; color: var(--color-white); transition: all var(--transition-fast);
+        }
+
+        .form-control:focus { outline: none; border-color: var(--color-gold); background: var(--color-charcoal); }
+        .form-control::placeholder { color: var(--color-steel); }
+
+        .form-actions {
+            display: flex; justify-content: flex-end; gap: var(--space-3);
+            padding-top: var(--space-5); border-top: 1px solid var(--color-slate); margin-top: var(--space-5);
+        }
+
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+            padding: var(--space-3) var(--space-5); border: none; border-radius: var(--radius-md);
+            font-family: var(--font-body); font-size: 0.875rem; font-weight: 600;
+            cursor: pointer; transition: all var(--transition-normal); text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+            color: var(--color-midnight);
+        }
+        .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: var(--shadow-gold); }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .btn-secondary { background: var(--color-slate); color: var(--color-mist); border: 1px solid var(--color-charcoal); }
+        .btn-secondary:hover { background: var(--color-charcoal); }
+
+        .btn-danger {
+            background: rgba(248, 81, 73, 0.15); color: var(--color-error);
+            border: 1px solid rgba(248, 81, 73, 0.3);
+        }
+        .btn-danger:hover { background: rgba(248, 81, 73, 0.25); }
+
+        /* Alert */
+        .alert {
+            padding: var(--space-4); border-radius: var(--radius-md);
+            margin-bottom: var(--space-4); display: flex; align-items: center;
+            gap: var(--space-3); font-size: 0.875rem;
+        }
+        .alert-success { background: rgba(63, 185, 80, 0.1); border: 1px solid rgba(63, 185, 80, 0.3); color: var(--color-success); }
+        .alert-danger { background: rgba(248, 81, 73, 0.1); border: 1px solid rgba(248, 81, 73, 0.3); color: var(--color-error); }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 24px; right: 24px; background: var(--color-charcoal);
+            border: 1px solid var(--color-slate); border-radius: var(--radius-lg);
+            padding: 16px 24px; display: flex; align-items: center; gap: 12px;
+            color: var(--color-white); font-size: 0.9375rem; z-index: 10000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            opacity: 0; transform: translateY(20px); transition: all 0.3s ease;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.success i { color: var(--color-success); }
+        .toast.error i { color: var(--color-error); }
+
+        @@media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+            .mobile-menu-btn { display: flex; }
+            .profile-grid { grid-template-columns: 1fr; }
+        }
+
+        @@media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+            .profile-header { flex-direction: column; text-align: center; }
+        }
+
+        @@keyframes spin { to { transform: rotate(360deg); } }
+    </style>
 </head>
 <body>
-    <div class="dashboard-layout">
-        <!-- Sidebar Overlay -->
-        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="page-transition" id="pageTransition"><div class="loader"></div></div>
 
+    <div class="dashboard-layout">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <a href="/" class="sidebar-brand">
-                    <div class="icon">
-                        <i class="fas fa-paper-plane"></i>
-                    </div>
-                    <span>TRAVIL</span>
+                <a href="/" onclick="navigateTo('/', event)" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo"><i class="fas fa-compass"></i></div>
+                    <h1>TRAVIL</h1>
                 </a>
             </div>
 
-            <nav class="sidebar-nav">
-                <div class="nav-section">
-                    <div class="nav-section-title">Main Menu</div>
-                    <a href="/account/dashboard" class="nav-link">
-                        <i class="fas fa-th-large"></i>
-                        Dashboard
-                    </a>
-                    <a href="/" class="nav-link">
-                        <i class="fas fa-compass"></i>
-                        Explore Packages
-                    </a>
-                    <a href="/account/bookings" class="nav-link">
-                        <i class="fas fa-suitcase"></i>
-                        My Bookings
-                    </a>
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-heart"></i>
-                        Wishlist
-                    </a>
-                </div>
+            <nav class="nav-section">
+                <div class="nav-section-title">Main Menu</div>
+                <a href="/account/dashboard" class="nav-item" onclick="navigateTo('/account/dashboard', event)">
+                    <i class="fas fa-th-large"></i><span>Dashboard</span>
+                </a>
+                <a href="/account/bookings" class="nav-item" onclick="navigateTo('/account/bookings', event)">
+                    <i class="fas fa-suitcase"></i><span>My Bookings</span>
+                </a>
+                <a href="/account/wishlist" class="nav-item" onclick="navigateTo('/account/wishlist', event)">
+                    <i class="fas fa-heart"></i><span>Wishlist</span>
+                </a>
+            </nav>
 
-                <div class="nav-section">
-                    <div class="nav-section-title">Account</div>
-                    <a href="/account/profile" class="nav-link active">
-                        <i class="fas fa-user"></i>
-                        Profile
-                    </a>
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-credit-card"></i>
-                        Payment Methods
-                    </a>
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-bell"></i>
-                        Notifications
-                    </a>
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-cog"></i>
-                        Settings
-                    </a>
-                </div>
+            <nav class="nav-section">
+                <div class="nav-section-title">Account</div>
+                <a href="/account/profile" class="nav-item active" onclick="navigateTo('/account/profile', event)">
+                    <i class="fas fa-user"></i><span>Profile</span>
+                </a>
+                <a href="/account/settings" class="nav-item" onclick="navigateTo('/account/settings', event)">
+                    <i class="fas fa-cog"></i><span>Settings</span>
+                </a>
+                <a href="/account/notifications" class="nav-item" onclick="navigateTo('/account/notifications', event)">
+                    <i class="fas fa-bell"></i><span>Notifications</span>
+                </a>
+            </nav>
 
-                <div class="nav-section">
-                    <div class="nav-section-title">Support</div>
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-question-circle"></i>
-                        Help Center
-                    </a>
-                    <a href="#" class="nav-link" id="logoutBtn">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Sign Out
-                    </a>
-                </div>
+            <nav class="nav-section">
+                <div class="nav-section-title">Support</div>
+                <a href="#" class="nav-item"><i class="fas fa-question-circle"></i><span>Help Center</span></a>
+                <a href="#" class="nav-item" onclick="logout(event)"><i class="fas fa-sign-out-alt"></i><span>Sign Out</span></a>
             </nav>
 
             <div class="sidebar-footer">
-                <div class="sidebar-user">
-                    <div class="sidebar-user-avatar" id="sidebarAvatar">JD</div>
-                    <div class="sidebar-user-info">
-                        <div class="sidebar-user-name" id="sidebarName">John Doe</div>
-                        <div class="sidebar-user-email" id="sidebarEmail">john&#64;example.com</div>
+                <div class="user-info">
+                    <div class="user-avatar" id="sidebarAvatar">U</div>
+                    <div class="user-details">
+                        <div class="user-name" id="sidebarName">User</div>
+                        <div class="user-email" id="sidebarEmail">user@example.com</div>
                     </div>
                 </div>
             </div>
         </aside>
 
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
         <!-- Main Content -->
         <main class="main-content">
-            <header class="top-header">
-                <button class="mobile-menu-btn" id="mobileMenuBtn">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <h1 class="page-title">My Profile</h1>
-                <div class="header-actions">
-                    <button class="header-btn">
-                        <i class="fas fa-bell"></i>
-                        <span class="badge">3</span>
-                    </button>
+            <div class="header">
+                <div>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+                    <h2>My Profile</h2>
+                    <p class="subtitle">Manage your account information</p>
                 </div>
-            </header>
+            </div>
 
-            <div class="page-content">
-                <!-- Alerts -->
-                <div id="alertSuccess" class="alert alert-success d-none">
-                    <i class="fas fa-check-circle"></i>
-                    <span id="alertSuccessMessage">Profile updated successfully!</span>
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-avatar" id="profileAvatar">U</div>
+                <div class="profile-info">
+                    <h1 id="profileName">User Name</h1>
+                    <div class="profile-meta">
+                        <span><i class="fas fa-envelope"></i> <span id="profileEmail">user@example.com</span></span>
+                        <span><i class="fas fa-calendar"></i> Member since December 2025</span>
+                    </div>
                 </div>
-                <div id="alertError" class="alert alert-danger d-none">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <span id="alertErrorMessage">An error occurred.</span>
+            </div>
+
+            <!-- Profile Grid -->
+            <div class="profile-grid">
+                <div>
+                    <!-- Personal Information -->
+                    <div class="form-section">
+                        <div class="form-section-header">
+                            <h3>Personal Information</h3>
+                            <p>Update your personal details</p>
+                        </div>
+                        <div class="form-section-body">
+                            <div id="personalAlert"></div>
+                            <form id="personalForm">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="firstName">First Name</label>
+                                        <input type="text" id="firstName" class="form-control" placeholder="John">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="lastName">Last Name</label>
+                                        <input type="text" id="lastName" class="form-control" placeholder="Doe">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="email">Email Address</label>
+                                        <input type="email" id="email" class="form-control" placeholder="john@example.com">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone">Phone Number</label>
+                                        <input type="tel" id="phone" class="form-control" placeholder="+1 (555) 123-4567">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="address">Address</label>
+                                        <input type="text" id="address" class="form-control" placeholder="Enter your address">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="city">City</label>
+                                        <input type="text" id="city" class="form-control" placeholder="Enter city">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="country">Country</label>
+                                        <input type="text" id="country" class="form-control" placeholder="Enter country">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="postalCode">Postal Code</label>
+                                        <input type="text" id="postalCode" class="form-control" placeholder="Enter postal code">
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-secondary" onclick="resetPersonalForm()">Cancel</button>
+                                    <button type="submit" class="btn btn-primary" id="saveBtn">
+                                        <i class="fas fa-save"></i> Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Change Password -->
+                    <div class="form-section">
+                        <div class="form-section-header">
+                            <h3>Change Password</h3>
+                            <p>Update your account password</p>
+                        </div>
+                        <div class="form-section-body">
+                            <div id="passwordAlert"></div>
+                            <form id="passwordForm">
+                                <div class="form-group">
+                                    <label for="currentPassword">Current Password</label>
+                                    <input type="password" id="currentPassword" class="form-control" placeholder="Enter current password">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="newPassword">New Password</label>
+                                        <input type="password" id="newPassword" class="form-control" placeholder="Enter new password">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="confirmPassword">Confirm New Password</label>
+                                        <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm new password">
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-secondary" onclick="resetPasswordForm()">Cancel</button>
+                                    <button type="submit" class="btn btn-primary" id="passwordBtn">
+                                        <i class="fas fa-lock"></i> Update Password
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Profile Header -->
-                <div class="profile-header">
-                    <div class="profile-avatar" id="profileAvatar">
-                        JD
-                        <button class="profile-avatar-edit" title="Change photo">
-                            <i class="fas fa-camera"></i>
-                        </button>
-                    </div>
-                    <div class="profile-info">
-                        <h1 id="profileName">John Doe</h1>
-                        <p><i class="fas fa-envelope"></i> <span id="profileEmail">john&#64;example.com</span></p>
-                        <p><i class="fas fa-calendar-alt"></i> Member since <span id="profileMemberSince">January 2025</span></p>
-                    </div>
-                </div>
-
-                <!-- Personal Information -->
-                <div class="content-card">
-                    <div class="content-card-header">
-                        <h3 class="content-card-title">Personal Information</h3>
-                    </div>
-                    <div class="content-card-body">
-                        <form id="profileForm">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label class="form-label">First Name</label>
-                                    <input type="text" class="form-control" id="firstName" placeholder="Enter first name">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Last Name</label>
-                                    <input type="text" class="form-control" id="lastName" placeholder="Enter last name">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Email Address</label>
-                                    <input type="email" class="form-control" id="email" placeholder="Enter email" disabled>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Phone Number</label>
-                                    <input type="tel" class="form-control" id="phone" placeholder="Enter phone number">
-                                </div>
-                                <div class="form-group full-width">
-                                    <label class="form-label">Address</label>
-                                    <input type="text" class="form-control" id="address" placeholder="Enter your address">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">City</label>
-                                    <input type="text" class="form-control" id="city" placeholder="Enter city">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Country</label>
-                                    <input type="text" class="form-control" id="country" placeholder="Enter country">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Postal Code</label>
-                                    <input type="text" class="form-control" id="postalCode" placeholder="Enter postal code">
-                                </div>
-                            </div>
-                            <div style="display: flex; gap: 16px; margin-top: 24px;">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save"></i>
-                                    Save Changes
-                                </button>
-                                <button type="button" class="btn btn-secondary" id="cancelBtn">
-                                    Cancel
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Change Password -->
-                <div class="content-card">
-                    <div class="content-card-header">
-                        <h3 class="content-card-title">Change Password</h3>
-                    </div>
-                    <div class="content-card-body">
-                        <form id="passwordForm">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label class="form-label">Current Password</label>
-                                    <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">New Password</label>
-                                    <input type="password" class="form-control" id="newPassword" placeholder="Enter new password">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Confirm New Password</label>
-                                    <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password">
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary" style="margin-top: 24px;">
-                                <i class="fas fa-lock"></i>
-                                Update Password
+                <div>
+                    <!-- Danger Zone -->
+                    <div class="form-section" style="border-color: rgba(248, 81, 73, 0.3);">
+                        <div class="form-section-header">
+                            <h3 style="color: var(--color-error);">Danger Zone</h3>
+                            <p>Once you delete your account, there is no going back. Please be certain.</p>
+                        </div>
+                        <div class="form-section-body">
+                            <button type="button" class="btn btn-danger" style="width: 100%;" onclick="confirmDelete()">
+                                <i class="fas fa-trash-alt"></i> Delete Account
                             </button>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Danger Zone -->
-                <div class="content-card" style="border-color: rgba(255, 107, 107, 0.3);">
-                    <div class="content-card-header">
-                        <h3 class="content-card-title" style="color: var(--color-error);">Danger Zone</h3>
-                    </div>
-                    <div class="content-card-body">
-                        <p style="color: var(--color-silver); margin-bottom: 20px;">
-                            Once you delete your account, there is no going back. Please be certain.
-                        </p>
-                        <button type="button" class="btn btn-danger" id="deleteAccountBtn">
-                            <i class="fas fa-trash-alt"></i>
-                            Delete Account
-                        </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <script>
-        let originalData = {};
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Message</span>
+    </div>
 
-        // Check authentication
-        function checkAuth() {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
             const token = localStorage.getItem('token');
             const user = localStorage.getItem('user');
 
             if (!token || !user) {
-                window.location.href = '/account/login';
-                return null;
+                navigateTo('/account/login');
+                return;
             }
 
-            return JSON.parse(user);
+            try {
+                const userData = JSON.parse(user);
+                const firstName = userData.firstName || '';
+                const lastName = userData.lastName || '';
+                const email = userData.email || '';
+                const phone = userData.phone || '';
+                const fullName = `${firstName} ${lastName}`.trim() || 'User';
+
+                document.getElementById('firstName').value = firstName;
+                document.getElementById('lastName').value = lastName;
+                document.getElementById('email').value = email;
+                document.getElementById('phone').value = phone;
+
+                document.getElementById('profileName').textContent = fullName;
+                document.getElementById('profileEmail').textContent = email;
+                document.getElementById('profileAvatar').textContent = (firstName || 'U').charAt(0).toUpperCase();
+
+                document.getElementById('sidebarName').textContent = fullName;
+                document.getElementById('sidebarEmail').textContent = email;
+                document.getElementById('sidebarAvatar').textContent = (firstName || 'U').charAt(0).toUpperCase();
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+
+        document.getElementById('personalForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('saveBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+            setTimeout(() => {
+                const user = JSON.parse(localStorage.getItem('user') || '{}');
+                user.firstName = document.getElementById('firstName').value;
+                user.lastName = document.getElementById('lastName').value;
+                user.email = document.getElementById('email').value;
+                user.phone = document.getElementById('phone').value;
+                localStorage.setItem('user', JSON.stringify(user));
+
+                const fullName = `${user.firstName} ${user.lastName}`.trim();
+                document.getElementById('profileName').textContent = fullName;
+                document.getElementById('profileEmail').textContent = user.email;
+                document.getElementById('profileAvatar').textContent = user.firstName.charAt(0).toUpperCase();
+                document.getElementById('sidebarName').textContent = fullName;
+                document.getElementById('sidebarEmail').textContent = user.email;
+                document.getElementById('sidebarAvatar').textContent = user.firstName.charAt(0).toUpperCase();
+
+                showToast('Profile updated successfully!');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+            }, 1000);
+        });
+
+        document.getElementById('passwordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const current = document.getElementById('currentPassword').value;
+            const newPass = document.getElementById('newPassword').value;
+            const confirm = document.getElementById('confirmPassword').value;
+
+            if (!current || !newPass || !confirm) {
+                showAlert('passwordAlert', 'All fields are required', 'danger');
+                return;
+            }
+            if (newPass !== confirm) {
+                showAlert('passwordAlert', 'Passwords do not match', 'danger');
+                return;
+            }
+            if (newPass.length < 8) {
+                showAlert('passwordAlert', 'Password must be at least 8 characters', 'danger');
+                return;
+            }
+
+            const btn = document.getElementById('passwordBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+
+            setTimeout(() => {
+                showToast('Password updated successfully!');
+                resetPasswordForm();
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-lock"></i> Update Password';
+            }, 1000);
+        });
+
+        function showAlert(containerId, message, type) {
+            document.getElementById(containerId).innerHTML = `
+                <div class="alert alert-${type}">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                    ${message}
+                </div>
+            `;
         }
 
-        // Initialize profile
-        function initProfile() {
-            const user = checkAuth();
-            if (!user) return;
-
-            // Store original data
-            originalData = { ...user };
-
-            // Update sidebar
-            document.getElementById('sidebarName').textContent = `${user.firstName} ${user.lastName}`;
-            document.getElementById('sidebarEmail').textContent = user.email;
-            document.getElementById('sidebarAvatar').textContent = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
-
-            // Update profile header
-            document.getElementById('profileName').textContent = `${user.firstName} ${user.lastName}`;
-            document.getElementById('profileEmail').textContent = user.email;
-            document.getElementById('profileAvatar').childNodes[0].textContent = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
-
-            // Format member since date
-            if (user.createdAt) {
-                const date = new Date(user.createdAt);
-                document.getElementById('profileMemberSince').textContent = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-            }
-
-            // Fill form
+        function resetPersonalForm() {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
             document.getElementById('firstName').value = user.firstName || '';
             document.getElementById('lastName').value = user.lastName || '';
             document.getElementById('email').value = user.email || '';
-            document.getElementById('phone').value = user.phoneNumber || '';
-            document.getElementById('address').value = user.address || '';
-            document.getElementById('city').value = user.city || '';
-            document.getElementById('country').value = user.country || '';
-            document.getElementById('postalCode').value = user.postalCode || '';
+            document.getElementById('phone').value = user.phone || '';
         }
 
-        // Show alert
-        function showAlert(type, message) {
-            const alertEl = document.getElementById(type === 'success' ? 'alertSuccess' : 'alertError');
-            const messageEl = document.getElementById(type === 'success' ? 'alertSuccessMessage' : 'alertErrorMessage');
-
-            messageEl.textContent = message;
-            alertEl.classList.remove('d-none');
-
-            setTimeout(() => {
-                alertEl.classList.add('d-none');
-            }, 5000);
+        function resetPasswordForm() {
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+            document.getElementById('passwordAlert').innerHTML = '';
         }
 
-        // Save profile
-        async function saveProfile(e) {
-            e.preventDefault();
-
-            const token = localStorage.getItem('token');
-            const formData = {
-                firstName: document.getElementById('firstName').value,
-                lastName: document.getElementById('lastName').value,
-                phoneNumber: document.getElementById('phone').value,
-                address: document.getElementById('address').value,
-                city: document.getElementById('city').value,
-                country: document.getElementById('country').value,
-                postalCode: document.getElementById('postalCode').value
-            };
-
-            try {
-                const response = await fetch('/api/account/profile', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                if (response.ok) {
-                    // Update local storage
-                    const user = JSON.parse(localStorage.getItem('user'));
-                    Object.assign(user, formData);
-                    localStorage.setItem('user', JSON.stringify(user));
-
-                    // Update UI
-                    initProfile();
-                    showAlert('success', 'Profile updated successfully!');
-                } else {
-                    showAlert('error', 'Failed to update profile. Please try again.');
-                }
-            } catch (error) {
-                // For now, just update local storage since API might not be ready
-                const user = JSON.parse(localStorage.getItem('user'));
-                Object.assign(user, formData);
-                localStorage.setItem('user', JSON.stringify(user));
-
-                initProfile();
-                showAlert('success', 'Profile updated successfully!');
+        function confirmDelete() {
+            if (confirm('Are you sure you want to delete your account? This cannot be undone.')) {
+                showToast('Account deletion is disabled for demo', 'error');
             }
         }
 
-        // Cancel changes
-        function cancelChanges() {
-            document.getElementById('firstName').value = originalData.firstName || '';
-            document.getElementById('lastName').value = originalData.lastName || '';
-            document.getElementById('phone').value = originalData.phoneNumber || '';
-            document.getElementById('address').value = originalData.address || '';
-            document.getElementById('city').value = originalData.city || '';
-            document.getElementById('country').value = originalData.country || '';
-            document.getElementById('postalCode').value = originalData.postalCode || '';
+        function navigateTo(url, event) {
+            if (event) event.preventDefault();
+            document.getElementById('pageTransition').classList.add('active');
+            setTimeout(() => { window.location.href = url; }, 400);
         }
 
-        // Change password
-        async function changePassword(e) {
-            e.preventDefault();
-
-            const currentPassword = document.getElementById('currentPassword').value;
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-
-            if (!currentPassword || !newPassword || !confirmPassword) {
-                showAlert('error', 'Please fill in all password fields.');
-                return;
-            }
-
-            if (newPassword !== confirmPassword) {
-                showAlert('error', 'New passwords do not match.');
-                return;
-            }
-
-            if (newPassword.length < 6) {
-                showAlert('error', 'Password must be at least 6 characters.');
-                return;
-            }
-
-            // API call would go here
-            showAlert('success', 'Password changed successfully!');
-            document.getElementById('passwordForm').reset();
-        }
-
-        // Mobile menu toggle
-        function toggleMobileMenu() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('active');
-        }
-
-        // Logout
-        function logout() {
+        function logout(event) {
+            if (event) event.preventDefault();
             localStorage.removeItem('token');
             localStorage.removeItem('user');
-            window.location.href = '/account/login';
+            showToast('Logged out successfully');
+            setTimeout(() => navigateTo('/account/login'), 1000);
         }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            initProfile();
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-            // Form submissions
-            document.getElementById('profileForm').addEventListener('submit', saveProfile);
-            document.getElementById('passwordForm').addEventListener('submit', changePassword);
-            document.getElementById('cancelBtn').addEventListener('click', cancelChanges);
-
-            // Mobile menu
-            document.getElementById('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
-            document.getElementById('sidebarOverlay').addEventListener('click', toggleMobileMenu);
-
-            // Logout
-            document.getElementById('logoutBtn').addEventListener('click', function(e) {
-                e.preventDefault();
-                logout();
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+                sidebarOverlay.classList.toggle('active');
             });
-
-            // Delete account
-            document.getElementById('deleteAccountBtn').addEventListener('click', function() {
-                if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-                    // API call would go here
-                    alert('Account deletion is not yet implemented.');
-                }
+        }
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('active');
             });
-        });
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.className = 'toast ' + type;
+            toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        window.addEventListener('pageshow', () => document.getElementById('pageTransition').classList.remove('active'));
     </script>
 </body>
 </html>

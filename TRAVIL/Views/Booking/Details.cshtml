@@ -1,4 +1,547 @@
-﻿@page
-@model TRAVEL.Views.Booking.DetailsModel
 @{
+    ViewData["Title"] = "Booking Details";
+    Layout = null;
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Booking Details - TRAVIL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        :root {
+            --color-midnight: #0d1117;
+            --color-navy: #161b22;
+            --color-slate: #21262d;
+            --color-charcoal: #30363d;
+            --color-gold: #d4a853;
+            --color-gold-dark: #b8923f;
+            --color-gold-muted: rgba(212, 168, 83, 0.15);
+            --color-white: #ffffff;
+            --color-silver: #8b949e;
+            --color-mist: #c9d1d9;
+            --color-success: #3fb950;
+            --color-warning: #d29922;
+            --color-error: #f85149;
+            --color-info: #58a6ff;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Outfit', sans-serif;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --radius-full: 9999px;
+            --sidebar-width: 280px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background: var(--color-midnight); color: var(--color-mist); line-height: 1.6; }
+
+        .page-transition {
+            position: fixed; inset: 0; background: var(--color-midnight); z-index: 10000;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: all 0.4s ease;
+        }
+        .page-transition.active { opacity: 1; visibility: visible; }
+        .loader { width: 48px; height: 48px; border: 3px solid var(--color-slate); border-top-color: var(--color-gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
+
+        .dashboard-layout { display: flex; min-height: 100vh; }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width); background: var(--color-navy);
+            border-right: 1px solid var(--color-slate);
+            position: fixed; top: 0; left: 0; bottom: 0; z-index: 100;
+            display: flex; flex-direction: column; transition: transform 0.3s;
+        }
+        .sidebar-header {
+            padding: 24px; display: flex; align-items: center; gap: 12px;
+            border-bottom: 1px solid var(--color-slate);
+        }
+        .sidebar-header .logo {
+            width: 42px; height: 42px;
+            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+            border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;
+            font-size: 1.125rem; color: var(--color-midnight);
+        }
+        .sidebar-header h1 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 500; color: var(--color-white); letter-spacing: 0.1em; }
+        .nav-section { padding: 16px; }
+        .nav-section-title { font-size: 0.6875rem; font-weight: 600; color: #484f58; text-transform: uppercase; letter-spacing: 0.1em; padding: 8px 12px; margin-bottom: 8px; }
+        .nav-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 16px; border-radius: var(--radius-md);
+            color: var(--color-silver); text-decoration: none; font-size: 0.9375rem;
+            font-weight: 500; transition: all 0.15s; margin-bottom: 4px;
+            border-left: 3px solid transparent;
+        }
+        .nav-item:hover { background: var(--color-slate); color: var(--color-white); }
+        .nav-item.active { background: var(--color-gold-muted); color: var(--color-gold); border-left-color: var(--color-gold); }
+        .nav-item i { width: 20px; text-align: center; }
+
+        .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+        .sidebar-overlay.active { display: block; }
+
+        /* Main Content */
+        .main-content { flex: 1; margin-left: var(--sidebar-width); padding: 24px; min-height: 100vh; }
+
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
+        .header h2 { font-family: var(--font-display); font-size: 1.75rem; font-weight: 500; color: var(--color-white); margin-bottom: 4px; }
+        .header .subtitle { font-size: 0.875rem; color: var(--color-silver); }
+        .mobile-menu-btn { display: none; background: var(--color-slate); border: none; color: var(--color-white); padding: 12px; border-radius: var(--radius-md); cursor: pointer; font-size: 1.125rem; }
+
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 12px 24px; border: none; border-radius: var(--radius-md);
+            font-family: var(--font-body); font-size: 0.875rem; font-weight: 600;
+            cursor: pointer; transition: all 0.3s; text-decoration: none;
+        }
+        .btn-primary { background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark)); color: var(--color-midnight); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(212, 168, 83, 0.25); }
+        .btn-outline { background: transparent; border: 1px solid var(--color-charcoal); color: var(--color-mist); }
+        .btn-outline:hover { border-color: var(--color-gold); color: var(--color-gold); }
+        .btn-danger { background: rgba(248, 81, 73, 0.15); color: var(--color-error); border: 1px solid rgba(248, 81, 73, 0.3); }
+        .btn-danger:hover { background: rgba(248, 81, 73, 0.25); }
+        .btn-sm { padding: 8px 16px; font-size: 0.8125rem; }
+
+        /* Booking Status Banner */
+        .status-banner {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 20px 24px; border-radius: var(--radius-lg); margin-bottom: 24px;
+            flex-wrap: wrap; gap: 16px;
+        }
+        .status-banner.confirmed { background: rgba(63, 185, 80, 0.1); border: 1px solid rgba(63, 185, 80, 0.3); }
+        .status-banner.pending { background: rgba(210, 153, 34, 0.1); border: 1px solid rgba(210, 153, 34, 0.3); }
+        .status-banner.upcoming { background: rgba(88, 166, 255, 0.1); border: 1px solid rgba(88, 166, 255, 0.3); }
+        .status-banner.cancelled { background: rgba(248, 81, 73, 0.1); border: 1px solid rgba(248, 81, 73, 0.3); }
+        .status-info { display: flex; align-items: center; gap: 16px; }
+        .status-icon { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+        .status-banner.confirmed .status-icon { background: rgba(63, 185, 80, 0.2); color: var(--color-success); }
+        .status-banner.pending .status-icon { background: rgba(210, 153, 34, 0.2); color: var(--color-warning); }
+        .status-banner.upcoming .status-icon { background: rgba(88, 166, 255, 0.2); color: var(--color-info); }
+        .status-text h3 { font-size: 1.125rem; font-weight: 600; color: var(--color-white); margin-bottom: 4px; }
+        .status-text p { font-size: 0.875rem; color: var(--color-silver); }
+
+        /* Booking Grid */
+        .booking-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+
+        /* Card */
+        .card {
+            background: var(--color-navy); border: 1px solid var(--color-slate);
+            border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 24px;
+        }
+        .card-header {
+            padding: 20px 24px; border-bottom: 1px solid var(--color-slate);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .card-header h3 { font-family: var(--font-display); font-size: 1.125rem; font-weight: 500; color: var(--color-white); }
+        .card-body { padding: 24px; }
+
+        /* Package Preview */
+        .package-preview { display: flex; gap: 20px; }
+        .package-preview img { width: 180px; height: 140px; border-radius: var(--radius-md); object-fit: cover; flex-shrink: 0; }
+        .package-info { flex: 1; }
+        .package-info h4 { font-size: 1.25rem; font-weight: 600; color: var(--color-white); margin-bottom: 8px; }
+        .package-location { display: flex; align-items: center; gap: 6px; font-size: 0.875rem; color: var(--color-gold); margin-bottom: 12px; }
+        .package-meta { display: flex; flex-wrap: wrap; gap: 16px; }
+        .package-meta-item { display: flex; align-items: center; gap: 6px; font-size: 0.875rem; color: var(--color-silver); }
+        .package-meta-item i { color: var(--color-gold); }
+
+        /* Details List */
+        .details-list { display: flex; flex-direction: column; gap: 16px; }
+        .details-item { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 1px solid var(--color-slate); }
+        .details-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .details-item .label { font-size: 0.9375rem; color: var(--color-silver); display: flex; align-items: center; gap: 8px; }
+        .details-item .label i { color: var(--color-gold); width: 20px; }
+        .details-item .value { font-size: 0.9375rem; font-weight: 600; color: var(--color-white); }
+
+        /* Price Breakdown */
+        .price-breakdown { display: flex; flex-direction: column; gap: 12px; }
+        .price-row { display: flex; justify-content: space-between; font-size: 0.9375rem; }
+        .price-row .label { color: var(--color-silver); }
+        .price-row .value { color: var(--color-mist); }
+        .price-row.discount .value { color: var(--color-success); }
+        .price-row.total { padding-top: 16px; border-top: 1px solid var(--color-slate); font-weight: 600; }
+        .price-row.total .value { font-size: 1.5rem; color: var(--color-gold); }
+
+        /* Timeline */
+        .timeline { position: relative; padding-left: 32px; }
+        .timeline::before { content: ''; position: absolute; left: 11px; top: 0; bottom: 0; width: 2px; background: var(--color-slate); }
+        .timeline-item { position: relative; padding-bottom: 24px; }
+        .timeline-item:last-child { padding-bottom: 0; }
+        .timeline-dot {
+            position: absolute; left: -32px; top: 0;
+            width: 24px; height: 24px; border-radius: 50%;
+            background: var(--color-slate); border: 2px solid var(--color-charcoal);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .timeline-dot.completed { background: var(--color-success); border-color: var(--color-success); }
+        .timeline-dot.active { background: var(--color-gold); border-color: var(--color-gold); }
+        .timeline-dot i { font-size: 0.625rem; color: var(--color-white); }
+        .timeline-content h4 { font-size: 0.9375rem; font-weight: 600; color: var(--color-white); margin-bottom: 4px; }
+        .timeline-content p { font-size: 0.8125rem; color: var(--color-silver); }
+
+        /* QR Code */
+        .qr-section { text-align: center; padding: 24px; }
+        .qr-code {
+            width: 160px; height: 160px; margin: 0 auto 16px;
+            background: var(--color-white); border-radius: var(--radius-md);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 4rem; color: var(--color-midnight);
+        }
+        .qr-section p { font-size: 0.8125rem; color: var(--color-silver); }
+
+        /* Actions */
+        .action-buttons { display: flex; flex-direction: column; gap: 12px; }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 24px; right: 24px; background: var(--color-charcoal);
+            border: 1px solid var(--color-slate); border-radius: var(--radius-lg);
+            padding: 16px 24px; display: flex; align-items: center; gap: 12px;
+            color: var(--color-white); font-size: 0.9375rem; z-index: 10000;
+            opacity: 0; transform: translateY(20px); transition: all 0.3s;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.success i { color: var(--color-success); }
+        .toast.error i { color: var(--color-error); }
+
+        @@media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+            .mobile-menu-btn { display: flex; }
+            .booking-grid { grid-template-columns: 1fr; }
+        }
+
+        @@media (max-width: 768px) {
+            .package-preview { flex-direction: column; }
+            .package-preview img { width: 100%; height: 200px; }
+            .status-banner { flex-direction: column; text-align: center; }
+        }
+
+        @@keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="page-transition" id="pageTransition"><div class="loader"></div></div>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="/" onclick="navigateTo('/',event)" style="display:flex;align-items:center;gap:12px;text-decoration:none">
+                    <div class="logo"><i class="fas fa-compass"></i></div>
+                    <h1>TRAVIL</h1>
+                </a>
+            </div>
+            <nav class="nav-section">
+                <div class="nav-section-title">Main Menu</div>
+                <a href="/account/dashboard" class="nav-item" onclick="navigateTo('/account/dashboard',event)"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                <a href="/account/bookings" class="nav-item active" onclick="navigateTo('/account/bookings',event)"><i class="fas fa-suitcase"></i><span>My Bookings</span></a>
+                <a href="/account/wishlist" class="nav-item" onclick="navigateTo('/account/wishlist',event)"><i class="fas fa-heart"></i><span>Wishlist</span></a>
+            </nav>
+            <nav class="nav-section">
+                <div class="nav-section-title">Account</div>
+                <a href="/account/profile" class="nav-item" onclick="navigateTo('/account/profile',event)"><i class="fas fa-user"></i><span>Profile</span></a>
+                <a href="#" class="nav-item" onclick="logout(event)"><i class="fas fa-sign-out-alt"></i><span>Sign Out</span></a>
+            </nav>
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <div>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+                    <h2>Booking Details</h2>
+                    <p class="subtitle">Reference: <strong id="bookingRef">TRV-A8K2M9</strong></p>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <a href="/account/bookings" class="btn btn-outline" onclick="navigateTo('/account/bookings',event)">
+                        <i class="fas fa-arrow-left"></i> Back to Bookings
+                    </a>
+                    <button class="btn btn-primary" onclick="downloadTicket()">
+                        <i class="fas fa-download"></i> Download Ticket
+                    </button>
+                </div>
+            </div>
+
+            <!-- Status Banner -->
+            <div class="status-banner confirmed" id="statusBanner">
+                <div class="status-info">
+                    <div class="status-icon"><i class="fas fa-check"></i></div>
+                    <div class="status-text">
+                        <h3>Booking Confirmed</h3>
+                        <p>Your trip is confirmed! Check your email for the confirmation details.</p>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button class="btn btn-outline btn-sm"><i class="fas fa-envelope"></i> Resend Email</button>
+                    <button class="btn btn-outline btn-sm"><i class="fas fa-print"></i> Print</button>
+                </div>
+            </div>
+
+            <div class="booking-grid">
+                <!-- Left Column -->
+                <div>
+                    <!-- Package Details -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Package Details</h3>
+                            <a href="/packages/1" class="btn btn-outline btn-sm" onclick="navigateTo('/packages/1',event)">View Package</a>
+                        </div>
+                        <div class="card-body">
+                            <div class="package-preview">
+                                <img id="packageImage" src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400&q=80" alt="Package">
+                                <div class="package-info">
+                                    <h4 id="packageTitle">Bali Paradise Escape</h4>
+                                    <div class="package-location"><i class="fas fa-map-marker-alt"></i> <span id="packageLocation">Bali, Indonesia</span></div>
+                                    <div class="package-meta">
+                                        <div class="package-meta-item"><i class="far fa-clock"></i> <span id="packageDuration">7 Days</span></div>
+                                        <div class="package-meta-item"><i class="fas fa-users"></i> <span id="packageGuests">2 Guests</span></div>
+                                        <div class="package-meta-item"><i class="far fa-star"></i> 4.9 Rating</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Trip Details -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Trip Details</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="details-list">
+                                <div class="details-item">
+                                    <span class="label"><i class="far fa-calendar"></i> Travel Dates</span>
+                                    <span class="value" id="travelDates">Jan 15 - Jan 22, 2025</span>
+                                </div>
+                                <div class="details-item">
+                                    <span class="label"><i class="fas fa-users"></i> Travelers</span>
+                                    <span class="value" id="travelers">2 Adults</span>
+                                </div>
+                                <div class="details-item">
+                                    <span class="label"><i class="fas fa-bed"></i> Accommodation</span>
+                                    <span class="value">5-Star Resort (Ocean View)</span>
+                                </div>
+                                <div class="details-item">
+                                    <span class="label"><i class="fas fa-plane"></i> Flight Included</span>
+                                    <span class="value">Yes - Round Trip</span>
+                                </div>
+                                <div class="details-item">
+                                    <span class="label"><i class="fas fa-utensils"></i> Meals</span>
+                                    <span class="value">Breakfast & Dinner</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Traveler Information -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Traveler Information</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="details-list">
+                                <div class="details-item">
+                                    <span class="label"><i class="fas fa-user"></i> Primary Contact</span>
+                                    <span class="value" id="primaryContact">John Doe</span>
+                                </div>
+                                <div class="details-item">
+                                    <span class="label"><i class="fas fa-envelope"></i> Email</span>
+                                    <span class="value" id="contactEmail">john@example.com</span>
+                                </div>
+                                <div class="details-item">
+                                    <span class="label"><i class="fas fa-phone"></i> Phone</span>
+                                    <span class="value" id="contactPhone">+1 (555) 123-4567</span>
+                                </div>
+                                <div class="details-item">
+                                    <span class="label"><i class="fas fa-comment"></i> Special Requests</span>
+                                    <span class="value">Vegetarian meals, Early check-in</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Booking Timeline -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Booking Timeline</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="timeline">
+                                <div class="timeline-item">
+                                    <div class="timeline-dot completed"><i class="fas fa-check"></i></div>
+                                    <div class="timeline-content">
+                                        <h4>Booking Created</h4>
+                                        <p>Dec 28, 2024 at 2:30 PM</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-dot completed"><i class="fas fa-check"></i></div>
+                                    <div class="timeline-content">
+                                        <h4>Payment Confirmed</h4>
+                                        <p>Dec 28, 2024 at 2:35 PM</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-dot completed"><i class="fas fa-check"></i></div>
+                                    <div class="timeline-content">
+                                        <h4>Confirmation Sent</h4>
+                                        <p>Dec 28, 2024 at 2:36 PM</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-dot active"><i class="fas fa-clock"></i></div>
+                                    <div class="timeline-content">
+                                        <h4>Trip Start</h4>
+                                        <p>Jan 15, 2025</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-dot"></div>
+                                    <div class="timeline-content">
+                                        <h4>Trip End</h4>
+                                        <p>Jan 22, 2025</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div>
+                    <!-- Payment Summary -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Payment Summary</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="price-breakdown">
+                                <div class="price-row">
+                                    <span class="label">Package Price (x2)</span>
+                                    <span class="value">$2,598.00</span>
+                                </div>
+                                <div class="price-row">
+                                    <span class="label">Service Fee</span>
+                                    <span class="value">$150.00</span>
+                                </div>
+                                <div class="price-row">
+                                    <span class="label">Taxes</span>
+                                    <span class="value">$260.00</span>
+                                </div>
+                                <div class="price-row discount">
+                                    <span class="label">Early Bird Discount</span>
+                                    <span class="value">-$200.00</span>
+                                </div>
+                                <div class="price-row total">
+                                    <span class="label">Total Paid</span>
+                                    <span class="value" id="totalPaid">$2,808.00</span>
+                                </div>
+                            </div>
+                            <div style="margin-top: 20px; padding: 16px; background: rgba(63, 185, 80, 0.1); border-radius: var(--radius-md); display: flex; align-items: center; gap: 12px;">
+                                <i class="fas fa-check-circle" style="color: var(--color-success); font-size: 1.25rem;"></i>
+                                <div>
+                                    <p style="font-weight: 600; color: var(--color-success); margin: 0;">Payment Complete</p>
+                                    <p style="font-size: 0.8125rem; color: var(--color-silver); margin: 0;">Paid via Credit Card</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- QR Code -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>E-Ticket</h3>
+                        </div>
+                        <div class="qr-section">
+                            <div class="qr-code"><i class="fas fa-qrcode"></i></div>
+                            <p>Scan this code at check-in</p>
+                            <p style="font-weight: 600; color: var(--color-white); margin-top: 8px;" id="ticketCode">TRV-A8K2M9</p>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Actions</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="action-buttons">
+                                <button class="btn btn-primary" onclick="downloadTicket()">
+                                    <i class="fas fa-download"></i> Download E-Ticket
+                                </button>
+                                <button class="btn btn-outline" onclick="shareBooking()">
+                                    <i class="fas fa-share-alt"></i> Share Itinerary
+                                </button>
+                                <button class="btn btn-outline" onclick="contactSupport()">
+                                    <i class="fas fa-headset"></i> Contact Support
+                                </button>
+                                <button class="btn btn-danger" onclick="requestCancellation()">
+                                    <i class="fas fa-times"></i> Request Cancellation
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="toast" class="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">Message</span></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            if (!token) { navigateTo('/account/login'); return; }
+
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            document.getElementById('primaryContact').textContent = `${user.firstName || 'John'} ${user.lastName || 'Doe'}`;
+            document.getElementById('contactEmail').textContent = user.email || 'john@example.com';
+            document.getElementById('contactPhone').textContent = user.phone || '+1 (555) 123-4567';
+        });
+
+        function navigateTo(url, event) {
+            if (event) event.preventDefault();
+            document.getElementById('pageTransition').classList.add('active');
+            setTimeout(() => { window.location.href = url; }, 400);
+        }
+
+        function logout(event) {
+            if (event) event.preventDefault();
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            navigateTo('/account/login');
+        }
+
+        function downloadTicket() { showToast('Downloading e-ticket...'); }
+        function shareBooking() { showToast('Share link copied to clipboard!'); }
+        function contactSupport() { showToast('Opening support chat...'); }
+        function requestCancellation() {
+            if (confirm('Are you sure you want to request cancellation? Cancellation fees may apply.')) {
+                showToast('Cancellation request submitted', 'error');
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.className = 'toast ' + type;
+            toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', () => { sidebar.classList.toggle('open'); sidebarOverlay.classList.toggle('active'); });
+        if (sidebarOverlay) sidebarOverlay.addEventListener('click', () => { sidebar.classList.remove('open'); sidebarOverlay.classList.remove('active'); });
+
+        window.addEventListener('pageshow', () => document.getElementById('pageTransition').classList.remove('active'));
+    </script>
+</body>
+</html>
