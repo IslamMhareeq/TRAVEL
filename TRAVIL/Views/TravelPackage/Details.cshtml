@@ -1,405 +1,1056 @@
 @{
-    ViewData["Title"] = "Bali Paradise Escape";
-    ViewData["BodyClass"] = "package-detail-page";
+    ViewData["Title"] = "Package Details";
+    Layout = null;
 }
 
-@section Styles {
-    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Package Details - TRAVIL</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="/css/home.css" rel="stylesheet" />
+    
+    <style>
+        .page-transition {
+            position: fixed;
+            inset: 0;
+            background: #0d1117;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
 
-<!-- Navigation -->
-<nav class="navbar scrolled" id="navbar">
-    <div class="container">
-        <a href="/" class="nav-brand">
-            <div class="logo">
-                <i class="fas fa-compass"></i>
-            </div>
-            <span>TRAVIL</span>
-        </a>
-        
-        <div class="nav-links">
-            <a href="/">Home</a>
-            <a href="/TravelPackage">Packages</a>
-            <a href="/#destinations">Destinations</a>
-            <a href="/#about">About</a>
-            <a href="/#contact">Contact</a>
-        </div>
-        
-        <div class="nav-auth">
-            <a href="/Account/Login" class="btn btn-ghost">Sign In</a>
-            <a href="/Account/Register" class="btn btn-primary">Get Started</a>
-        </div>
-        
-        <button class="mobile-menu-btn" id="mobileMenuBtn">
-            <i class="fas fa-bars"></i>
-        </button>
+        .page-transition.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .page-transition .loader {
+            width: 48px;
+            height: 48px;
+            border: 3px solid #21262d;
+            border-top-color: #d4a853;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @@keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Package Hero */
+        .package-hero {
+            position: relative;
+            height: 60vh;
+            min-height: 500px;
+            overflow: hidden;
+        }
+
+        .package-hero-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            transform: scale(1.05);
+        }
+
+        .package-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(13, 17, 23, 0.3) 0%, rgba(13, 17, 23, 0.8) 80%, #0d1117 100%);
+            z-index: 1;
+        }
+
+        .package-hero-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 48px;
+            z-index: 2;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .package-badges {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .package-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            background: rgba(212, 168, 83, 0.2);
+            border: 1px solid rgba(212, 168, 83, 0.4);
+            border-radius: 9999px;
+            color: #d4a853;
+            font-size: 0.8125rem;
+            font-weight: 600;
+        }
+
+        .package-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 500;
+            color: #ffffff;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .package-location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #c9d1d9;
+            font-size: 1.125rem;
+        }
+
+        .package-location i {
+            color: #d4a853;
+        }
+
+        /* Package Content */
+        .package-content-section {
+            background: #0d1117;
+            padding: 48px 24px;
+        }
+
+        .package-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 48px;
+        }
+
+        @@media (max-width: 1024px) {
+            .package-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Package Info */
+        .package-info {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .info-section {
+            background: #161b22;
+            border: 1px solid #21262d;
+            border-radius: 16px;
+            padding: 32px;
+        }
+
+        .info-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #ffffff;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #21262d;
+        }
+
+        .info-section p {
+            color: #c9d1d9;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .info-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Package Stats */
+        .package-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        @@media (max-width: 600px) {
+            .package-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 20px;
+            background: #21262d;
+            border-radius: 12px;
+        }
+
+        .stat-box i {
+            font-size: 1.5rem;
+            color: #d4a853;
+            margin-bottom: 8px;
+        }
+
+        .stat-box .stat-value {
+            display: block;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .stat-box .stat-label {
+            font-size: 0.8125rem;
+            color: #8b949e;
+        }
+
+        /* Highlights */
+        .highlights-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        @@media (max-width: 600px) {
+            .highlights-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .highlight-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: #21262d;
+            border-radius: 10px;
+        }
+
+        .highlight-item i {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(212, 168, 83, 0.15);
+            border-radius: 50%;
+            color: #d4a853;
+            font-size: 0.875rem;
+        }
+
+        .highlight-item span {
+            font-size: 0.9375rem;
+            color: #c9d1d9;
+        }
+
+        /* Itinerary */
+        .itinerary-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .itinerary-day {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            background: #21262d;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .itinerary-day:hover {
+            background: #30363d;
+        }
+
+        .day-number {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #d4a853 0%, #b8923f 100%);
+            border-radius: 12px;
+            font-weight: 700;
+            color: #0d1117;
+            flex-shrink: 0;
+        }
+
+        .day-content h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .day-content p {
+            font-size: 0.875rem;
+            color: #8b949e;
+            margin: 0;
+        }
+
+        /* Booking Card */
+        .booking-card {
+            position: sticky;
+            top: 100px;
+            background: #161b22;
+            border: 1px solid #21262d;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .booking-header {
+            padding: 24px;
+            border-bottom: 1px solid #21262d;
+        }
+
+        .booking-price {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .booking-price .amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #d4a853;
+        }
+
+        .booking-price .per {
+            font-size: 0.9375rem;
+            color: #8b949e;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #484f58;
+            font-size: 1.125rem;
+            margin-top: 4px;
+        }
+
+        .booking-body {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: #c9d1d9;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9375rem;
+            color: #ffffff;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #d4a853;
+        }
+
+        .guests-input {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .guest-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 50%;
+            color: #c9d1d9;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .guest-btn:hover {
+            background: #d4a853;
+            color: #0d1117;
+            border-color: #d4a853;
+        }
+
+        .guest-count {
+            flex: 1;
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .price-breakdown {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #21262d;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 0.9375rem;
+        }
+
+        .price-row .label {
+            color: #8b949e;
+        }
+
+        .price-row .value {
+            color: #c9d1d9;
+        }
+
+        .price-row.total {
+            padding-top: 12px;
+            border-top: 1px solid #21262d;
+            font-weight: 600;
+        }
+
+        .price-row.total .value {
+            color: #d4a853;
+            font-size: 1.25rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #d4a853 0%, #b8923f 100%);
+            color: #0d1117;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(212, 168, 83, 0.25);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+            margin-top: 12px;
+        }
+
+        .btn-outline:hover {
+            border-color: #d4a853;
+            color: #d4a853;
+        }
+
+        /* Reviews */
+        .reviews-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .review-card {
+            padding: 24px;
+            background: #21262d;
+            border-radius: 12px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .review-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .review-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #d4a853 0%, #b8923f 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #0d1117;
+        }
+
+        .review-author-info h4 {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .review-author-info span {
+            font-size: 0.8125rem;
+            color: #8b949e;
+        }
+
+        .review-rating {
+            display: flex;
+            gap: 4px;
+        }
+
+        .review-rating i {
+            color: #d4a853;
+            font-size: 0.875rem;
+        }
+
+        .review-content p {
+            color: #c9d1d9;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #30363d;
+            border: 1px solid #21262d;
+            border-radius: 16px;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #ffffff;
+            font-size: 0.9375rem;
+            z-index: 10000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.success i { color: #3fb950; }
+        .toast.error i { color: #f85149; }
+    </style>
+</head>
+<body>
+    <!-- Page Transition -->
+    <div class="page-transition" id="pageTransition">
+        <div class="loader"></div>
     </div>
-</nav>
 
-<!-- Package Hero -->
-<section class="package-detail-hero" style="background: url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1920&q=85') center/cover no-repeat;">
-    <div class="container">
-        <nav style="margin-bottom: var(--space-4);">
-            <a href="/TravelPackage" style="color: var(--color-gold); text-decoration: none; font-size: 0.875rem;">
-                <i class="fas fa-arrow-left"></i> Back to Packages
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="container">
+            <a href="/" class="nav-brand" onclick="navigateTo('/', event)">
+                <div class="logo">
+                    <i class="fas fa-compass"></i>
+                </div>
+                <span>TRAVIL</span>
             </a>
-        </nav>
-        
-        <div style="display: flex; gap: var(--space-3); margin-bottom: var(--space-4);">
-            <span class="package-badge">Featured</span>
-            <span style="background: rgba(255,255,255,0.2); padding: var(--space-2) var(--space-3); border-radius: var(--radius-md); font-size: 0.75rem; color: white;">
-                <i class="fas fa-star" style="color: var(--color-gold);"></i> 4.9 (128 Reviews)
-            </span>
+            
+            <div class="nav-links">
+                <a href="/" onclick="navigateTo('/', event)">Home</a>
+                <a href="/packages" onclick="navigateTo('/packages', event)" class="active">Packages</a>
+                <a href="/#destinations">Destinations</a>
+                <a href="/#about">About</a>
+                <a href="/#contact">Contact</a>
+            </div>
+            
+            <div class="nav-auth" id="navAuth">
+                <a href="/account/login" class="btn btn-ghost" onclick="navigateTo('/account/login', event)">Sign In</a>
+                <a href="/account/register" class="btn btn-primary" onclick="navigateTo('/account/register', event)">Get Started</a>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
-        
-        <h1 style="font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 400; color: white; margin-bottom: var(--space-3);">
-            Bali Paradise Escape
-        </h1>
-        
-        <div style="display: flex; flex-wrap: wrap; gap: var(--space-6); color: var(--color-pearl);">
-            <div style="display: flex; align-items: center; gap: var(--space-2);">
-                <i class="fas fa-map-marker-alt" style="color: var(--color-gold);"></i>
-                Bali, Indonesia
-            </div>
-            <div style="display: flex; align-items: center; gap: var(--space-2);">
-                <i class="far fa-clock" style="color: var(--color-gold);"></i>
-                7 Days / 6 Nights
-            </div>
-            <div style="display: flex; align-items: center; gap: var(--space-2);">
-                <i class="fas fa-users" style="color: var(--color-gold);"></i>
-                Max 12 People
-            </div>
-        </div>
-    </div>
-</section>
+    </nav>
 
-<!-- Package Content -->
-<section class="package-detail-content">
-    <div class="container">
-        <!-- Main Content -->
-        <div class="package-main">
-            <!-- Overview -->
-            <div class="package-section">
-                <h2>Overview</h2>
-                <p>
-                    Experience the enchanting island of Bali with our carefully curated 7-day journey. 
-                    From ancient temples and lush rice terraces to pristine beaches and vibrant culture, 
-                    this package offers the perfect blend of adventure, relaxation, and spiritual discovery.
-                </p>
-                <p style="margin-top: var(--space-4);">
-                    Immerse yourself in Balinese traditions, explore hidden waterfalls, witness breathtaking 
-                    sunsets, and indulge in world-class cuisine. Whether you're seeking adventure or tranquility, 
-                    Bali has something magical waiting for you.
-                </p>
+    <!-- Package Hero -->
+    <section class="package-hero">
+        <div class="package-hero-bg" id="packageHeroBg" style="background-image: url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1600&q=85');"></div>
+        <div class="package-hero-content">
+            <div class="package-badges">
+                <span class="package-badge"><i class="fas fa-star"></i> Featured</span>
+                <span class="package-badge"><i class="fas fa-fire"></i> Best Seller</span>
             </div>
-            
-            <!-- Highlights -->
-            <div class="package-section">
-                <h2>Highlights</h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-4); margin-top: var(--space-4);">
-                    <div style="display: flex; align-items: flex-start; gap: var(--space-3);">
-                        <div style="width: 40px; height: 40px; background: rgba(212, 168, 83, 0.15); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                            <i class="fas fa-gopuram" style="color: var(--color-gold);"></i>
-                        </div>
-                        <div>
-                            <h4 style="color: var(--color-white); margin-bottom: var(--space-1);">Ancient Temples</h4>
-                            <p style="color: var(--color-pearl); font-size: 0.9375rem;">Visit iconic temples including Tanah Lot and Uluwatu</p>
-                        </div>
-                    </div>
-                    <div style="display: flex; align-items: flex-start; gap: var(--space-3);">
-                        <div style="width: 40px; height: 40px; background: rgba(212, 168, 83, 0.15); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                            <i class="fas fa-leaf" style="color: var(--color-gold);"></i>
-                        </div>
-                        <div>
-                            <h4 style="color: var(--color-white); margin-bottom: var(--space-1);">Tegallalang Rice Terraces</h4>
-                            <p style="color: var(--color-pearl); font-size: 0.9375rem;">Walk through stunning UNESCO-listed rice paddies</p>
-                        </div>
-                    </div>
-                    <div style="display: flex; align-items: flex-start; gap: var(--space-3);">
-                        <div style="width: 40px; height: 40px; background: rgba(212, 168, 83, 0.15); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                            <i class="fas fa-umbrella-beach" style="color: var(--color-gold);"></i>
-                        </div>
-                        <div>
-                            <h4 style="color: var(--color-white); margin-bottom: var(--space-1);">Pristine Beaches</h4>
-                            <p style="color: var(--color-pearl); font-size: 0.9375rem;">Relax on world-famous beaches of Seminyak and Nusa Dua</p>
-                        </div>
-                    </div>
-                    <div style="display: flex; align-items: flex-start; gap: var(--space-3);">
-                        <div style="width: 40px; height: 40px; background: rgba(212, 168, 83, 0.15); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                            <i class="fas fa-water" style="color: var(--color-gold);"></i>
-                        </div>
-                        <div>
-                            <h4 style="color: var(--color-white); margin-bottom: var(--space-1);">Hidden Waterfalls</h4>
-                            <p style="color: var(--color-pearl); font-size: 0.9375rem;">Discover secluded waterfalls in the jungle</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Itinerary -->
-            <div class="package-section">
-                <h2>Itinerary</h2>
-                
-                <div class="itinerary-day">
-                    <div class="itinerary-day-header">
-                        <div class="itinerary-day-number">1</div>
-                        <h3 class="itinerary-day-title">Arrival & Welcome</h3>
-                    </div>
-                    <div class="itinerary-day-content">
-                        <p>Arrive at Ngurah Rai International Airport. Private transfer to your luxury resort in Seminyak. Evening welcome dinner with traditional Balinese dance performance. Free time to explore the area.</p>
-                    </div>
-                </div>
-                
-                <div class="itinerary-day">
-                    <div class="itinerary-day-header">
-                        <div class="itinerary-day-number">2</div>
-                        <h3 class="itinerary-day-title">Ubud Cultural Tour</h3>
-                    </div>
-                    <div class="itinerary-day-content">
-                        <p>Full-day excursion to Ubud. Visit the Sacred Monkey Forest, Ubud Royal Palace, and local art galleries. Explore the Tegallalang Rice Terraces and enjoy lunch with panoramic views. Evening at leisure.</p>
-                    </div>
-                </div>
-                
-                <div class="itinerary-day">
-                    <div class="itinerary-day-header">
-                        <div class="itinerary-day-number">3</div>
-                        <h3 class="itinerary-day-title">Temple Discovery</h3>
-                    </div>
-                    <div class="itinerary-day-content">
-                        <p>Morning visit to Tirta Empul Holy Water Temple for a traditional purification ritual. Afternoon at Tanah Lot Temple, one of Bali's most iconic landmarks. Watch the sunset over the sea temple.</p>
-                    </div>
-                </div>
-                
-                <div class="itinerary-day">
-                    <div class="itinerary-day-header">
-                        <div class="itinerary-day-number">4</div>
-                        <h3 class="itinerary-day-title">Adventure Day</h3>
-                    </div>
-                    <div class="itinerary-day-content">
-                        <p>Early morning Mount Batur sunrise trek (optional). Relax at natural hot springs. Afternoon waterfall exploration including Tegenungan and Tibumana falls. Evening cooking class with local family.</p>
-                    </div>
-                </div>
-                
-                <div class="itinerary-day">
-                    <div class="itinerary-day-header">
-                        <div class="itinerary-day-number">5</div>
-                        <h3 class="itinerary-day-title">Beach & Relaxation</h3>
-                    </div>
-                    <div class="itinerary-day-content">
-                        <p>Transfer to Nusa Dua beach area. Full day at leisure to enjoy beach activities, water sports, or spa treatments. Optional snorkeling trip to nearby islands. Beachside dinner.</p>
-                    </div>
-                </div>
-                
-                <div class="itinerary-day">
-                    <div class="itinerary-day-header">
-                        <div class="itinerary-day-number">6</div>
-                        <h3 class="itinerary-day-title">Uluwatu & Farewell</h3>
-                    </div>
-                    <div class="itinerary-day-content">
-                        <p>Morning free for shopping or spa. Afternoon visit to Uluwatu Temple perched on dramatic cliffs. Watch the famous Kecak Fire Dance at sunset. Farewell dinner at a cliffside restaurant.</p>
-                    </div>
-                </div>
-                
-                <div class="itinerary-day">
-                    <div class="itinerary-day-header">
-                        <div class="itinerary-day-number">7</div>
-                        <h3 class="itinerary-day-title">Departure</h3>
-                    </div>
-                    <div class="itinerary-day-content">
-                        <p>Breakfast at hotel. Free time until departure. Private transfer to airport for your onward journey. Selamat jalan! (Safe travels!)</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- What's Included -->
-            <div class="package-section">
-                <h2>What's Included</h2>
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-6); margin-top: var(--space-4);">
-                    <div>
-                        <h4 style="color: var(--color-gold); margin-bottom: var(--space-3); display: flex; align-items: center; gap: var(--space-2);">
-                            <i class="fas fa-check-circle"></i> Included
-                        </h4>
-                        <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: var(--space-2);">
-                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
-                                <i class="fas fa-check" style="color: #22c55e; font-size: 0.75rem;"></i>
-                                6 nights luxury accommodation
-                            </li>
-                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
-                                <i class="fas fa-check" style="color: #22c55e; font-size: 0.75rem;"></i>
-                                Daily breakfast, 3 lunches, 4 dinners
-                            </li>
-                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
-                                <i class="fas fa-check" style="color: #22c55e; font-size: 0.75rem;"></i>
-                                Private airport transfers
-                            </li>
-                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
-                                <i class="fas fa-check" style="color: #22c55e; font-size: 0.75rem;"></i>
-                                English-speaking guide
-                            </li>
-                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
-                                <i class="fas fa-check" style="color: #22c55e; font-size: 0.75rem;"></i>
-                                All entrance fees and activities
-                            </li>
-                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
-                                <i class="fas fa-check" style="color: #22c55e; font-size: 0.75rem;"></i>
-                                Traditional cooking class
-                            </li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 style="color: var(--color-pearl); margin-bottom: var(--space-3); display: flex; align-items: center; gap: var(--space-2);">
-                            <i class="fas fa-times-circle"></i> Not Included
-                        </h4>
-                        <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: var(--space-2);">
-                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
-                                <i class="fas fa-times" style="color: #ef4444; font-size: 0.75rem;"></i>
-                                International flights
-                            </li>
-                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
-                                <i class="fas fa-times" style="color: #ef4444; font-size: 0.75rem;"></i>
-                                Travel insurance
-                            </li>
-                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
-                                <i class="fas fa-times" style="color: #ef4444; font-size: 0.75rem;"></i>
-                                Personal expenses
-                            </li>
-                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
-                                <i class="fas fa-times" style="color: #ef4444; font-size: 0.75rem;"></i>
-                                Optional activities
-                            </li>
-                            <li style="color: var(--color-pearl); display: flex; align-items: center; gap: var(--space-2);">
-                                <i class="fas fa-times" style="color: #ef4444; font-size: 0.75rem;"></i>
-                                Tips and gratuities
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+            <h1 class="package-title" id="packageTitle">Bali Paradise Escape</h1>
+            <div class="package-location">
+                <i class="fas fa-map-marker-alt"></i>
+                <span id="packageLocation">Bali, Indonesia</span>
             </div>
         </div>
-        
-        <!-- Booking Sidebar -->
-        <div class="package-sidebar">
-            <div class="booking-card">
-                <div class="booking-price">
-                    <span class="booking-price-value">$1,299</span>
-                    <span class="booking-price-period">/ person</span>
-                </div>
-                
-                <form class="booking-form" action="/Booking/Create" method="post">
-                    <input type="hidden" name="packageId" value="1">
-                    
-                    <div class="form-group">
-                        <label for="travelDate">Travel Date</label>
-                        <input type="date" id="travelDate" name="travelDate" class="form-control" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="guests">Number of Travelers</label>
-                        <select id="guests" name="guests" class="form-control">
-                            <option value="1">1 Person</option>
-                            <option value="2" selected>2 People</option>
-                            <option value="3">3 People</option>
-                            <option value="4">4 People</option>
-                            <option value="5">5 People</option>
-                            <option value="6">6+ People</option>
-                        </select>
-                    </div>
-                    
-                    <div class="booking-summary">
-                        <div class="booking-summary-row">
-                            <span>$1,299 × 2 travelers</span>
-                            <span>$2,598</span>
-                        </div>
-                        <div class="booking-summary-row">
-                            <span>Service fee</span>
-                            <span>$129</span>
-                        </div>
-                        <div class="booking-summary-row total">
-                            <span>Total</span>
-                            <span>$2,727</span>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">
-                        Book Now
-                        <i class="fas fa-arrow-right"></i>
-                    </button>
-                </form>
-                
-                <p style="text-align: center; font-size: 0.875rem; color: var(--color-pearl); margin-top: var(--space-4);">
-                    <i class="fas fa-shield-halved" style="color: var(--color-gold);"></i>
-                    Free cancellation up to 14 days before
-                </p>
-            </div>
-            
-            <!-- Contact Card -->
-            <div style="background: var(--color-charcoal); border: 1px solid var(--color-slate); border-radius: var(--radius-xl); padding: var(--space-6); margin-top: var(--space-5);">
-                <h3 style="font-family: var(--font-display); font-size: 1.125rem; color: var(--color-white); margin-bottom: var(--space-4);">Need Help?</h3>
-                <p style="color: var(--color-pearl); font-size: 0.9375rem; margin-bottom: var(--space-4);">Our travel experts are here to help you plan your perfect trip.</p>
-                <a href="tel:+15551234567" class="btn btn-outline btn-block">
-                    <i class="fas fa-phone"></i>
-                    Call Us
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
+    </section>
 
-<!-- Footer -->
-<footer class="footer">
-    <div class="container">
-        <div class="footer-main">
-            <div class="footer-brand">
-                <a href="/" class="footer-logo">
-                    <div class="logo"><i class="fas fa-compass"></i></div>
-                    <span>TRAVIL</span>
-                </a>
-                <p class="footer-description">
-                    Your trusted partner for extraordinary travel experiences.
-                </p>
-                <div class="footer-social">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a>
+    <!-- Package Content -->
+    <section class="package-content-section">
+        <div class="package-grid">
+            <!-- Package Info -->
+            <div class="package-info">
+                <!-- Quick Stats -->
+                <div class="info-section">
+                    <div class="package-stats">
+                        <div class="stat-box">
+                            <i class="far fa-clock"></i>
+                            <span class="stat-value" id="statDuration">7 Days</span>
+                            <span class="stat-label">Duration</span>
+                        </div>
+                        <div class="stat-box">
+                            <i class="fas fa-users"></i>
+                            <span class="stat-value" id="statGroupSize">Max 12</span>
+                            <span class="stat-label">Group Size</span>
+                        </div>
+                        <div class="stat-box">
+                            <i class="fas fa-language"></i>
+                            <span class="stat-value">English</span>
+                            <span class="stat-label">Language</span>
+                        </div>
+                        <div class="stat-box">
+                            <i class="fas fa-star"></i>
+                            <span class="stat-value" id="statRating">4.9</span>
+                            <span class="stat-label">Rating</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Overview -->
+                <div class="info-section">
+                    <h2>Overview</h2>
+                    <p id="packageDescription">Experience the enchanting island of Bali with our carefully curated 7-day adventure. From the spiritual heart of Ubud to the pristine beaches of Seminyak, this journey takes you through ancient temples, lush rice terraces, and vibrant local markets.</p>
+                    <p>Discover the island's rich cultural heritage while enjoying world-class accommodations and authentic Balinese cuisine. Perfect for couples, solo travelers, and small groups looking for an unforgettable tropical getaway.</p>
+                </div>
+
+                <!-- Highlights -->
+                <div class="info-section">
+                    <h2>Trip Highlights</h2>
+                    <div class="highlights-list">
+                        <div class="highlight-item">
+                            <i class="fas fa-gopuram"></i>
+                            <span>Visit ancient temples</span>
+                        </div>
+                        <div class="highlight-item">
+                            <i class="fas fa-seedling"></i>
+                            <span>Tegallalang rice terraces</span>
+                        </div>
+                        <div class="highlight-item">
+                            <i class="fas fa-umbrella-beach"></i>
+                            <span>Beach hopping</span>
+                        </div>
+                        <div class="highlight-item">
+                            <i class="fas fa-spa"></i>
+                            <span>Traditional spa treatment</span>
+                        </div>
+                        <div class="highlight-item">
+                            <i class="fas fa-utensils"></i>
+                            <span>Cooking class</span>
+                        </div>
+                        <div class="highlight-item">
+                            <i class="fas fa-water"></i>
+                            <span>Waterfall exploration</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Itinerary -->
+                <div class="info-section">
+                    <h2>Day by Day Itinerary</h2>
+                    <div class="itinerary-list">
+                        <div class="itinerary-day">
+                            <div class="day-number">1</div>
+                            <div class="day-content">
+                                <h4>Arrival & Welcome</h4>
+                                <p>Airport pickup, hotel check-in, welcome dinner at beachside restaurant</p>
+                            </div>
+                        </div>
+                        <div class="itinerary-day">
+                            <div class="day-number">2</div>
+                            <div class="day-content">
+                                <h4>Ubud Cultural Tour</h4>
+                                <p>Sacred Monkey Forest, Ubud Palace, traditional art galleries, rice terrace walk</p>
+                            </div>
+                        </div>
+                        <div class="itinerary-day">
+                            <div class="day-number">3</div>
+                            <div class="day-content">
+                                <h4>Temple Discovery</h4>
+                                <p>Tanah Lot sunrise, Uluwatu Temple, traditional Kecak fire dance performance</p>
+                            </div>
+                        </div>
+                        <div class="itinerary-day">
+                            <div class="day-number">4</div>
+                            <div class="day-content">
+                                <h4>Adventure Day</h4>
+                                <p>White water rafting, Tegenungan Waterfall, traditional Balinese cooking class</p>
+                            </div>
+                        </div>
+                        <div class="itinerary-day">
+                            <div class="day-number">5</div>
+                            <div class="day-content">
+                                <h4>Beach & Relaxation</h4>
+                                <p>Seminyak beach, spa treatment, sunset at Potato Head Beach Club</p>
+                            </div>
+                        </div>
+                        <div class="itinerary-day">
+                            <div class="day-number">6</div>
+                            <div class="day-content">
+                                <h4>Island Exploration</h4>
+                                <p>Nusa Penida day trip, Kelingking Beach, snorkeling with manta rays</p>
+                            </div>
+                        </div>
+                        <div class="itinerary-day">
+                            <div class="day-number">7</div>
+                            <div class="day-content">
+                                <h4>Departure</h4>
+                                <p>Leisurely breakfast, last-minute shopping, airport transfer</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reviews -->
+                <div class="info-section">
+                    <h2>Guest Reviews</h2>
+                    <div class="reviews-list">
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="review-author">
+                                    <div class="review-avatar">S</div>
+                                    <div class="review-author-info">
+                                        <h4>Sarah Johnson</h4>
+                                        <span>December 2024</span>
+                                    </div>
+                                </div>
+                                <div class="review-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="review-content">
+                                <p>Absolutely incredible experience! The itinerary was perfectly balanced between adventure and relaxation. Our guide was knowledgeable and made us feel like VIPs throughout the entire trip.</p>
+                            </div>
+                        </div>
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="review-author">
+                                    <div class="review-avatar">M</div>
+                                    <div class="review-author-info">
+                                        <h4>Michael Chen</h4>
+                                        <span>November 2024</span>
+                                    </div>
+                                </div>
+                                <div class="review-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="review-content">
+                                <p>This trip exceeded all expectations. The accommodations were top-notch, and every detail was thoughtfully planned. Can't recommend TRAVIL enough!</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="footer-column">
-                <h4>Quick Links</h4>
-                <ul class="footer-links">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/TravelPackage">Packages</a></li>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h4>Support</h4>
-                <ul class="footer-links">
-                    <li><a href="#">FAQs</a></li>
-                    <li><a href="#">Booking Guide</a></li>
-                    <li><a href="#">Travel Insurance</a></li>
-                    <li><a href="#">Cancellation Policy</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h4>Contact Us</h4>
-                <div class="footer-contact-item">
-                    <i class="fas fa-envelope"></i>
-                    <span>hello@travil.com</span>
-                </div>
-                <div class="footer-contact-item">
-                    <i class="fas fa-phone"></i>
-                    <span>+1 (555) 123-4567</span>
+
+            <!-- Booking Card -->
+            <div>
+                <div class="booking-card">
+                    <div class="booking-header">
+                        <div class="booking-price">
+                            <span class="amount" id="bookingPrice">$1,299</span>
+                            <span class="per">/ person</span>
+                        </div>
+                        <div class="original-price" id="originalPrice">$1,599</div>
+                    </div>
+                    <div class="booking-body">
+                        <form id="bookingForm">
+                            <div class="form-group">
+                                <label>Select Date</label>
+                                <input type="date" class="form-control" id="travelDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Number of Guests</label>
+                                <div class="guests-input">
+                                    <button type="button" class="guest-btn" onclick="updateGuests(-1)">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <span class="guest-count" id="guestCount">2</span>
+                                    <button type="button" class="guest-btn" onclick="updateGuests(1)">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="price-breakdown">
+                                <div class="price-row">
+                                    <span class="label">$1,299 × <span id="guestCountDisplay">2</span> guests</span>
+                                    <span class="value" id="subtotal">$2,598</span>
+                                </div>
+                                <div class="price-row">
+                                    <span class="label">Service fee</span>
+                                    <span class="value">$150</span>
+                                </div>
+                                <div class="price-row">
+                                    <span class="label">Discount</span>
+                                    <span class="value" style="color: #3fb950;">-$200</span>
+                                </div>
+                                <div class="price-row total">
+                                    <span class="label">Total</span>
+                                    <span class="value" id="totalPrice">$2,548</span>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-calendar-check"></i>
+                                Book Now
+                            </button>
+                            <button type="button" class="btn btn-outline" onclick="addToWishlist()">
+                                <i class="far fa-heart"></i>
+                                Add to Wishlist
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p class="footer-copyright">© 2024 TRAVIL. All rights reserved.</p>
-            <div class="footer-legal">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="nav-brand" onclick="navigateTo('/', event)">
+                        <div class="logo">
+                            <i class="fas fa-compass"></i>
+                        </div>
+                        <span>TRAVIL</span>
+                    </a>
+                    <p>Crafting unforgettable journeys to the world's most extraordinary destinations since 2010.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 TRAVIL. All rights reserved.</p>
             </div>
         </div>
+    </footer>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Message</span>
     </div>
-</footer>
+
+    <script>
+        // Variables
+        let guests = 2;
+        const pricePerPerson = 1299;
+        const packageId = getPackageId();
+
+        function getPackageId() {
+            const path = window.location.pathname;
+            const match = path.match(/\/(\d+)$/);
+            return match ? parseInt(match[1]) : 1;
+        }
+
+        // Demo package data
+        const packages = {
+            1: {
+                title: 'Bali Paradise Escape',
+                location: 'Bali, Indonesia',
+                price: 1299,
+                duration: '7 Days',
+                image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1600&q=85',
+                description: 'Experience the enchanting island of Bali with our carefully curated 7-day adventure.'
+            },
+            2: {
+                title: 'Romantic Paris Getaway',
+                location: 'Paris, France',
+                price: 1599,
+                duration: '5 Days',
+                image: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=1600&q=85',
+                description: 'Fall in love with the City of Light through iconic landmarks and hidden gems.'
+            },
+            3: {
+                title: 'Ancient Kyoto Discovery',
+                location: 'Kyoto, Japan',
+                price: 2199,
+                duration: '8 Days',
+                image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1600&q=85',
+                description: 'Immerse yourself in traditional Japanese culture, temples, and gardens.'
+            },
+            4: {
+                title: 'Maldives Luxury Resort',
+                location: 'Maldives',
+                price: 3499,
+                duration: '6 Days',
+                image: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=1600&q=85',
+                description: 'Ultimate relaxation in overwater villas with crystal-clear waters.'
+            }
+        };
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            const pkg = packages[packageId] || packages[1];
+            
+            document.getElementById('packageTitle').textContent = pkg.title;
+            document.getElementById('packageLocation').textContent = pkg.location;
+            document.getElementById('packageHeroBg').style.backgroundImage = `url('${pkg.image}')`;
+            document.getElementById('bookingPrice').textContent = `$${pkg.price.toLocaleString()}`;
+            document.getElementById('statDuration').textContent = pkg.duration;
+            
+            // Set minimum date to tomorrow
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            document.getElementById('travelDate').min = tomorrow.toISOString().split('T')[0];
+            
+            updatePriceBreakdown();
+            checkAuthStatus();
+        });
+
+        // Update guest count
+        function updateGuests(change) {
+            guests = Math.max(1, Math.min(12, guests + change));
+            document.getElementById('guestCount').textContent = guests;
+            updatePriceBreakdown();
+        }
+
+        // Update price breakdown
+        function updatePriceBreakdown() {
+            const pkg = packages[packageId] || packages[1];
+            const subtotal = pkg.price * guests;
+            const serviceFee = 150;
+            const discount = 200;
+            const total = subtotal + serviceFee - discount;
+            
+            document.getElementById('guestCountDisplay').textContent = guests;
+            document.getElementById('subtotal').textContent = `$${subtotal.toLocaleString()}`;
+            document.getElementById('totalPrice').textContent = `$${total.toLocaleString()}`;
+        }
+
+        // Check auth status
+        function checkAuthStatus() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+            
+            if (token && user) {
+                const userData = JSON.parse(user);
+                const navAuth = document.getElementById('navAuth');
+                navAuth.innerHTML = `
+                    <a href="/account/dashboard" class="btn btn-ghost" onclick="navigateTo('/account/dashboard', event)">
+                        <i class="fas fa-user"></i>
+                        ${userData.firstName || 'Account'}
+                    </a>
+                `;
+            }
+        }
+
+        // Booking form
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const token = localStorage.getItem('token');
+            if (!token) {
+                showToast('Please login to book', 'error');
+                setTimeout(() => navigateTo('/account/login'), 1500);
+                return;
+            }
+            
+            const travelDate = document.getElementById('travelDate').value;
+            if (!travelDate) {
+                showToast('Please select a travel date', 'error');
+                return;
+            }
+            
+            showToast('Redirecting to booking...');
+            setTimeout(() => navigateTo(`/booking/create/${packageId}`), 1000);
+        });
+
+        // Add to wishlist
+        function addToWishlist() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                showToast('Please login to save to wishlist', 'error');
+                return;
+            }
+            showToast('Added to wishlist!');
+        }
+
+        // Navigation
+        function navigateTo(url, event) {
+            if (event) event.preventDefault();
+            const transition = document.getElementById('pageTransition');
+            transition.classList.add('active');
+            setTimeout(() => {
+                window.location.href = url;
+            }, 400);
+        }
+
+        // Toast
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = toast.querySelector('i');
+            
+            toastMessage.textContent = message;
+            toast.className = 'toast ' + type;
+            toastIcon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+            
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Page load transition
+        window.addEventListener('pageshow', function() {
+            document.getElementById('pageTransition').classList.remove('active');
+        });
+    </script>
+</body>
+</html>
