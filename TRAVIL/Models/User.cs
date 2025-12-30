@@ -105,7 +105,7 @@ namespace TRAVEL.Models
         public DateTime? EmailVerifiedAt { get; set; }
 
         // ===== NAVIGATION PROPERTIES =====
-
+        public virtual ICollection<WishlistItem> Wishlist { get; set; } = new List<WishlistItem>();
         [Display(Name = "Bookings")]
         public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 

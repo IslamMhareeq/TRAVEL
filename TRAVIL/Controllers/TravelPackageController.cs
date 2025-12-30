@@ -11,6 +11,7 @@ namespace TRAVEL.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Route("api/packages")]
     [Produces("application/json")]
     public class TravelPackageController : ControllerBase
     {
@@ -162,31 +163,47 @@ namespace TRAVEL.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreatePackage([FromBody] TravelPackageDto dto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(new { success = false, message = "Invalid data", errors = ModelState });
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(new { success = false, message = "Invalid data", errors = ModelState });
 
-            // Validate required fields
-            if (string.IsNullOrEmpty(dto.Destination))
-                return BadRequest(new { success = false, message = "Destination is required" });
-            if (string.IsNullOrEmpty(dto.Country))
-                return BadRequest(new { success = false, message = "Country is required" });
-            if (dto.StartDate <= DateTime.UtcNow)
-                return BadRequest(new { success = false, message = "Start date must be in the future" });
-            if (dto.EndDate <= dto.StartDate)
-                return BadRequest(new { success = false, message = "End date must be after start date" });
-            if (dto.Price <= 0)
-                return BadRequest(new { success = false, message = "Price must be greater than 0" });
-            if (dto.AvailableRooms <= 0)
-                return BadRequest(new { success = false, message = "Available rooms must be greater than 0" });
-            if (string.IsNullOrEmpty(dto.Description))
-                return BadRequest(new { success = false, message = "Description is required" });
+                // Validate required fields
+                if (string.IsNullOrEmpty(dto.Destination))
+                    return BadRequest(new { success = false, message = "Destination is required" });
 
-            var package = await _packageService.CreatePackageAsync(dto);
+                if (string.IsNullOrEmpty(dto.Country))
+                    return BadRequest(new { success = false, message = "Country is required" });
 
-            _logger.LogInformation($"Package created: {package.Destination} by admin");
+                // FIX: Changed from dto.StartDate <= DateTime.UtcNow to compare only dates
+                // This allows today's date to be selected without timezone issues
+                if (dto.StartDate.Date < DateTime.UtcNow.Date)
+                    return BadRequest(new { success = false, message = "Start date cannot be in the past" });
 
-            return CreatedAtAction(nameof(GetPackage), new { id = package.PackageId },
-                new { success = true, message = "Package created successfully", data = package });
+                if (dto.EndDate <= dto.StartDate)
+                    return BadRequest(new { success = false, message = "End date must be after start date" });
+
+                if (dto.Price <= 0)
+                    return BadRequest(new { success = false, message = "Price must be greater than 0" });
+
+                if (dto.AvailableRooms <= 0)
+                    return BadRequest(new { success = false, message = "Available rooms must be greater than 0" });
+
+                if (string.IsNullOrEmpty(dto.Description))
+                    return BadRequest(new { success = false, message = "Description is required" });
+
+                var package = await _packageService.CreatePackageAsync(dto);
+
+                _logger.LogInformation($"Package created: {package.Destination} by admin");
+
+                return CreatedAtAction(nameof(GetPackage), new { id = package.PackageId },
+                    new { success = true, message = "Package created successfully", data = package });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating package");
+                return StatusCode(500, new { success = false, message = "An error occurred while creating the package" });
+            }
         }
 
         /// <summary>
@@ -196,16 +213,28 @@ namespace TRAVEL.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdatePackage(int id, [FromBody] TravelPackageDto dto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(new { success = false, message = "Invalid data", errors = ModelState });
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(new { success = false, message = "Invalid data", errors = ModelState });
 
-            var package = await _packageService.UpdatePackageAsync(id, dto);
-            if (package == null)
-                return NotFound(new { success = false, message = "Package not found" });
+                // Validate dates for updates as well
+                if (dto.EndDate <= dto.StartDate)
+                    return BadRequest(new { success = false, message = "End date must be after start date" });
 
-            _logger.LogInformation($"Package updated: {package.Destination} (ID: {id})");
+                var package = await _packageService.UpdatePackageAsync(id, dto);
+                if (package == null)
+                    return NotFound(new { success = false, message = "Package not found" });
 
-            return Ok(new { success = true, message = "Package updated successfully", data = package });
+                _logger.LogInformation($"Package updated: {package.Destination} (ID: {id})");
+
+                return Ok(new { success = true, message = "Package updated successfully", data = package });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error updating package {id}");
+                return StatusCode(500, new { success = false, message = "An error occurred while updating the package" });
+            }
         }
 
         /// <summary>
@@ -215,13 +244,49 @@ namespace TRAVEL.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeletePackage(int id)
         {
-            var result = await _packageService.DeletePackageAsync(id);
-            if (!result)
-                return BadRequest(new { success = false, message = "Cannot delete package. It may have active bookings." });
+            try
+            {
+                var result = await _packageService.DeletePackageAsync(id);
+                if (!result)
+                    return BadRequest(new { success = false, message = "Cannot delete package. It may have active bookings." });
 
-            _logger.LogInformation($"Package deleted: ID {id}");
+                _logger.LogInformation($"Package deleted: ID {id}");
 
-            return Ok(new { success = true, message = "Package deleted successfully" });
+                return Ok(new { success = true, message = "Package deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error deleting package {id}");
+                return StatusCode(500, new { success = false, message = "An error occurred while deleting the package" });
+            }
+        }
+
+        /// <summary>
+        /// Toggle package active status (Admin only)
+        /// </summary>
+        [HttpPatch("{id}/toggle-status")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> TogglePackageStatus(int id)
+        {
+            try
+            {
+                var package = await _packageService.GetPackageByIdAsync(id);
+                if (package == null)
+                    return NotFound(new { success = false, message = "Package not found" });
+
+                var result = await _packageService.TogglePackageStatusAsync(id);
+                if (!result)
+                    return BadRequest(new { success = false, message = "Failed to toggle package status" });
+
+                _logger.LogInformation($"Package status toggled: ID {id}");
+
+                return Ok(new { success = true, message = "Package status updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error toggling package status {id}");
+                return StatusCode(500, new { success = false, message = "An error occurred while updating package status" });
+            }
         }
 
         /// <summary>
@@ -229,23 +294,34 @@ namespace TRAVEL.Controllers
         /// </summary>
         [HttpPost("{id}/discount")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> ApplyDiscount(int id, [FromBody] DiscountRequest request)
+        public async Task<IActionResult> ApplyDiscount(int id, [FromBody] ApplyDiscountRequest request)
         {
-            // Validate discount duration (max 7 days)
-            var duration = request.EndDate - request.StartDate;
-            if (duration.TotalDays > 7)
-                return BadRequest(new { success = false, message = "Discount duration cannot exceed 7 days" });
+            try
+            {
+                if (request.DiscountedPrice <= 0)
+                    return BadRequest(new { success = false, message = "Discounted price must be greater than 0" });
 
-            if (request.DiscountedPrice <= 0)
-                return BadRequest(new { success = false, message = "Discounted price must be greater than 0" });
+                if (request.StartDate >= request.EndDate)
+                    return BadRequest(new { success = false, message = "End date must be after start date" });
 
-            var result = await _packageService.ApplyDiscountAsync(id, request.DiscountedPrice, request.StartDate, request.EndDate);
-            if (!result)
-                return BadRequest(new { success = false, message = "Failed to apply discount. Ensure discounted price is less than original price." });
+                var result = await _packageService.ApplyDiscountAsync(
+                    id,
+                    request.DiscountedPrice,
+                    request.StartDate,
+                    request.EndDate);
 
-            _logger.LogInformation($"Discount applied to package {id}");
+                if (!result)
+                    return BadRequest(new { success = false, message = "Failed to apply discount. Check that discounted price is less than original price and duration is max 7 days." });
 
-            return Ok(new { success = true, message = "Discount applied successfully" });
+                _logger.LogInformation($"Discount applied to package {id}");
+
+                return Ok(new { success = true, message = "Discount applied successfully" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error applying discount to package {id}");
+                return StatusCode(500, new { success = false, message = "An error occurred while applying the discount" });
+            }
         }
 
         /// <summary>
@@ -255,28 +331,61 @@ namespace TRAVEL.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> RemoveDiscount(int id)
         {
-            var result = await _packageService.RemoveDiscountAsync(id);
-            if (!result)
-                return NotFound(new { success = false, message = "Package not found" });
+            try
+            {
+                var result = await _packageService.RemoveDiscountAsync(id);
+                if (!result)
+                    return NotFound(new { success = false, message = "Package not found or no discount to remove" });
 
-            _logger.LogInformation($"Discount removed from package {id}");
+                _logger.LogInformation($"Discount removed from package {id}");
 
-            return Ok(new { success = true, message = "Discount removed successfully" });
+                return Ok(new { success = true, message = "Discount removed successfully" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error removing discount from package {id}");
+                return StatusCode(500, new { success = false, message = "An error occurred while removing the discount" });
+            }
         }
 
         /// <summary>
-        /// Get dashboard statistics (Admin only)
+        /// Get package statistics (Admin only)
         /// </summary>
         [HttpGet("stats")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetStats()
+        public async Task<IActionResult> GetPackageStats()
         {
-            var stats = await _packageService.GetDashboardStatsAsync();
-            return Ok(new { success = true, data = stats });
+            try
+            {
+                var allPackages = await _packageService.GetAllPackagesAsync();
+                var activePackages = allPackages.FindAll(p => p.IsActive);
+                var inactivePackages = allPackages.FindAll(p => !p.IsActive);
+                var discountedPackages = await _packageService.GetDiscountedPackagesAsync();
+
+                return Ok(new
+                {
+                    success = true,
+                    data = new
+                    {
+                        totalPackages = allPackages.Count,
+                        activePackages = activePackages.Count,
+                        inactivePackages = inactivePackages.Count,
+                        discountedPackages = discountedPackages.Count
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting package stats");
+                return StatusCode(500, new { success = false, message = "An error occurred while fetching statistics" });
+            }
         }
     }
 
-    public class DiscountRequest
+    /// <summary>
+    /// Request model for applying discount
+    /// </summary>
+    public class ApplyDiscountRequest
     {
         public decimal DiscountedPrice { get; set; }
         public DateTime StartDate { get; set; }

@@ -16,7 +16,7 @@ namespace TRAVEL.Data
         }
 
         // ===== DbSets =====
-
+        public DbSet<WishlistItem> Wishlists { get; set; }
         /// <summary>
         /// Users table
         /// </summary>
@@ -95,7 +95,27 @@ namespace TRAVEL.Data
 
                 entity.ToTable("Users");
             });
+            modelBuilder.Entity<WishlistItem>(entity =>
+            {
+                entity.HasKey(e => e.WishlistId);
 
+                entity.HasOne(e => e.User)
+                    .WithMany(u => u.Wishlist)
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.TravelPackage)
+                    .WithMany()
+                    .HasForeignKey(e => e.PackageId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.Property(e => e.DateAdded)
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.HasIndex(e => new { e.UserId, e.PackageId }).IsUnique();
+
+                entity.ToTable("Wishlists");
+            });
             // ===== TRAVEL PACKAGE CONFIGURATION =====
             modelBuilder.Entity<TravelPackage>(entity =>
             {

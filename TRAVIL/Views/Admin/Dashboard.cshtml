@@ -8,20 +8,62 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard - TRAVIL</title>
-    
+    <title>Dashboard - TRAVIL Admin</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link href="/css/admin.css" rel="stylesheet" />
-    
+
     <style>
+        :root {
+            --color-midnight: #0d1117;
+            --color-navy: #161b22;
+            --color-slate: #21262d;
+            --color-charcoal: #30363d;
+            --color-steel: #484f58;
+            --color-silver: #8b949e;
+            --color-white: #ffffff;
+            --color-gold: #d4a853;
+            --color-gold-dark: #b8943f;
+            --color-gold-muted: rgba(212, 168, 83, 0.15);
+            --color-success: #3fb950;
+            --color-warning: #d29922;
+            --color-error: #f85149;
+            --sidebar-width: 280px;
+            --space-1: 4px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-5: 24px;
+            --space-6: 32px;
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Outfit', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-midnight);
+            color: var(--color-white);
+            line-height: 1.6;
+        }
+
         /* Page Transition */
         .page-transition {
             position: fixed;
             inset: 0;
-            background: #0d1117;
+            background: var(--color-midnight);
             z-index: 10000;
             display: flex;
             align-items: center;
@@ -31,84 +73,433 @@
             transition: opacity 0.4s ease, visibility 0.4s ease;
         }
 
-        .page-transition.active {
-            opacity: 1;
-            visibility: visible;
-        }
+            .page-transition.active {
+                opacity: 1;
+                visibility: visible;
+            }
 
-        .page-transition .loader {
-            width: 48px;
-            height: 48px;
-            border: 3px solid #21262d;
-            border-top-color: #d4a853;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
+            .page-transition .loader {
+                width: 48px;
+                height: 48px;
+                border: 3px solid var(--color-slate);
+                border-top-color: var(--color-gold);
+                border-radius: 50%;
+                animation: spin 0.8s linear infinite;
+            }
 
         @@keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
-        /* Sidebar Overlay */
-        .sidebar-overlay {
-            display: none;
+        /* Layout */
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, var(--color-navy) 0%, var(--color-midnight) 100%);
             position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 99;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            border-right: 1px solid var(--color-slate);
         }
 
-        .sidebar-overlay.active {
-            display: block;
+        .sidebar-header {
+            padding: var(--space-5);
+            border-bottom: 1px solid var(--color-slate);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
         }
 
-        /* Loading Spinner */
-        .loading {
+            .sidebar-header .logo {
+                width: 48px;
+                height: 48px;
+                background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+                border-radius: var(--radius-md);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.25rem;
+                color: var(--color-midnight);
+                flex-shrink: 0;
+            }
+
+            .sidebar-header .brand-text {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .sidebar-header h1 {
+                font-family: var(--font-display);
+                font-size: 1.5rem;
+                font-weight: 500;
+                color: var(--color-white);
+                letter-spacing: 0.1em;
+                margin: 0;
+                line-height: 1.2;
+            }
+
+            .sidebar-header .brand-text span {
+                font-size: 0.6875rem;
+                color: var(--color-gold);
+                text-transform: uppercase;
+                letter-spacing: 0.15em;
+            }
+
+        .nav-section {
+            padding: var(--space-4) var(--space-3);
+        }
+
+        .nav-section-title {
+            padding: 0 var(--space-3);
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--color-steel);
+            margin-bottom: var(--space-3);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3) var(--space-4);
+            color: var(--color-silver);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all var(--transition-fast);
+            margin-bottom: var(--space-1);
+        }
+
+            .nav-item:hover {
+                background: var(--color-slate);
+                color: var(--color-white);
+            }
+
+            .nav-item.active {
+                background: var(--color-gold-muted);
+                color: var(--color-gold);
+            }
+
+            .nav-item i {
+                width: 20px;
+                text-align: center;
+                flex-shrink: 0;
+            }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: var(--space-5);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-6);
+            flex-wrap: wrap;
+            gap: var(--space-4);
+        }
+
+            .header h2 {
+                font-family: var(--font-display);
+                font-size: 2rem;
+                font-weight: 500;
+                margin-bottom: var(--space-1);
+            }
+
+            .header .subtitle {
+                color: var(--color-silver);
+                font-size: 0.9375rem;
+            }
+
+        .header-actions {
+            display: flex;
+            gap: var(--space-3);
+            align-items: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-5);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-decoration: none;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+            color: var(--color-midnight);
+        }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(212, 168, 83, 0.4);
+            }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 48px;
+            font-weight: 600;
+            color: var(--color-midnight);
         }
 
-        .spinner {
-            width: 32px;
-            height: 32px;
-            border: 3px solid #21262d;
-            border-top-color: #d4a853;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: var(--space-5);
+            margin-bottom: var(--space-6);
+        }
+
+        .stat-card {
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+            transition: all var(--transition-normal);
+        }
+
+            .stat-card:hover {
+                transform: translateY(-4px);
+                border-color: var(--color-gold-muted);
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--color-gold-muted);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--color-gold);
+            margin-bottom: var(--space-4);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--color-white);
+            margin-bottom: var(--space-1);
+        }
+
+        .stat-label {
+            color: var(--color-silver);
+            font-size: 0.875rem;
+            margin-bottom: var(--space-2);
+        }
+
+        .stat-change {
+            font-size: 0.8125rem;
+            font-weight: 500;
+        }
+
+            .stat-change.positive {
+                color: var(--color-success);
+            }
+
+            .stat-change.negative {
+                color: var(--color-error);
+            }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--space-5);
+        }
+
+        .card {
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-5);
+            border-bottom: 1px solid var(--color-slate);
+        }
+
+            .card-header h3 {
+                font-family: var(--font-display);
+                font-size: 1.25rem;
+                font-weight: 500;
+            }
+
+            .card-header a {
+                color: var(--color-gold);
+                text-decoration: none;
+                font-size: 0.875rem;
+                font-weight: 500;
+            }
+
+                .card-header a:hover {
+                    text-decoration: underline;
+                }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .data-table th,
+            .data-table td {
+                padding: var(--space-4);
+                text-align: left;
+                border-bottom: 1px solid var(--color-slate);
+            }
+
+            .data-table th {
+                font-size: 0.75rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                color: var(--color-steel);
+                background: var(--color-midnight);
+            }
+
+            .data-table tbody tr {
+                transition: background var(--transition-fast);
+            }
+
+                .data-table tbody tr:hover {
+                    background: rgba(212, 168, 83, 0.05);
+                }
+
+                .data-table tbody tr:last-child td {
+                    border-bottom: none;
+                }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+            .status-badge.confirmed {
+                background: rgba(63, 185, 80, 0.15);
+                color: var(--color-success);
+            }
+
+            .status-badge.pending {
+                background: rgba(210, 153, 34, 0.15);
+                color: var(--color-warning);
+            }
+
+            .status-badge.cancelled {
+                background: rgba(248, 81, 73, 0.15);
+                color: var(--color-error);
+            }
+
+        /* Quick Actions */
+        .quick-actions {
+            padding: var(--space-5);
+        }
+
+        .action-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            color: var(--color-silver);
+            text-decoration: none;
+            transition: all var(--transition-fast);
+            margin-bottom: var(--space-2);
+        }
+
+            .action-item:hover {
+                background: var(--color-slate);
+                color: var(--color-white);
+            }
+
+        .action-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--color-slate);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: var(--color-gold);
+        }
+
+        .action-text {
+            font-weight: 500;
+            font-size: 0.9375rem;
         }
 
         /* Empty State */
         .empty-state {
             text-align: center;
             padding: 48px 24px;
-            color: #8b949e;
+            color: var(--color-silver);
         }
 
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 16px;
-            opacity: 0.5;
-        }
-
-        .empty-state p {
-            font-size: 0.9375rem;
-        }
+            .empty-state i {
+                font-size: 3rem;
+                margin-bottom: var(--space-4);
+                opacity: 0.5;
+            }
 
         /* Toast */
         .toast {
             position: fixed;
             bottom: 24px;
             right: 24px;
-            background: #30363d;
-            border: 1px solid #21262d;
-            border-radius: 16px;
-            padding: 16px 24px;
+            background: var(--color-charcoal);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4) var(--space-5);
             display: flex;
             align-items: center;
-            gap: 12px;
-            color: #ffffff;
+            gap: var(--space-3);
+            color: var(--color-white);
             font-size: 0.9375rem;
             z-index: 10000;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
@@ -117,13 +508,85 @@
             transition: all 0.3s ease;
         }
 
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
+            .toast.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .toast.success i {
+                color: var(--color-success);
+            }
+
+            .toast.error i {
+                color: var(--color-error);
+            }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--color-white);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: var(--space-2);
+            margin-right: var(--space-3);
         }
 
-        .toast.success i { color: #3fb950; }
-        .toast.error i { color: #f85149; }
+        /* Sidebar Overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+
+        /* Responsive */
+        @@media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+                .sidebar.open {
+                    transform: translateX(0);
+                }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .data-table {
+                font-size: 0.8125rem;
+            }
+
+                .data-table th, .data-table td {
+                    padding: var(--space-3);
+                }
+
+            .hide-mobile {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -137,7 +600,7 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="logo"><i class="fas fa-compass"></i></div>
-                <div>
+                <div class="brand-text">
                     <h1>TRAVIL</h1>
                     <span>Admin Panel</span>
                 </div>
@@ -156,7 +619,6 @@
                 <a href="/admin/bookings" class="nav-item" onclick="navigateTo('/admin/bookings', event)">
                     <i class="fas fa-calendar-check"></i>
                     <span>Bookings</span>
-                    <span class="badge" id="pendingBookingsCount">0</span>
                 </a>
             </nav>
 
@@ -169,7 +631,6 @@
                 <a href="/admin/reviews" class="nav-item" onclick="navigateTo('/admin/reviews', event)">
                     <i class="fas fa-star"></i>
                     <span>Reviews</span>
-                    <span class="badge" id="pendingReviewsCount">0</span>
                 </a>
                 <a href="/admin/prices" class="nav-item" onclick="navigateTo('/admin/prices', event)">
                     <i class="fas fa-tags"></i>
@@ -182,10 +643,6 @@
                 <a href="/admin/profile" class="nav-item" onclick="navigateTo('/admin/profile', event)">
                     <i class="fas fa-user-cog"></i>
                     <span>Profile</span>
-                </a>
-                <a href="/admin/settings" class="nav-item" onclick="navigateTo('/admin/settings', event)">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
                 </a>
                 <a href="/" class="nav-item" onclick="navigateTo('/', event)">
                     <i class="fas fa-globe"></i>
@@ -224,60 +681,61 @@
 
             <!-- Stats Grid -->
             <div class="stats-grid">
-                <div class="stat-card packages">
+                <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-suitcase"></i></div>
                     <div class="stat-value" id="totalPackages">--</div>
                     <div class="stat-label">Total Packages</div>
                     <div class="stat-change positive" id="activePackages">-- active</div>
                 </div>
-                <div class="stat-card bookings">
+                <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
                     <div class="stat-value" id="totalBookings">--</div>
                     <div class="stat-label">Total Bookings</div>
                     <div class="stat-change positive" id="confirmedBookings">-- confirmed</div>
                 </div>
-                <div class="stat-card users">
+                <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-users"></i></div>
                     <div class="stat-value" id="totalUsers">--</div>
                     <div class="stat-label">Registered Users</div>
                     <div class="stat-change positive" id="activeUsers">-- active</div>
                 </div>
-                <div class="stat-card revenue">
+                <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
                     <div class="stat-value" id="totalRevenue">$--</div>
                     <div class="stat-label">Total Revenue</div>
-                    <div class="stat-change positive" id="fullyBooked">-- fully booked</div>
+                    <div class="stat-change positive" id="revenueChange">This month</div>
                 </div>
             </div>
 
+            <!-- Content Grid -->
             <div class="content-grid">
                 <!-- Recent Bookings -->
                 <div class="card">
                     <div class="card-header">
                         <h3>Recent Bookings</h3>
-                        <a href="/admin/bookings" class="btn btn-outline btn-sm" onclick="navigateTo('/admin/bookings', event)">View All</a>
+                        <a href="/admin/bookings" onclick="navigateTo('/admin/bookings', event)">View All</a>
                     </div>
-                    <div class="card-body" style="padding: 0;">
-                        <div id="recentBookingsLoader" class="loading">
-                            <div class="spinner"></div>
-                        </div>
-                        <table class="table" id="recentBookingsTable" style="display: none;">
-                            <thead>
-                                <tr>
-                                    <th>Reference</th>
-                                    <th>Customer</th>
-                                    <th>Destination</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="recentBookingsBody"></tbody>
-                        </table>
-                        <div id="noBookings" class="empty-state" style="display: none;">
-                            <i class="fas fa-calendar-times"></i>
-                            <p>No bookings yet</p>
-                        </div>
-                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Reference</th>
+                                <th>Customer</th>
+                                <th class="hide-mobile">Destination</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentBookingsTable">
+                            <tr>
+                                <td colspan="5">
+                                    <div class="empty-state">
+                                        <i class="fas fa-calendar"></i>
+                                        <p>Loading bookings...</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
                 <!-- Quick Actions -->
@@ -285,25 +743,23 @@
                     <div class="card-header">
                         <h3>Quick Actions</h3>
                     </div>
-                    <div class="card-body">
-                        <div class="quick-actions">
-                            <a href="/admin/packages/edit" class="quick-action" onclick="navigateTo('/admin/packages/edit', event)">
-                                <i class="fas fa-plus-circle"></i>
-                                <span>Add Package</span>
-                            </a>
-                            <a href="/admin/users" class="quick-action" onclick="navigateTo('/admin/users', event)">
-                                <i class="fas fa-user-plus"></i>
-                                <span>Manage Users</span>
-                            </a>
-                            <a href="/admin/prices" class="quick-action" onclick="navigateTo('/admin/prices', event)">
-                                <i class="fas fa-percentage"></i>
-                                <span>Set Discounts</span>
-                            </a>
-                            <a href="/admin/reviews" class="quick-action" onclick="navigateTo('/admin/reviews', event)">
-                                <i class="fas fa-check-circle"></i>
-                                <span>Approve Reviews</span>
-                            </a>
-                        </div>
+                    <div class="quick-actions">
+                        <a href="/admin/packages/edit" class="action-item" onclick="navigateTo('/admin/packages/edit', event)">
+                            <div class="action-icon"><i class="fas fa-plus"></i></div>
+                            <span class="action-text">Add Package</span>
+                        </a>
+                        <a href="/admin/users" class="action-item" onclick="navigateTo('/admin/users', event)">
+                            <div class="action-icon"><i class="fas fa-user-plus"></i></div>
+                            <span class="action-text">Manage Users</span>
+                        </a>
+                        <a href="/admin/prices" class="action-item" onclick="navigateTo('/admin/prices', event)">
+                            <div class="action-icon"><i class="fas fa-percent"></i></div>
+                            <span class="action-text">Set Discounts</span>
+                        </a>
+                        <a href="/admin/reviews" class="action-item" onclick="navigateTo('/admin/reviews', event)">
+                            <div class="action-icon"><i class="fas fa-check-circle"></i></div>
+                            <span class="action-text">Approve Reviews</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -311,44 +767,74 @@
     </div>
 
     <!-- Toast -->
-    <div id="toast" class="toast">
+    <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
-        <span id="toastMessage">Message</span>
+        <span id="toastMessage">Success!</span>
     </div>
 
     <script>
-        // Authentication Check
+        // Navigation
+        function navigateTo(url, event) {
+            if (event) event.preventDefault();
+            const transition = document.getElementById('pageTransition');
+            transition.classList.add('active');
+            setTimeout(() => { window.location.href = url; }, 300);
+        }
+
+        // Logout
+        function logout(event) {
+            if (event) event.preventDefault();
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            navigateTo('/account/login');
+        }
+
+        // Toast
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Mobile menu toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        });
+
+        document.getElementById('sidebarOverlay').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('open');
+            this.classList.remove('active');
+        });
+
+        // Auth check and load dashboard
         document.addEventListener('DOMContentLoaded', async function() {
             const token = localStorage.getItem('token');
-            const user = localStorage.getItem('user');
+            const userData = JSON.parse(localStorage.getItem('user') || '{}');
 
-            if (!token || !user) {
+            if (!token) {
                 navigateTo('/account/login');
                 return;
             }
 
-            try {
-                const userData = JSON.parse(user);
-                
-                // Check if admin
-                if (userData.role !== 'Admin' && userData.role !== 0 && userData.role !== 'admin') {
-                    showToast('Access denied. Admin privileges required.', 'error');
-                    setTimeout(() => navigateTo('/'), 2000);
-                    return;
-                }
-
-                // Set user info
-                const firstName = userData.firstName || userData.name?.split(' ')[0] || 'Admin';
-                document.getElementById('adminName').textContent = firstName;
-                document.getElementById('userDisplayName').textContent = firstName;
-                document.getElementById('userAvatar').textContent = firstName.charAt(0).toUpperCase();
-
-                // Load dashboard data
-                await loadDashboard();
-            } catch (error) {
-                console.error('Auth error:', error);
-                navigateTo('/account/login');
+            if (userData.role !== 'Admin' && userData.role !== 0) {
+                showToast('Admin privileges required.', 'error');
+                setTimeout(() => navigateTo('/'), 2000);
+                return;
             }
+
+            // Set user info
+            const firstName = userData.firstName || userData.name?.split(' ')[0] || 'Admin';
+            document.getElementById('adminName').textContent = firstName;
+            document.getElementById('userDisplayName').textContent = firstName;
+            document.getElementById('userAvatar').textContent = firstName.charAt(0).toUpperCase();
+
+            // Load dashboard data
+            await loadDashboard();
         });
 
         // Load Dashboard Data
@@ -357,7 +843,7 @@
 
             try {
                 const response = await fetch('/api/admin/dashboard', {
-                    headers: { 
+                    headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     }
@@ -375,166 +861,92 @@
                     document.getElementById('totalUsers').textContent = data.users?.total || 0;
                     document.getElementById('activeUsers').textContent = `${data.users?.active || 0} active`;
                     document.getElementById('totalRevenue').textContent = `$${(data.bookings?.totalRevenue || 0).toLocaleString()}`;
-                    document.getElementById('fullyBooked').textContent = `${data.packages?.fullyBooked || 0} fully booked`;
 
-                    // Update badges
-                    document.getElementById('pendingBookingsCount').textContent = data.bookings?.pending || 0;
-                    document.getElementById('pendingReviewsCount').textContent = data.reviews?.pending || 0;
+                    // Load recent bookings
+                    loadRecentBookings();
                 } else {
-                    // Show demo data if API fails
-                    showDemoData();
+                    console.error('Failed to load dashboard data');
+                    showToast('Failed to load dashboard data', 'error');
                 }
-
-                await loadRecentBookings();
             } catch (error) {
                 console.error('Dashboard error:', error);
-                showDemoData();
-                loadDemoBookings();
+                showToast('Error loading dashboard', 'error');
             }
-        }
-
-        // Show Demo Data
-        function showDemoData() {
-            document.getElementById('totalPackages').textContent = '24';
-            document.getElementById('activePackages').textContent = '18 active';
-            document.getElementById('totalBookings').textContent = '156';
-            document.getElementById('confirmedBookings').textContent = '142 confirmed';
-            document.getElementById('totalUsers').textContent = '1,247';
-            document.getElementById('activeUsers').textContent = '892 active';
-            document.getElementById('totalRevenue').textContent = '$284,520';
-            document.getElementById('fullyBooked').textContent = '3 fully booked';
-            document.getElementById('pendingBookingsCount').textContent = '5';
-            document.getElementById('pendingReviewsCount').textContent = '8';
         }
 
         // Load Recent Bookings
         async function loadRecentBookings() {
             const token = localStorage.getItem('token');
+            const tbody = document.getElementById('recentBookingsTable');
 
             try {
                 const response = await fetch('/api/booking/all', {
-                    headers: { 
+                    headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     }
                 });
 
-                document.getElementById('recentBookingsLoader').style.display = 'none';
-
                 if (response.ok) {
                     const result = await response.json();
-                    const bookings = result.data?.slice(0, 5) || [];
+                    const bookings = (result.data || []).slice(0, 5);
 
-                    if (bookings.length > 0) {
-                        displayBookings(bookings);
-                    } else {
-                        loadDemoBookings();
+                    if (bookings.length === 0) {
+                        tbody.innerHTML = `
+                            <tr>
+                                <td colspan="5">
+                                    <div class="empty-state">
+                                        <i class="fas fa-calendar"></i>
+                                        <p>No bookings yet</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                        return;
                     }
+
+                    tbody.innerHTML = bookings.map(booking => {
+                        const statusClass = booking.status?.toLowerCase() || 'pending';
+                        return `
+                            <tr>
+                                <td><strong>${booking.bookingReference || 'N/A'}</strong></td>
+                                <td>${booking.userName || 'Unknown'}</td>
+                                <td class="hide-mobile">${booking.destination || 'N/A'}</td>
+                                <td>$${(booking.totalPrice || 0).toLocaleString()}</td>
+                                <td><span class="status-badge ${statusClass}">${booking.status || 'Pending'}</span></td>
+                            </tr>
+                        `;
+                    }).join('');
                 } else {
-                    loadDemoBookings();
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="5">
+                                <div class="empty-state">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    <p>Failed to load bookings</p>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
                 }
             } catch (error) {
-                console.error('Bookings error:', error);
-                loadDemoBookings();
+                console.error('Error loading bookings:', error);
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <p>Error loading bookings</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
             }
         }
 
-        // Display Bookings
-        function displayBookings(bookings) {
-            const tbody = document.getElementById('recentBookingsBody');
-            const table = document.getElementById('recentBookingsTable');
-
-            tbody.innerHTML = bookings.map(booking => `
-                <tr>
-                    <td><strong>${booking.bookingReference || 'TRV-' + Math.random().toString(36).substr(2, 6).toUpperCase()}</strong></td>
-                    <td>${booking.customerName || 'Customer'}</td>
-                    <td>${booking.destination || 'Destination'}</td>
-                    <td>$${(booking.totalPrice || 0).toLocaleString()}</td>
-                    <td><span class="status-badge ${(booking.status || 'pending').toLowerCase()}">${booking.status || 'Pending'}</span></td>
-                </tr>
-            `).join('');
-
-            table.style.display = 'table';
-        }
-
-        // Load Demo Bookings
-        function loadDemoBookings() {
-            document.getElementById('recentBookingsLoader').style.display = 'none';
-
-            const demoBookings = [
-                { bookingReference: 'TRV-A8K2M9', customerName: 'John Smith', destination: 'Bali, Indonesia', totalPrice: 2598, status: 'Confirmed' },
-                { bookingReference: 'TRV-B3P7Q2', customerName: 'Sarah Johnson', destination: 'Paris, France', totalPrice: 3198, status: 'Pending' },
-                { bookingReference: 'TRV-C5R9T4', customerName: 'Mike Wilson', destination: 'Kyoto, Japan', totalPrice: 4398, status: 'Confirmed' },
-                { bookingReference: 'TRV-D7U1W6', customerName: 'Emily Brown', destination: 'Maldives', totalPrice: 6998, status: 'Confirmed' },
-                { bookingReference: 'TRV-E9X3Y8', customerName: 'David Lee', destination: 'Santorini, Greece', totalPrice: 3998, status: 'Pending' }
-            ];
-
-            displayBookings(demoBookings);
-        }
-
-        // Navigation
-        function navigateTo(url, event) {
-            if (event) event.preventDefault();
-            
-            const transition = document.getElementById('pageTransition');
-            transition.classList.add('active');
-            
-            setTimeout(() => {
-                window.location.href = url;
-            }, 400);
-        }
-
-        // Logout
-        function logout(event) {
-            if (event) event.preventDefault();
-            
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            
-            showToast('Logged out successfully');
-            setTimeout(() => navigateTo('/account/login'), 1000);
-        }
-
-        // Mobile Menu
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-
-        if (mobileMenuBtn) {
-            mobileMenuBtn.addEventListener('click', function() {
-                sidebar.classList.toggle('open');
-                sidebarOverlay.classList.toggle('active');
-            });
-        }
-
-        if (sidebarOverlay) {
-            sidebarOverlay.addEventListener('click', function() {
-                sidebar.classList.remove('open');
-                sidebarOverlay.classList.remove('active');
-            });
-        }
-
-        // Toast
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-            const toastIcon = toast.querySelector('i');
-            
-            toastMessage.textContent = message;
-            toast.className = 'toast ' + type;
-            toastIcon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
-            
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        // Page load transition
+        // Page transition on load
         window.addEventListener('pageshow', function() {
-            const transition = document.getElementById('pageTransition');
-            transition.classList.remove('active');
+            document.getElementById('pageTransition').classList.remove('active');
         });
     </script>
 </body>

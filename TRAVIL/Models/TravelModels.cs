@@ -112,6 +112,26 @@ namespace TRAVEL.Models
     }
 
     // ===== PACKAGE IMAGE =====
+    [Table("Wishlists")]
+    public class WishlistItem
+    {
+        [Key]
+        public int WishlistId { get; set; }
+
+        [Required]
+        [ForeignKey("User")]
+        public int UserId { get; set; }
+
+        [Required]
+        [ForeignKey("TravelPackage")]
+        public int PackageId { get; set; }
+
+        public DateTime DateAdded { get; set; } = DateTime.UtcNow;
+
+        // Navigation properties
+        public virtual User User { get; set; } = null!;
+        public virtual TravelPackage TravelPackage { get; set; } = null!;
+    }
 
     [Table("PackageImages")]
     public class PackageImage

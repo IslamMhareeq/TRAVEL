@@ -20,6 +20,7 @@ namespace TRAVEL.Services
         Task<List<TravelPackage>> SearchPackagesAsync(PackageSearchCriteria criteria);
         Task<bool> ApplyDiscountAsync(int packageId, decimal discountedPrice, DateTime startDate, DateTime endDate);
         Task<bool> RemoveDiscountAsync(int packageId);
+        Task<bool> TogglePackageStatusAsync(int packageId);  // ADDED: Missing method
         Task<DashboardStats> GetDashboardStatsAsync();
         Task<List<TravelPackage>> GetDiscountedPackagesAsync();
         Task<List<TravelPackage>> GetPopularPackagesAsync(int count = 10);
@@ -60,9 +61,7 @@ namespace TRAVEL.Services
             return await _context.TravelPackages
                 .Include(p => p.Images)
                 .Include(p => p.Reviews)
-                    .ThenInclude(r => r.User)
                 .Include(p => p.Bookings)
-                .Include(p => p.WaitingList)
                 .FirstOrDefaultAsync(p => p.PackageId == packageId);
         }
 
@@ -72,8 +71,8 @@ namespace TRAVEL.Services
             {
                 Destination = dto.Destination,
                 Country = dto.Country,
-                StartDate = dto.StartDate,
-                EndDate = dto.EndDate,
+                StartDate = DateTime.SpecifyKind(dto.StartDate, DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(dto.EndDate, DateTimeKind.Utc),
                 Price = dto.Price,
                 AvailableRooms = dto.AvailableRooms,
                 PackageType = dto.PackageType,
@@ -82,14 +81,15 @@ namespace TRAVEL.Services
                 Description = dto.Description,
                 Itinerary = dto.Itinerary,
                 ImageUrl = dto.ImageUrl,
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
+                IsActive = dto.IsActive,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
 
             _context.TravelPackages.Add(package);
             await _context.SaveChangesAsync();
 
-            // Add images if provided
+            // Add multiple images if provided
             if (dto.ImageUrls != null && dto.ImageUrls.Any())
             {
                 int order = 0;
@@ -120,8 +120,8 @@ namespace TRAVEL.Services
 
             package.Destination = dto.Destination;
             package.Country = dto.Country;
-            package.StartDate = dto.StartDate;
-            package.EndDate = dto.EndDate;
+            package.StartDate = DateTime.SpecifyKind(dto.StartDate, DateTimeKind.Utc);
+            package.EndDate = DateTime.SpecifyKind(dto.EndDate, DateTimeKind.Utc);
             package.Price = dto.Price;
             package.AvailableRooms = dto.AvailableRooms;
             package.PackageType = dto.PackageType;
@@ -170,6 +170,7 @@ namespace TRAVEL.Services
             var query = _context.TravelPackages
                 .Include(p => p.Images)
                 .Include(p => p.Reviews)
+                .Include(p => p.Bookings)
                 .Where(p => p.IsActive);
 
             // Search by name/destination
@@ -211,7 +212,7 @@ namespace TRAVEL.Services
                 query = query.Where(p => (p.DiscountedPrice ?? p.Price) <= criteria.MaxPrice.Value);
             }
 
-            // Filter by travel date
+            // Filter by date range
             if (criteria.StartDateFrom.HasValue)
             {
                 query = query.Where(p => p.StartDate >= criteria.StartDateFrom.Value);
@@ -222,20 +223,15 @@ namespace TRAVEL.Services
                 query = query.Where(p => p.StartDate <= criteria.StartDateTo.Value);
             }
 
-            // Filter only discounted
-            if (criteria.OnSaleOnly)
+            // Filter by duration (PostgreSQL compatible)
+            if (criteria.MinDuration.HasValue)
             {
-                var now = DateTime.UtcNow;
-                query = query.Where(p =>
-                    p.DiscountedPrice.HasValue &&
-                    p.DiscountStartDate <= now &&
-                    p.DiscountEndDate >= now);
+                query = query.Where(p => (p.EndDate - p.StartDate).Days >= criteria.MinDuration.Value);
             }
 
-            // Filter by availability
-            if (criteria.AvailableOnly)
+            if (criteria.MaxDuration.HasValue)
             {
-                query = query.Where(p => p.AvailableRooms > 0);
+                query = query.Where(p => (p.EndDate - p.StartDate).Days <= criteria.MaxDuration.Value);
             }
 
             // Sorting
@@ -276,8 +272,8 @@ namespace TRAVEL.Services
             }
 
             package.DiscountedPrice = discountedPrice;
-            package.DiscountStartDate = startDate;
-            package.DiscountEndDate = endDate;
+            package.DiscountStartDate = DateTime.SpecifyKind(startDate, DateTimeKind.Utc);
+            package.DiscountEndDate = DateTime.SpecifyKind(endDate, DateTimeKind.Utc);
             package.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
@@ -300,6 +296,24 @@ namespace TRAVEL.Services
             await _context.SaveChangesAsync();
 
             _logger.LogInformation($"Removed discount from package {packageId}");
+            return true;
+        }
+
+        /// <summary>
+        /// Toggle package active/inactive status
+        /// </summary>
+        public async Task<bool> TogglePackageStatusAsync(int packageId)
+        {
+            var package = await _context.TravelPackages.FindAsync(packageId);
+            if (package == null)
+                return false;
+
+            package.IsActive = !package.IsActive;
+            package.UpdatedAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation($"Toggled package {packageId} status to: {(package.IsActive ? "Active" : "Inactive")}");
             return true;
         }
 
@@ -355,7 +369,8 @@ namespace TRAVEL.Services
         }
     }
 
-    // DTOs
+    // ===== DTOs =====
+
     public class TravelPackageDto
     {
         public string Destination { get; set; }
@@ -368,9 +383,9 @@ namespace TRAVEL.Services
         public int? MinimumAge { get; set; }
         public int? MaximumAge { get; set; }
         public string Description { get; set; }
-        public string Itinerary { get; set; }
-        public string ImageUrl { get; set; }
-        public List<string> ImageUrls { get; set; }
+        public string? Itinerary { get; set; }
+        public string? ImageUrl { get; set; }  // Made optional
+        public List<string>? ImageUrls { get; set; }  // Made optional
         public bool IsActive { get; set; } = true;
     }
 
@@ -384,8 +399,8 @@ namespace TRAVEL.Services
         public decimal? MaxPrice { get; set; }
         public DateTime? StartDateFrom { get; set; }
         public DateTime? StartDateTo { get; set; }
-        public bool OnSaleOnly { get; set; }
-        public bool AvailableOnly { get; set; }
+        public int? MinDuration { get; set; }
+        public int? MaxDuration { get; set; }
         public string SortBy { get; set; }
     }
 
