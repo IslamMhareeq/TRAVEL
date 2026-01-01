@@ -56,7 +56,6 @@
             min-height: 100vh;
         }
 
-        /* Sidebar */
         .sidebar {
             width: var(--sidebar-width);
             background: var(--color-surface);
@@ -139,7 +138,6 @@
                 text-align: center;
             }
 
-        /* Main Content */
         .main-content {
             flex: 1;
             margin-left: var(--sidebar-width);
@@ -166,7 +164,6 @@
             font-size: 0.9rem;
         }
 
-        /* Stats Row */
         .stats-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -206,7 +203,6 @@
                 color: var(--color-silver);
             }
 
-        /* Filters */
         .filters {
             display: flex;
             gap: var(--space-3);
@@ -253,7 +249,6 @@
             min-width: 150px;
         }
 
-        /* Table */
         .table-container {
             background: var(--color-surface);
             border: 1px solid var(--color-border);
@@ -289,7 +284,6 @@
                 border-bottom: none;
             }
 
-        /* User Cell */
         .user-cell {
             display: flex;
             align-items: center;
@@ -317,7 +311,6 @@
             color: var(--color-silver);
         }
 
-        /* Badges */
         .badge {
             display: inline-block;
             padding: 4px 10px;
@@ -351,7 +344,6 @@
                 color: var(--color-danger);
             }
 
-        /* Action Buttons */
         .action-btns {
             display: flex;
             gap: var(--space-2);
@@ -389,7 +381,6 @@
                     color: white;
                 }
 
-        /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -424,7 +415,6 @@
             color: white;
         }
 
-        /* Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -488,7 +478,6 @@
             border-top: 1px solid var(--color-border);
         }
 
-        /* Form */
         .form-group {
             margin-bottom: var(--space-4);
         }
@@ -522,7 +511,6 @@
             gap: var(--space-4);
         }
 
-        /* Loading & Empty */
         .loading {
             display: flex;
             justify-content: center;
@@ -550,7 +538,6 @@
                 opacity: 0.5;
             }
 
-        /* Toast */
         .toast {
             position: fixed;
             bottom: 20px;
@@ -587,7 +574,6 @@
             }
         }
 
-        /* Mobile */
         .mobile-menu-btn {
             display: none;
             background: none;
@@ -656,7 +642,6 @@
 </head>
 <body>
     <div class="admin-layout">
-        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="logo"><i class="fas fa-compass"></i></div>
@@ -685,7 +670,6 @@
 
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-        <!-- Main Content -->
         <main class="main-content">
             <div class="header">
                 <div>
@@ -695,7 +679,6 @@
                 </div>
             </div>
 
-            <!-- Stats -->
             <div class="stats-row">
                 <div class="stat-card">
                     <div class="icon"><i class="fas fa-users"></i></div>
@@ -715,7 +698,6 @@
                 </div>
             </div>
 
-            <!-- Filters -->
             <div class="filters">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
@@ -723,18 +705,17 @@
                 </div>
                 <select class="filter-select" id="roleFilter" onchange="filterUsers()">
                     <option value="">All Roles</option>
-                    <option value="Admin">Admin</option>
-                    <option value="User">User</option>
+                    <option value="0">Admin</option>
+                    <option value="1">User</option>
                 </select>
                 <select class="filter-select" id="statusFilter" onchange="filterUsers()">
                     <option value="">All Status</option>
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                    <option value="Suspended">Suspended</option>
+                    <option value="0">Active</option>
+                    <option value="1">Inactive</option>
+                    <option value="2">Suspended</option>
                 </select>
             </div>
 
-            <!-- Users Table -->
             <div class="table-container">
                 <table class="data-table">
                     <thead>
@@ -787,16 +768,16 @@
                         <div class="form-group">
                             <label class="form-label">Role</label>
                             <select class="form-control" id="editRole">
-                                <option value="User">User</option>
-                                <option value="Admin">Admin</option>
+                                <option value="0">Admin</option>
+                                <option value="1">User</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Status</label>
                             <select class="form-control" id="editStatus">
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
-                                <option value="Suspended">Suspended</option>
+                                <option value="0">Active</option>
+                                <option value="1">Inactive</option>
+                                <option value="2">Suspended</option>
                             </select>
                         </div>
                     </div>
@@ -834,14 +815,51 @@
         let allUsers = [];
         let filteredUsers = [];
 
+        // Role: 0 = Admin, 1 = User
+        // Status: 0 = Active, 1 = Inactive, 2 = Suspended, 3 = Deleted
+
+        function getRoleName(role) {
+            var r = parseInt(role);
+            if (r === 0) return 'Admin';
+            if (r === 1) return 'User';
+            return 'User';
+        }
+
+        function getRoleClass(role) {
+            var r = parseInt(role);
+            if (r === 0) return 'admin';
+            return 'user';
+        }
+
+        function getStatusName(status) {
+            var s = parseInt(status);
+            if (s === 0) return 'Active';
+            if (s === 1) return 'Inactive';
+            if (s === 2) return 'Suspended';
+            if (s === 3) return 'Deleted';
+            return 'Active';
+        }
+
+        function getStatusClass(status) {
+            var s = parseInt(status);
+            if (s === 0) return 'active';
+            if (s === 1) return 'inactive';
+            if (s === 2) return 'suspended';
+            if (s === 3) return 'suspended';
+            return 'active';
+        }
+
         function navigateTo(url, event) { if (event) event.preventDefault(); window.location.href = url; }
         function logout(event) { if (event) event.preventDefault(); localStorage.removeItem('token'); localStorage.removeItem('user'); navigateTo('/account/login'); }
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
+
+        function showToast(message, type) {
+            type = type || 'success';
+            var toast = document.getElementById('toast');
             document.getElementById('toastMessage').textContent = message;
             toast.className = 'toast ' + type + ' show';
             setTimeout(function() { toast.classList.remove('show'); }, 3000);
         }
+
         function formatDate(dateStr) {
             if (!dateStr) return 'N/A';
             return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
@@ -859,11 +877,11 @@
 
         // Load Users
         async function loadUsers() {
-            const token = localStorage.getItem('token');
+            var token = localStorage.getItem('token');
             if (!token) { navigateTo('/account/login'); return; }
 
             try {
-                const response = await fetch('/api/admin/users', {
+                var response = await fetch('/api/admin/users', {
                     headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }
                 });
 
@@ -874,9 +892,9 @@
                 }
 
                 if (response.ok) {
-                    const result = await response.json();
+                    var result = await response.json();
                     allUsers = result.data || [];
-                    filteredUsers = [...allUsers];
+                    filteredUsers = allUsers.slice();
                     renderUsers();
                     updateStats();
                 } else {
@@ -891,40 +909,68 @@
         // Update Stats
         function updateStats() {
             document.getElementById('totalUsers').textContent = allUsers.length;
-            document.getElementById('activeUsers').textContent = allUsers.filter(u => u.status === 'Active').length;
-            document.getElementById('adminUsers').textContent = allUsers.filter(u => u.role === 'Admin').length;
 
-            // New users this month
-            const now = new Date();
-            const thisMonth = allUsers.filter(u => {
-                const created = new Date(u.createdAt);
-                return created.getMonth() === now.getMonth() && created.getFullYear() === now.getFullYear();
-            }).length;
-            document.getElementById('newUsers').textContent = thisMonth;
+            // Count active users (status = 0 or status = "Active")
+            var activeCount = 0;
+            var adminCount = 0;
+            var newCount = 0;
+            var now = new Date();
+            var thisMonth = now.getMonth();
+            var thisYear = now.getFullYear();
+
+            for (var i = 0; i < allUsers.length; i++) {
+                var u = allUsers[i];
+                var status = u.status;
+                var role = u.role;
+
+                // Check status
+                if (status === 0 || status === '0' || status === 'Active') {
+                    activeCount++;
+                }
+
+                // Check role
+                if (role === 0 || role === '0' || role === 'Admin') {
+                    adminCount++;
+                }
+
+                // Check new this month
+                if (u.createdAt) {
+                    var created = new Date(u.createdAt);
+                    if (created.getMonth() === thisMonth && created.getFullYear() === thisYear) {
+                        newCount++;
+                    }
+                }
+            }
+
+            document.getElementById('activeUsers').textContent = activeCount;
+            document.getElementById('adminUsers').textContent = adminCount;
+            document.getElementById('newUsers').textContent = newCount;
         }
 
         // Render Users Table
         function renderUsers() {
-            const tbody = document.getElementById('usersTableBody');
+            var tbody = document.getElementById('usersTableBody');
 
             if (filteredUsers.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><i class="fas fa-users"></i><p>No users found</p></div></td></tr>';
                 return;
             }
 
-            let html = '';
-            for (let i = 0; i < filteredUsers.length; i++) {
-                const user = filteredUsers[i];
-                const initial = (user.firstName || 'U').charAt(0).toUpperCase();
-                const fullName = ((user.firstName || '') + ' ' + (user.lastName || '')).trim() || 'Unknown';
-                const roleBadge = user.role === 'Admin' ? 'admin' : 'user';
-                const statusBadge = (user.status || 'Active').toLowerCase();
+            var html = '';
+            for (var i = 0; i < filteredUsers.length; i++) {
+                var user = filteredUsers[i];
+                var initial = (user.firstName || 'U').charAt(0).toUpperCase();
+                var fullName = ((user.firstName || '') + ' ' + (user.lastName || '')).trim() || 'Unknown';
+                var roleName = getRoleName(user.role);
+                var roleClass = getRoleClass(user.role);
+                var statusName = getStatusName(user.status);
+                var statusClass = getStatusClass(user.status);
 
                 html += '<tr>';
                 html += '<td><div class="user-cell"><div class="user-avatar">' + initial + '</div><div><div class="user-name">' + fullName + '</div><div class="user-email">' + (user.email || '') + '</div></div></div></td>';
                 html += '<td class="hide-mobile">' + (user.phoneNumber || '-') + '</td>';
-                html += '<td><span class="badge ' + roleBadge + '">' + (user.role || 'User') + '</span></td>';
-                html += '<td><span class="badge ' + statusBadge + '">' + (user.status || 'Active') + '</span></td>';
+                html += '<td><span class="badge ' + roleClass + '">' + roleName + '</span></td>';
+                html += '<td><span class="badge ' + statusClass + '">' + statusName + '</span></td>';
                 html += '<td class="hide-mobile">' + formatDate(user.createdAt) + '</td>';
                 html += '<td><div class="action-btns">';
                 html += '<button class="action-btn edit" onclick="editUser(' + user.userId + ')" title="Edit"><i class="fas fa-edit"></i></button>';
@@ -937,25 +983,44 @@
 
         // Filter Users
         function filterUsers() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const role = document.getElementById('roleFilter').value;
-            const status = document.getElementById('statusFilter').value;
+            var search = document.getElementById('searchInput').value.toLowerCase();
+            var roleFilter = document.getElementById('roleFilter').value;
+            var statusFilter = document.getElementById('statusFilter').value;
 
-            filteredUsers = allUsers.filter(function(user) {
-                const fullName = ((user.firstName || '') + ' ' + (user.lastName || '')).toLowerCase();
-                const email = (user.email || '').toLowerCase();
-                const matchSearch = !search || fullName.includes(search) || email.includes(search);
-                const matchRole = !role || user.role === role;
-                const matchStatus = !status || user.status === status;
-                return matchSearch && matchRole && matchStatus;
-            });
+            filteredUsers = [];
+            for (var i = 0; i < allUsers.length; i++) {
+                var user = allUsers[i];
+                var fullName = ((user.firstName || '') + ' ' + (user.lastName || '')).toLowerCase();
+                var email = (user.email || '').toLowerCase();
+
+                // Search match
+                var matchSearch = !search || fullName.indexOf(search) >= 0 || email.indexOf(search) >= 0;
+
+                // Role match - compare as strings
+                var userRole = String(user.role);
+                var matchRole = !roleFilter || userRole === roleFilter;
+
+                // Status match - compare as strings
+                var userStatus = String(user.status);
+                var matchStatus = !statusFilter || userStatus === statusFilter;
+
+                if (matchSearch && matchRole && matchStatus) {
+                    filteredUsers.push(user);
+                }
+            }
 
             renderUsers();
         }
 
         // Edit User
         function editUser(userId) {
-            const user = allUsers.find(function(u) { return u.userId === userId; });
+            var user = null;
+            for (var i = 0; i < allUsers.length; i++) {
+                if (allUsers[i].userId === userId) {
+                    user = allUsers[i];
+                    break;
+                }
+            }
             if (!user) return;
 
             document.getElementById('editUserId').value = user.userId;
@@ -963,8 +1028,8 @@
             document.getElementById('editLastName').value = user.lastName || '';
             document.getElementById('editEmail').value = user.email || '';
             document.getElementById('editPhone').value = user.phoneNumber || '';
-            document.getElementById('editRole').value = user.role || 'User';
-            document.getElementById('editStatus').value = user.status || 'Active';
+            document.getElementById('editRole').value = String(user.role);
+            document.getElementById('editStatus').value = String(user.status);
             document.getElementById('editModal').classList.add('active');
         }
 
@@ -975,20 +1040,20 @@
         // Save User
         async function saveUser(event) {
             event.preventDefault();
-            const token = localStorage.getItem('token');
-            const userId = document.getElementById('editUserId').value;
+            var token = localStorage.getItem('token');
+            var userId = document.getElementById('editUserId').value;
 
-            const userData = {
+            var userData = {
                 firstName: document.getElementById('editFirstName').value,
                 lastName: document.getElementById('editLastName').value,
                 email: document.getElementById('editEmail').value,
                 phoneNumber: document.getElementById('editPhone').value,
-                role: document.getElementById('editRole').value,
-                status: document.getElementById('editStatus').value
+                role: parseInt(document.getElementById('editRole').value),
+                status: parseInt(document.getElementById('editStatus').value)
             };
 
             try {
-                const response = await fetch('/api/admin/users/' + userId, {
+                var response = await fetch('/api/admin/users/' + userId, {
                     method: 'PUT',
                     headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
                     body: JSON.stringify(userData)
@@ -999,7 +1064,7 @@
                     closeModal();
                     loadUsers();
                 } else {
-                    const error = await response.json();
+                    var error = await response.json();
                     showToast(error.message || 'Failed to update user', 'error');
                 }
             } catch (error) {
@@ -1010,7 +1075,13 @@
 
         // Delete User
         function deleteUser(userId) {
-            const user = allUsers.find(function(u) { return u.userId === userId; });
+            var user = null;
+            for (var i = 0; i < allUsers.length; i++) {
+                if (allUsers[i].userId === userId) {
+                    user = allUsers[i];
+                    break;
+                }
+            }
             if (!user) return;
 
             document.getElementById('deleteUserId').value = userId;
@@ -1023,11 +1094,11 @@
         }
 
         async function confirmDelete() {
-            const token = localStorage.getItem('token');
-            const userId = document.getElementById('deleteUserId').value;
+            var token = localStorage.getItem('token');
+            var userId = document.getElementById('deleteUserId').value;
 
             try {
-                const response = await fetch('/api/admin/users/' + userId, {
+                var response = await fetch('/api/admin/users/' + userId, {
                     method: 'DELETE',
                     headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }
                 });
@@ -1037,7 +1108,7 @@
                     closeDeleteModal();
                     loadUsers();
                 } else {
-                    const error = await response.json();
+                    var error = await response.json();
                     showToast(error.message || 'Failed to delete user', 'error');
                 }
             } catch (error) {
@@ -1048,8 +1119,8 @@
 
         // Check admin auth and load users
         document.addEventListener('DOMContentLoaded', function() {
-            const token = localStorage.getItem('token');
-            const user = localStorage.getItem('user');
+            var token = localStorage.getItem('token');
+            var user = localStorage.getItem('user');
 
             if (!token || !user) {
                 navigateTo('/account/login');
@@ -1057,8 +1128,9 @@
             }
 
             try {
-                const userData = JSON.parse(user);
-                if (userData.role !== 'Admin') {
+                var userData = JSON.parse(user);
+                // Check if admin (role = 0 or role = "Admin")
+                if (userData.role !== 0 && userData.role !== '0' && userData.role !== 'Admin') {
                     showToast('Admin access required', 'error');
                     setTimeout(function() { navigateTo('/'); }, 2000);
                     return;
