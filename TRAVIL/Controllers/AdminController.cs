@@ -78,6 +78,68 @@ namespace TRAVEL.Controllers
                 }
             });
         }
+        /// <summary>
+        /// Update user information
+        /// </summary>
+        [HttpPut("users/{userId}")]
+        public async Task<IActionResult> UpdateUser(int userId, [FromBody] UpdateUserRequest request)
+        {
+            try
+            {
+                var user = await _userService.GetUserByIdAsync(userId);
+                if (user == null)
+                    return NotFound(new { success = false, message = "User not found" });
+
+                // Update user properties
+                if (!string.IsNullOrEmpty(request.FirstName))
+                    user.FirstName = request.FirstName;
+
+                if (!string.IsNullOrEmpty(request.LastName))
+                    user.LastName = request.LastName;
+
+                if (!string.IsNullOrEmpty(request.Email))
+                    user.Email = request.Email;
+
+                if (!string.IsNullOrEmpty(request.PhoneNumber))
+                    user.PhoneNumber = request.PhoneNumber;
+
+                // Update role if provided
+                if (!string.IsNullOrEmpty(request.Role))
+                {
+                    if (Enum.TryParse<TRAVEL.Models.UserRole>(request.Role, true, out var role))
+                    {
+                        user.Role = role;
+                    }
+                }
+
+                // Update status if provided
+                if (!string.IsNullOrEmpty(request.Status))
+                {
+                    if (Enum.TryParse<TRAVEL.Models.UserStatus>(request.Status, true, out var status))
+                    {
+                        user.Status = status;
+                    }
+                }
+
+                user.UpdatedAt = DateTime.UtcNow;
+
+                var result = await _userService.UpdateUserAsync(user);
+
+                if (result)
+                {
+                    _logger.LogInformation($"User {userId} updated by admin");
+                    return Ok(new { success = true, message = "User updated successfully" });
+                }
+
+                return BadRequest(new { success = false, message = "Failed to update user" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error updating user {userId}");
+                return StatusCode(500, new { success = false, message = "Internal server error" });
+            }
+        }
+
 
         // ===== USER MANAGEMENT =====
 
@@ -268,5 +330,14 @@ namespace TRAVEL.Controllers
     public class SuspendUserRequest
     {
         public string Reason { get; set; }
+    }
+    public class UpdateUserRequest
+    {
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? Email { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? Role { get; set; }
+        public string? Status { get; set; }
     }
 }

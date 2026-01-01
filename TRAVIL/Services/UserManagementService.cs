@@ -12,11 +12,12 @@ namespace TRAVEL.Services
     public interface IUserManagementService
     {
         Task<List<User>> GetAllUsersAsync();
-        Task<User> GetUserByIdAsync(int userId);
+        Task<User?> GetUserByIdAsync(int userId);
+        Task<bool> UpdateUserAsync(User user);
         Task<bool> SuspendUserAsync(int userId, string reason);
         Task<bool> ActivateUserAsync(int userId);
         Task<bool> DeleteUserAsync(int userId);
-        Task<UserBookingHistory> GetUserBookingHistoryAsync(int userId);
+        Task<UserBookingHistory?> GetUserBookingHistoryAsync(int userId);
         Task<List<User>> SearchUsersAsync(string searchTerm);
         Task<UserStats> GetUserStatsAsync();
     }
@@ -41,7 +42,7 @@ namespace TRAVEL.Services
                 .ToListAsync();
         }
 
-        public async Task<User> GetUserByIdAsync(int userId)
+        public async Task<User?> GetUserByIdAsync(int userId)
         {
             return await _context.Users
                 .Include(u => u.Bookings)
@@ -52,6 +53,22 @@ namespace TRAVEL.Services
                 .Include(u => u.WaitingListEntries)
                     .ThenInclude(w => w.TravelPackage)
                 .FirstOrDefaultAsync(u => u.UserId == userId);
+        }
+
+        public async Task<bool> UpdateUserAsync(User user)
+        {
+            try
+            {
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation($"User {user.UserId} updated successfully");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error updating user {user.UserId}");
+                return false;
+            }
         }
 
         public async Task<bool> SuspendUserAsync(int userId, string reason)
@@ -128,7 +145,7 @@ namespace TRAVEL.Services
             return true;
         }
 
-        public async Task<UserBookingHistory> GetUserBookingHistoryAsync(int userId)
+        public async Task<UserBookingHistory?> GetUserBookingHistoryAsync(int userId)
         {
             var user = await _context.Users
                 .Include(u => u.Bookings)
@@ -140,24 +157,22 @@ namespace TRAVEL.Services
             if (user == null)
                 return null;
 
-            var bookings = user.Bookings.ToList();
-
             return new UserBookingHistory
             {
-                UserId = userId,
+                UserId = user.UserId,
                 UserName = $"{user.FirstName} {user.LastName}",
                 Email = user.Email,
-                TotalBookings = bookings.Count,
-                CompletedBookings = bookings.Count(b => b.Status == BookingStatus.Completed),
-                CancelledBookings = bookings.Count(b => b.Status == BookingStatus.Cancelled),
-                TotalSpent = bookings
-                    .Where(b => b.Payment?.Status == PaymentStatus.Completed)
+                TotalBookings = user.Bookings.Count,
+                CompletedBookings = user.Bookings.Count(b => b.Status == BookingStatus.Completed),
+                CancelledBookings = user.Bookings.Count(b => b.Status == BookingStatus.Cancelled),
+                TotalSpent = user.Bookings
+                    .Where(b => b.Status == BookingStatus.Completed || b.Status == BookingStatus.Confirmed)
                     .Sum(b => b.TotalPrice),
-                Bookings = bookings.Select(b => new BookingHistoryItem
+                Bookings = user.Bookings.Select(b => new BookingHistoryItem
                 {
                     BookingId = b.BookingId,
-                    BookingReference = b.BookingReference,
-                    Destination = b.TravelPackage?.Destination,
+                    BookingReference = b.BookingReference ?? $"TRV-{b.BookingId:D6}",
+                    Destination = b.TravelPackage?.Destination ?? "Unknown",
                     TravelDate = b.TravelPackage?.StartDate ?? DateTime.MinValue,
                     BookingDate = b.BookingDate,
                     Status = b.Status.ToString(),
@@ -197,8 +212,7 @@ namespace TRAVEL.Services
                 SuspendedUsers = users.Count(u => u.Status == UserStatus.Suspended),
                 DeletedUsers = users.Count(u => u.Status == UserStatus.Deleted),
                 NewUsersThisMonth = users.Count(u => u.CreatedAt >= thirtyDaysAgo),
-                UsersWithBookings = await _context.Users
-                    .CountAsync(u => u.Bookings.Any()),
+                UsersWithBookings = await _context.Users.CountAsync(u => u.Bookings.Any()),
                 AdminCount = users.Count(u => u.Role == UserRole.Admin),
                 RegularUserCount = users.Count(u => u.Role == UserRole.User)
             };
@@ -208,25 +222,25 @@ namespace TRAVEL.Services
     public class UserBookingHistory
     {
         public int UserId { get; set; }
-        public string UserName { get; set; }
-        public string Email { get; set; }
+        public string UserName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         public int TotalBookings { get; set; }
         public int CompletedBookings { get; set; }
         public int CancelledBookings { get; set; }
         public decimal TotalSpent { get; set; }
-        public List<BookingHistoryItem> Bookings { get; set; }
+        public List<BookingHistoryItem> Bookings { get; set; } = new();
     }
 
     public class BookingHistoryItem
     {
         public int BookingId { get; set; }
-        public string BookingReference { get; set; }
-        public string Destination { get; set; }
+        public string BookingReference { get; set; } = string.Empty;
+        public string Destination { get; set; } = string.Empty;
         public DateTime TravelDate { get; set; }
         public DateTime BookingDate { get; set; }
-        public string Status { get; set; }
+        public string Status { get; set; } = string.Empty;
         public decimal Amount { get; set; }
-        public string PaymentStatus { get; set; }
+        public string PaymentStatus { get; set; } = string.Empty;
     }
 
     public class UserStats

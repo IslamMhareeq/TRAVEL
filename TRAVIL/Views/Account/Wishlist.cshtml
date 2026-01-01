@@ -57,7 +57,6 @@
             min-height: 100vh;
         }
 
-        /* Sidebar */
         .sidebar {
             width: var(--sidebar-width);
             background: var(--color-surface);
@@ -158,7 +157,6 @@
             color: var(--color-silver);
         }
 
-        /* Main Content */
         .main-content {
             flex: 1;
             margin-left: var(--sidebar-width);
@@ -234,7 +232,6 @@
                 color: white;
             }
 
-        /* Wishlist Grid */
         .wishlist-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -360,7 +357,6 @@
             margin-right: var(--space-2);
         }
 
-        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 80px 20px;
@@ -387,7 +383,6 @@
                 margin-right: auto;
             }
 
-        /* Loading */
         .loading {
             display: flex;
             justify-content: center;
@@ -409,7 +404,6 @@
             }
         }
 
-        /* Toast */
         .toast {
             position: fixed;
             bottom: 20px;
@@ -440,7 +434,6 @@
                 border-color: var(--color-danger);
             }
 
-        /* Mobile */
         .mobile-menu-btn {
             display: none;
             background: none;
@@ -491,7 +484,6 @@
 </head>
 <body>
     <div class="dashboard-layout">
-        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <a href="/" class="sidebar-logo" onclick="navigateTo('/', event)">
@@ -533,7 +525,6 @@
 
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-        <!-- Main Content -->
         <main class="main-content">
             <div class="header">
                 <div>
@@ -548,7 +539,6 @@
                 </a>
             </div>
 
-            <!-- Content -->
             <div id="content">
                 <div class="loading" id="loader">
                     <div class="spinner"></div>
@@ -594,15 +584,17 @@
         }
 
         function formatDate(dateString) {
+            if (!dateString) return 'N/A';
             const date = new Date(dateString);
             return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         }
 
         function calculateDuration(start, end) {
+            if (!start || !end) return 0;
             const startDate = new Date(start);
             const endDate = new Date(end);
             const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-            return days;
+            return days > 0 ? days : 1;
         }
 
         // Mobile menu
@@ -618,12 +610,16 @@
 
         async function removeFromWishlist(packageId) {
             const token = localStorage.getItem('token');
+            if (!token) {
+                showToast('Please login first', 'error');
+                return;
+            }
 
             try {
-                const response = await fetch(`/api/wishlist/${packageId}`, {
+                const response = await fetch('/api/wishlist/' + packageId, {
                     method: 'DELETE',
                     headers: {
-                        'Authorization': `Bearer ${token}`,
+                        'Authorization': 'Bearer ' + token,
                         'Content-Type': 'application/json'
                     }
                 });
@@ -647,18 +643,40 @@
             const emptyState = document.getElementById('emptyState');
             const grid = document.getElementById('wishlistGrid');
 
+            if (!token) {
+                console.log('No token found, redirecting to login');
+                navigateTo('/account/login');
+                return;
+            }
+
+            console.log('Token found, loading wishlist...');
+
             try {
                 const response = await fetch('/api/wishlist', {
+                    method: 'GET',
                     headers: {
-                        'Authorization': `Bearer ${token}`,
+                        'Authorization': 'Bearer ' + token,
                         'Content-Type': 'application/json'
                     }
                 });
 
+                console.log('Response status:', response.status);
                 loader.style.display = 'none';
+
+                if (response.status === 401) {
+                    console.log('Token expired or invalid');
+                    showToast('Session expired. Please login again.', 'error');
+                    setTimeout(function() {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        navigateTo('/account/login');
+                    }, 2000);
+                    return;
+                }
 
                 if (response.ok) {
                     const result = await response.json();
+                    console.log('Wishlist result:', result);
                     const wishlist = result.data || [];
 
                     if (wishlist.length === 0) {
@@ -668,52 +686,47 @@
                     }
 
                     emptyState.style.display = 'none';
-                    grid.innerHTML = wishlist.map(item => {
+
+                    let html = '';
+                    for (let i = 0; i < wishlist.length; i++) {
+                        const item = wishlist[i];
                         const pkg = item.package || {};
                         const imageUrl = pkg.imageUrl || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80';
                         const hasDiscount = pkg.discountedPrice && pkg.discountedPrice < pkg.price;
                         const duration = calculateDuration(pkg.startDate, pkg.endDate);
+                        const price = hasDiscount ? pkg.discountedPrice : pkg.price;
 
-                        return `
-                            <div class="wishlist-card">
-                                <div class="wishlist-image-container">
-                                    <img src="${imageUrl}" alt="${pkg.destination}" class="wishlist-image"
-                                         onerror="this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80'">
-                                    ${hasDiscount ? '<span class="wishlist-badge">On Sale</span>' : ''}
-                                    <button class="wishlist-remove" onclick="removeFromWishlist(${pkg.packageId})" title="Remove from wishlist">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                                <div class="wishlist-content">
-                                    <div class="wishlist-location">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                        ${pkg.country || 'Unknown'}
-                                    </div>
-                                    <div class="wishlist-title">${pkg.destination || 'Package'}</div>
-                                    <div class="wishlist-meta">
-                                        <div class="wishlist-meta-item">
-                                            <i class="far fa-calendar"></i>
-                                            ${formatDate(pkg.startDate)} - ${formatDate(pkg.endDate)}
-                                        </div>
-                                        <div class="wishlist-meta-item">
-                                            <i class="far fa-clock"></i>
-                                            ${duration} days
-                                        </div>
-                                    </div>
-                                    <div class="wishlist-footer">
-                                        <div class="wishlist-price">
-                                            ${hasDiscount ? `<span class="wishlist-price-old">$${pkg.price?.toLocaleString()}</span>` : ''}
-                                            $${(hasDiscount ? pkg.discountedPrice : pkg.price)?.toLocaleString() || '0'}
-                                        </div>
-                                        <a href="/packages/${pkg.packageId}" class="btn btn-outline btn-sm" onclick="navigateTo('/packages/${pkg.packageId}', event)">
-                                            View Details
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
+                        html += '<div class="wishlist-card">';
+                        html += '<div class="wishlist-image-container">';
+                        html += '<img src="' + imageUrl + '" alt="' + (pkg.destination || 'Package') + '" class="wishlist-image" onerror="this.src=\'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80\'">';
+                        if (hasDiscount) {
+                            html += '<span class="wishlist-badge">On Sale</span>';
+                        }
+                        html += '<button class="wishlist-remove" onclick="removeFromWishlist(' + pkg.packageId + ')" title="Remove from wishlist"><i class="fas fa-trash"></i></button>';
+                        html += '</div>';
+                        html += '<div class="wishlist-content">';
+                        html += '<div class="wishlist-location"><i class="fas fa-map-marker-alt"></i> ' + (pkg.country || 'Unknown') + '</div>';
+                        html += '<div class="wishlist-title">' + (pkg.destination || 'Package') + '</div>';
+                        html += '<div class="wishlist-meta">';
+                        html += '<div class="wishlist-meta-item"><i class="far fa-calendar"></i> ' + formatDate(pkg.startDate) + ' - ' + formatDate(pkg.endDate) + '</div>';
+                        html += '<div class="wishlist-meta-item"><i class="far fa-clock"></i> ' + duration + ' days</div>';
+                        html += '</div>';
+                        html += '<div class="wishlist-footer">';
+                        html += '<div class="wishlist-price">';
+                        if (hasDiscount) {
+                            html += '<span class="wishlist-price-old">$' + (pkg.price || 0).toLocaleString() + '</span>';
+                        }
+                        html += '$' + (price || 0).toLocaleString();
+                        html += '</div>';
+                        html += '<a href="/packages/' + pkg.packageId + '" class="btn btn-outline btn-sm">View Details</a>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                    }
+
+                    grid.innerHTML = html;
                 } else {
+                    console.log('Error response');
                     emptyState.style.display = 'block';
                 }
             } catch (error) {
@@ -724,9 +737,12 @@
         }
 
         // Initialize
-        document.addEventListener('DOMContentLoaded', async function() {
+        document.addEventListener('DOMContentLoaded', function() {
             const token = localStorage.getItem('token');
             const user = localStorage.getItem('user');
+
+            console.log('Page loaded, checking auth...');
+            console.log('Token exists:', !!token);
 
             if (!token || !user) {
                 navigateTo('/account/login');
@@ -735,11 +751,11 @@
 
             try {
                 const userData = JSON.parse(user);
-                document.getElementById('userName').textContent = `${userData.firstName || ''} ${userData.lastName || ''}`.trim();
+                document.getElementById('userName').textContent = ((userData.firstName || '') + ' ' + (userData.lastName || '')).trim() || 'User';
                 document.getElementById('userEmail').textContent = userData.email || '';
                 document.getElementById('userAvatar').textContent = (userData.firstName || 'U').charAt(0).toUpperCase();
 
-                await loadWishlist();
+                loadWishlist();
             } catch (error) {
                 console.error('Error:', error);
             }
