@@ -11,13 +11,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@(isEdit ? "Edit" : "Add") Package - TRAVIL Admin</title>
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link href="/css/admin.css" rel="stylesheet" />
-    
+
     <style>
         :root {
             --color-midnight: #0d1117;
@@ -45,148 +45,428 @@
             --font-body: 'Outfit', sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: var(--font-body); background: var(--color-midnight); color: var(--color-white); }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-midnight);
+            color: var(--color-white);
+        }
 
         .page-transition {
-            position: fixed; inset: 0; background: #0d1117; z-index: 10000;
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease;
+            position: fixed;
+            inset: 0;
+            background: #0d1117;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
         }
-        .page-transition.active { opacity: 1; visibility: visible; }
-        .page-transition .loader {
-            width: 48px; height: 48px; border: 3px solid #21262d;
-            border-top-color: #d4a853; border-radius: 50%; animation: spin 0.8s linear infinite;
-        }
-        @@keyframes spin { to { transform: rotate(360deg); } }
 
-        .admin-layout { display: flex; min-height: 100vh; }
+            .page-transition.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .page-transition .loader {
+                width: 48px;
+                height: 48px;
+                border: 3px solid #21262d;
+                border-top-color: #d4a853;
+                border-radius: 50%;
+                animation: spin 0.8s linear infinite;
+            }
+
+        @@keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
 
         /* Sidebar */
         .sidebar {
-            width: var(--sidebar-width); background: linear-gradient(180deg, var(--color-navy) 0%, var(--color-midnight) 100%);
-            position: fixed; height: 100vh; overflow-y: auto; z-index: 1000;
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, var(--color-navy) 0%, var(--color-midnight) 100%);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
             border-right: 1px solid var(--color-slate);
         }
-        .sidebar-header {
-            padding: var(--space-5); border-bottom: 1px solid var(--color-slate);
-            display: flex; align-items: center; gap: var(--space-3);
-        }
-        .sidebar-header .logo {
-            width: 48px; height: 48px;
-            background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
-            border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;
-            font-size: 1.25rem; color: var(--color-midnight);
-        }
-        .sidebar-header h1 {
-            font-family: var(--font-display); font-size: 1.5rem; font-weight: 500;
-            color: var(--color-white); letter-spacing: 0.1em; margin-bottom: 0;
-        }
-        .sidebar-header span { font-size: 0.6875rem; color: var(--color-gold); text-transform: uppercase; letter-spacing: 0.15em; }
 
-        .nav-section { padding: var(--space-4) var(--space-3); }
+        .sidebar-header {
+            padding: var(--space-5);
+            border-bottom: 1px solid var(--color-slate);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+            .sidebar-header .logo {
+                width: 48px;
+                height: 48px;
+                background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+                border-radius: var(--radius-md);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.25rem;
+                color: var(--color-midnight);
+            }
+
+            .sidebar-header h1 {
+                font-family: var(--font-display);
+                font-size: 1.5rem;
+                font-weight: 500;
+                color: var(--color-white);
+                letter-spacing: 0.1em;
+                margin-bottom: 0;
+            }
+
+            .sidebar-header span {
+                font-size: 0.6875rem;
+                color: var(--color-gold);
+                text-transform: uppercase;
+                letter-spacing: 0.15em;
+            }
+
+        .nav-section {
+            padding: var(--space-4) var(--space-3);
+        }
+
         .nav-section-title {
-            padding: 0 var(--space-3); font-size: 0.6875rem; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 0.15em; color: var(--color-steel); margin-bottom: var(--space-3);
+            padding: 0 var(--space-3);
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--color-steel);
+            margin-bottom: var(--space-3);
         }
+
         .nav-item {
-            display: flex; align-items: center; gap: var(--space-3);
-            padding: var(--space-3) var(--space-4); color: var(--color-silver);
-            text-decoration: none; border-radius: var(--radius-md); font-size: 0.875rem;
-            font-weight: 500; transition: all var(--transition-fast);
-            margin-bottom: var(--space-1); border-left: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3) var(--space-4);
+            color: var(--color-silver);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all var(--transition-fast);
+            margin-bottom: var(--space-1);
+            border-left: 3px solid transparent;
         }
-        .nav-item i { width: 20px; text-align: center; font-size: 1rem; }
-        .nav-item:hover { background: var(--color-slate); color: var(--color-white); }
-        .nav-item.active { background: var(--color-gold-muted); color: var(--color-gold); border-left-color: var(--color-gold); }
+
+            .nav-item i {
+                width: 20px;
+                text-align: center;
+                font-size: 1rem;
+            }
+
+            .nav-item:hover {
+                background: var(--color-slate);
+                color: var(--color-white);
+            }
+
+            .nav-item.active {
+                background: var(--color-gold-muted);
+                color: var(--color-gold);
+                border-left-color: var(--color-gold);
+            }
 
         /* Main Content */
-        .main-content { flex: 1; margin-left: var(--sidebar-width); padding: var(--space-6); }
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: var(--space-6);
+        }
 
         .header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-6);
+            flex-wrap: wrap;
+            gap: var(--space-4);
         }
-        .header h2 { font-size: 1.75rem; font-weight: 600; }
-        .header .subtitle { color: var(--color-silver); font-size: 0.9375rem; margin-top: var(--space-1); }
+
+            .header h2 {
+                font-size: 1.75rem;
+                font-weight: 600;
+            }
+
+            .header .subtitle {
+                color: var(--color-silver);
+                font-size: 0.9375rem;
+                margin-top: var(--space-1);
+            }
 
         .btn {
-            display: inline-flex; align-items: center; gap: var(--space-2);
-            padding: var(--space-3) var(--space-5); border-radius: var(--radius-md);
-            font-size: 0.875rem; font-weight: 500; cursor: pointer;
-            transition: all var(--transition-fast); text-decoration: none; border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-5);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-decoration: none;
+            border: none;
         }
-        .btn-primary { background: var(--color-gold); color: var(--color-midnight); }
-        .btn-primary:hover { background: var(--color-gold-dark); }
-        .btn-secondary { background: var(--color-slate); color: var(--color-white); }
-        .btn-secondary:hover { background: var(--color-steel); }
+
+        .btn-primary {
+            background: var(--color-gold);
+            color: var(--color-midnight);
+        }
+
+            .btn-primary:hover {
+                background: var(--color-gold-dark);
+            }
+
+        .btn-secondary {
+            background: var(--color-slate);
+            color: var(--color-white);
+        }
+
+            .btn-secondary:hover {
+                background: var(--color-steel);
+            }
 
         /* Form Card */
         .form-card {
-            background: var(--color-navy); border: 1px solid var(--color-slate);
-            border-radius: var(--radius-lg); padding: var(--space-6);
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
         }
-        .form-section { margin-bottom: var(--space-6); }
+
+        .form-section {
+            margin-bottom: var(--space-6);
+        }
+
         .form-section-title {
-            font-size: 1.125rem; font-weight: 600; margin-bottom: var(--space-4);
-            padding-bottom: var(--space-3); border-bottom: 1px solid var(--color-slate);
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: var(--space-4);
+            padding-bottom: var(--space-3);
+            border-bottom: 1px solid var(--color-slate);
         }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-5); }
-        .form-group { margin-bottom: var(--space-4); }
-        .form-group.full-width { grid-column: 1 / -1; }
-        .form-group label {
-            display: block; font-size: 0.875rem; font-weight: 500;
-            color: var(--color-silver); margin-bottom: var(--space-2);
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-4);
         }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+            .form-group.full-width {
+                grid-column: 1 / -1;
+            }
+
+            .form-group label {
+                font-size: 0.875rem;
+                font-weight: 500;
+                color: var(--color-silver);
+            }
+
         .form-control {
-            width: 100%; padding: var(--space-3) var(--space-4);
-            background: var(--color-slate); border: 1px solid var(--color-steel);
-            border-radius: var(--radius-sm); color: var(--color-white);
-            font-size: 0.9375rem; font-family: var(--font-body);
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--color-slate);
+            background: var(--color-midnight);
+            color: var(--color-white);
+            font-size: 0.9375rem;
+            font-family: inherit;
             transition: all var(--transition-fast);
         }
-        .form-control:focus { outline: none; border-color: var(--color-gold); box-shadow: 0 0 0 3px var(--color-gold-muted); }
-        .form-control::placeholder { color: var(--color-steel); }
-        textarea.form-control { min-height: 120px; resize: vertical; }
-        select.form-control { cursor: pointer; }
 
-        .checkbox-group { display: flex; align-items: center; gap: var(--space-3); }
-        .checkbox-group input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--color-gold); }
+            .form-control:focus {
+                outline: none;
+                border-color: var(--color-gold);
+                box-shadow: 0 0 0 3px rgba(212, 168, 83, 0.1);
+            }
+
+            .form-control::placeholder {
+                color: var(--color-steel);
+            }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+            .checkbox-group input[type="checkbox"] {
+                width: 20px;
+                height: 20px;
+                accent-color: var(--color-gold);
+                cursor: pointer;
+            }
 
         /* Image Upload */
         .image-upload {
-            border: 2px dashed var(--color-slate); border-radius: var(--radius-md);
-            padding: var(--space-6); text-align: center; cursor: pointer;
+            border: 2px dashed var(--color-slate);
+            border-radius: var(--radius-md);
+            padding: var(--space-6);
+            text-align: center;
+            cursor: pointer;
             transition: all var(--transition-fast);
+            margin-top: var(--space-3);
         }
-        .image-upload:hover { border-color: var(--color-gold); background: var(--color-gold-muted); }
-        .image-upload i { font-size: 2.5rem; color: var(--color-steel); margin-bottom: var(--space-3); }
-        .image-upload p { color: var(--color-silver); font-size: 0.875rem; }
-        .image-preview { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
-        .image-preview img { width: 100px; height: 100px; object-fit: cover; border-radius: var(--radius-sm); }
+
+            .image-upload:hover {
+                border-color: var(--color-gold);
+                background: var(--color-gold-muted);
+            }
+
+            .image-upload i {
+                font-size: 2rem;
+                color: var(--color-gold);
+                margin-bottom: var(--space-3);
+            }
+
+            .image-upload p {
+                color: var(--color-silver);
+                font-size: 0.875rem;
+            }
+
+        .image-preview {
+            display: flex;
+            gap: var(--space-3);
+            flex-wrap: wrap;
+            margin-top: var(--space-4);
+        }
+
+            .image-preview img {
+                width: 100px;
+                height: 100px;
+                object-fit: cover;
+                border-radius: var(--radius-sm);
+            }
 
         /* Form Actions */
         .form-actions {
-            display: flex; gap: var(--space-4); justify-content: flex-end;
-            padding-top: var(--space-5); border-top: 1px solid var(--color-slate);
+            display: flex;
+            gap: var(--space-4);
+            justify-content: flex-end;
+            padding-top: var(--space-5);
+            border-top: 1px solid var(--color-slate);
         }
 
         /* Toast */
         .toast {
-            position: fixed; bottom: 24px; right: 24px; background: #30363d;
-            border: 1px solid #21262d; border-radius: 16px; padding: 16px 24px;
-            display: flex; align-items: center; gap: 12px; color: #ffffff;
-            font-size: 0.9375rem; z-index: 10000; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            opacity: 0; transform: translateY(20px); transition: all 0.3s ease;
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #30363d;
+            border: 1px solid #21262d;
+            border-radius: 16px;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #ffffff;
+            font-size: 0.9375rem;
+            z-index: 10000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
         }
-        .toast.show { opacity: 1; transform: translateY(0); }
-        .toast.success i { color: #3fb950; }
-        .toast.error i { color: #f85149; }
+
+            .toast.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .toast.success i {
+                color: #3fb950;
+            }
+
+            .toast.error i {
+                color: #f85149;
+            }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 1001;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            border: none;
+            background: var(--color-navy);
+            color: var(--color-white);
+            cursor: pointer;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+            .sidebar-overlay.active {
+                display: block;
+                opacity: 1;
+            }
 
         @@media (max-width: 1024px) {
-            .sidebar { transform: translateX(-100%); }
-            .sidebar.open { transform: translateX(0); }
-            .main-content { margin-left: 0; }
+            .mobile-menu-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+                .sidebar.open {
+                    transform: translateX(0);
+                }
+
+            .main-content {
+                margin-left: 0;
+                padding: 80px 16px 24px;
+            }
         }
     </style>
 </head>
@@ -194,6 +474,11 @@
     <div class="page-transition" id="pageTransition">
         <div class="loader"></div>
     </div>
+
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <div class="admin-layout">
         <!-- Sidebar -->
@@ -301,18 +586,18 @@
                         </div>
                         <div class="form-group">
                             <label for="availableRooms">Available Rooms *</label>
-                            <input type="number" id="availableRooms" name="availableRooms" class="form-control" min="1" placeholder="e.g., 20" required />
+                            <input type="number" id="availableRooms" name="availableRooms" class="form-control" placeholder="e.g., 20" min="1" required />
                         </div>
                         <div class="form-group full-width">
                             <label for="description">Description *</label>
-                            <textarea id="description" name="description" class="form-control" placeholder="Describe the travel package..." required></textarea>
+                            <textarea id="description" name="description" class="form-control" placeholder="Describe the package, highlights, and what's included..." rows="4" required></textarea>
                         </div>
                     </div>
                 </div>
 
-                <!-- Dates -->
+                <!-- Dates & Pricing -->
                 <div class="form-section">
-                    <h3 class="form-section-title"><i class="fas fa-calendar" style="color: var(--color-gold); margin-right: 8px;"></i>Travel Dates</h3>
+                    <h3 class="form-section-title"><i class="fas fa-calendar-alt" style="color: var(--color-gold); margin-right: 8px;"></i>Dates & Pricing</h3>
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="startDate">Start Date *</label>
@@ -322,20 +607,13 @@
                             <label for="endDate">End Date *</label>
                             <input type="date" id="endDate" name="endDate" class="form-control" required />
                         </div>
-                    </div>
-                </div>
-
-                <!-- Pricing -->
-                <div class="form-section">
-                    <h3 class="form-section-title"><i class="fas fa-dollar-sign" style="color: var(--color-gold); margin-right: 8px;"></i>Pricing</h3>
-                    <div class="form-grid">
                         <div class="form-group">
-                            <label for="price">Price (USD) *</label>
-                            <input type="number" id="price" name="price" class="form-control" step="0.01" min="0" placeholder="e.g., 1299.00" required />
+                            <label for="price">Price ($) *</label>
+                            <input type="number" id="price" name="price" class="form-control" placeholder="e.g., 1999" min="1" step="0.01" required />
                         </div>
                         <div class="form-group">
-                            <label for="discountedPrice">Discounted Price (USD)</label>
-                            <input type="number" id="discountedPrice" name="discountedPrice" class="form-control" step="0.01" min="0" placeholder="e.g., 999.00" />
+                            <label for="discountedPrice">Discounted Price ($)</label>
+                            <input type="number" id="discountedPrice" name="discountedPrice" class="form-control" placeholder="Leave empty if no discount" min="0" step="0.01" />
                         </div>
                         <div class="form-group">
                             <label for="discountStartDate">Discount Start Date</label>
@@ -350,24 +628,24 @@
 
                 <!-- Age Requirements -->
                 <div class="form-section">
-                    <h3 class="form-section-title"><i class="fas fa-user-friends" style="color: var(--color-gold); margin-right: 8px;"></i>Age Requirements</h3>
+                    <h3 class="form-section-title"><i class="fas fa-user-friends" style="color: var(--color-gold); margin-right: 8px;"></i>Age Requirements (Optional)</h3>
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="minimumAge">Minimum Age</label>
-                            <input type="number" id="minimumAge" name="minimumAge" class="form-control" min="0" placeholder="e.g., 18" />
+                            <input type="number" id="minimumAge" name="minimumAge" class="form-control" placeholder="e.g., 18" min="0" />
                         </div>
                         <div class="form-group">
                             <label for="maximumAge">Maximum Age</label>
-                            <input type="number" id="maximumAge" name="maximumAge" class="form-control" min="0" placeholder="e.g., 65" />
+                            <input type="number" id="maximumAge" name="maximumAge" class="form-control" placeholder="e.g., 65" min="0" />
                         </div>
                     </div>
                 </div>
 
-                <!-- Images -->
+                <!-- Media -->
                 <div class="form-section">
-                    <h3 class="form-section-title"><i class="fas fa-images" style="color: var(--color-gold); margin-right: 8px;"></i>Package Images</h3>
+                    <h3 class="form-section-title"><i class="fas fa-image" style="color: var(--color-gold); margin-right: 8px;"></i>Media</h3>
                     <div class="form-group">
-                        <label for="imageUrl">Main Image URL</label>
+                        <label for="imageUrl">Image URL</label>
                         <input type="url" id="imageUrl" name="imageUrl" class="form-control" placeholder="https://example.com/image.jpg" />
                     </div>
                     <div class="image-upload" onclick="document.getElementById('imageUpload').click()">
@@ -399,7 +677,7 @@
                 <!-- Form Actions -->
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" onclick="navigateTo('/admin/packages', event)">Cancel</button>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
                         <i class="fas fa-save"></i> @(isEdit ? "Update" : "Create") Package
                     </button>
                 </div>
@@ -409,20 +687,39 @@
 
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
-        <span id="toastMessage">Package saved successfully!</span>
+        <span id="toastMessage">Success!</span>
     </div>
 
     <script>
+        // Check authentication on page load
+        (function() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/account/login';
+                return;
+            }
+
+            // Verify user is admin
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (user.role !== 'Admin') {
+                showToast('Access denied. Admin privileges required.', 'error');
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 2000);
+            }
+        })();
+
         // Navigation
         function navigateTo(url, event) {
             if (event) event.preventDefault();
-            document.getElementById('pageTransition').classList.add('active');
+            const transition = document.getElementById('pageTransition');
+            transition.classList.add('active');
             setTimeout(() => { window.location.href = url; }, 400);
         }
 
         // Logout
         function logout(event) {
-            event.preventDefault();
+            if (event) event.preventDefault();
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             navigateTo('/account/login');
@@ -433,7 +730,7 @@
             const toast = document.getElementById('toast');
             const toastMessage = document.getElementById('toastMessage');
             toastMessage.textContent = message;
-            toast.className = `toast ${type}`;
+            toast.className = 'toast ' + type;
             toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
@@ -454,6 +751,17 @@
             });
         });
 
+        // Mobile menu
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        });
+
+        document.getElementById('sidebarOverlay').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('open');
+            this.classList.remove('active');
+        });
+
         // Load package data if editing
         async function loadPackageData() {
             const packageId = document.getElementById('packageId').value;
@@ -461,15 +769,23 @@
 
             try {
                 const token = localStorage.getItem('token');
-                const response = await fetch(`/api/packages/${packageId}`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                const response = await fetch('/api/packages/' + packageId, {
+                    headers: { 'Authorization': 'Bearer ' + token }
                 });
-                
+
+                if (response.status === 401) {
+                    showToast('Session expired. Please login again.', 'error');
+                    setTimeout(() => navigateTo('/account/login'), 1500);
+                    return;
+                }
+
                 if (response.ok) {
-                    const pkg = await response.json();
+                    const result = await response.json();
+                    const pkg = result.data || result;
+
                     document.getElementById('destination').value = pkg.destination || '';
                     document.getElementById('country').value = pkg.country || '';
-                    document.getElementById('packageType').value = pkg.packageType || '';
+                    document.getElementById('packageType').value = pkg.packageType !== undefined ? pkg.packageType : '';
                     document.getElementById('availableRooms').value = pkg.availableRooms || '';
                     document.getElementById('description').value = pkg.description || '';
                     document.getElementById('startDate').value = pkg.startDate ? pkg.startDate.split('T')[0] : '';
@@ -483,19 +799,36 @@
                     document.getElementById('imageUrl').value = pkg.imageUrl || '';
                     document.getElementById('itinerary').value = pkg.itinerary || '';
                     document.getElementById('isActive').checked = pkg.isActive !== false;
+                } else {
+                    showToast('Failed to load package data', 'error');
                 }
             } catch (error) {
                 console.error('Error loading package:', error);
+                showToast('Error loading package data', 'error');
             }
         }
 
         // Form submission
         document.getElementById('packageForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
+            const token = localStorage.getItem('token');
+
+            // Check if token exists
+            if (!token) {
+                showToast('You must be logged in as admin to save packages', 'error');
+                setTimeout(() => navigateTo('/account/login'), 1500);
+                return;
+            }
+
             const packageId = document.getElementById('packageId').value;
-            const isEdit = !!packageId;
-            
+            const isEdit = packageId && packageId.length > 0;
+
+            // Disable submit button
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
             const formData = {
                 destination: document.getElementById('destination').value,
                 country: document.getElementById('country').value,
@@ -516,35 +849,83 @@
             };
 
             try {
-                const token = localStorage.getItem('token');
-                const url = isEdit ? `/api/packages/${packageId}` : '/api/packages';
+                const url = isEdit ? '/api/packages/' + packageId : '/api/packages';
                 const method = isEdit ? 'PUT' : 'POST';
-                
+
+                console.log('Sending request to:', url);
+                console.log('Method:', method);
+                console.log('Token exists:', !!token);
+
                 const response = await fetch(url, {
                     method: method,
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': 'Bearer ' + token
                     },
                     body: JSON.stringify(formData)
                 });
 
+                console.log('Response status:', response.status);
+
+                // Handle 401 Unauthorized - token expired or invalid
+                if (response.status === 401) {
+                    showToast('Session expired or unauthorized. Please login again.', 'error');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    setTimeout(() => navigateTo('/account/login'), 1500);
+                    return;
+                }
+
+                // Handle 403 Forbidden - not admin
+                if (response.status === 403) {
+                    showToast('Access denied. Admin privileges required.', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-save"></i> ' + (isEdit ? 'Update' : 'Create') + ' Package';
+                    return;
+                }
+
+                // Try to parse JSON response
+                let result;
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const text = await response.text();
+                    if (text) {
+                        result = JSON.parse(text);
+                    } else {
+                        result = { message: 'Empty response from server' };
+                    }
+                } else {
+                    result = { message: 'Server returned non-JSON response' };
+                }
+
                 if (response.ok) {
-                    showToast(`Package ${isEdit ? 'updated' : 'created'} successfully!`);
+                    showToast('Package ' + (isEdit ? 'updated' : 'created') + ' successfully!', 'success');
                     setTimeout(() => navigateTo('/admin/packages'), 1500);
                 } else {
-                    const error = await response.json();
-                    showToast(error.message || 'Failed to save package', 'error');
+                    showToast(result.message || 'Failed to save package', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-save"></i> ' + (isEdit ? 'Update' : 'Create') + ' Package';
                 }
             } catch (error) {
                 console.error('Error saving package:', error);
-                showToast('An error occurred while saving', 'error');
+                showToast('An error occurred while saving: ' + error.message, 'error');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-save"></i> ' + (isEdit ? 'Update' : 'Create') + ' Package';
             }
         });
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             loadPackageData();
+
+            // Set minimum date for start date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('startDate').setAttribute('min', today);
+        });
+
+        // Handle page load transition
+        window.addEventListener('pageshow', function() {
+            document.getElementById('pageTransition').classList.remove('active');
         });
     </script>
 </body>
