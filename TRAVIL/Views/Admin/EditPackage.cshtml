@@ -695,17 +695,20 @@
         (function() {
             const token = localStorage.getItem('token');
             if (!token) {
+                console.log('No token found, redirecting to login');
                 window.location.href = '/account/login';
                 return;
             }
 
-            // Verify user is admin
+            // Verify user is admin (Admin = 0, User = 1)
             const user = JSON.parse(localStorage.getItem('user') || '{}');
-            if (user.role !== 'Admin') {
-                showToast('Access denied. Admin privileges required.', 'error');
-                setTimeout(() => {
-                    window.location.href = '/';
-                }, 2000);
+            const userRole = user.role !== undefined ? user.role : user.Role;
+            console.log('User role:', userRole);
+
+            if (userRole !== 0 && userRole !== '0') {
+                alert('Access denied. Admin privileges required.');
+                window.location.href = '/';
+                return;
             }
         })();
 
@@ -878,7 +881,7 @@
 
                 // Handle 403 Forbidden - not admin
                 if (response.status === 403) {
-                    showToast('Access denied. Admin privileges required.', 'error');
+                    showToast('Access denied. Admin privileges required (role must be 0).', 'error');
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = '<i class="fas fa-save"></i> ' + (isEdit ? 'Update' : 'Create') + ' Package';
                     return;
