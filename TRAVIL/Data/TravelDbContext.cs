@@ -16,7 +16,7 @@ namespace TRAVEL.Data
         }
 
         // ===== DbSets =====
-        public DbSet<WishlistItem> Wishlists { get; set; }
+
         /// <summary>
         /// Users table
         /// </summary>
@@ -51,6 +51,21 @@ namespace TRAVEL.Data
         /// Waiting list entries table
         /// </summary>
         public DbSet<WaitingListEntry> WaitingListEntries { get; set; }
+
+        /// <summary>
+        /// Wishlists table
+        /// </summary>
+        public DbSet<WishlistItem> Wishlists { get; set; }
+
+        /// <summary>
+        /// Shopping carts table
+        /// </summary>
+        public DbSet<Cart> Carts { get; set; }
+
+        /// <summary>
+        /// Cart items table
+        /// </summary>
+        public DbSet<CartItem> CartItems { get; set; }
 
         // ===== MODEL CONFIGURATION =====
 
@@ -95,6 +110,8 @@ namespace TRAVEL.Data
 
                 entity.ToTable("Users");
             });
+
+            // ===== WISHLIST CONFIGURATION =====
             modelBuilder.Entity<WishlistItem>(entity =>
             {
                 entity.HasKey(e => e.WishlistId);
@@ -116,6 +133,7 @@ namespace TRAVEL.Data
 
                 entity.ToTable("Wishlists");
             });
+
             // ===== TRAVEL PACKAGE CONFIGURATION =====
             modelBuilder.Entity<TravelPackage>(entity =>
             {
@@ -222,7 +240,7 @@ namespace TRAVEL.Data
                 entity.HasOne(e => e.TravelPackage)
                     .WithMany(p => p.Reviews)
                     .HasForeignKey(e => e.PackageId)
-                    .OnDelete(DeleteBehavior.SetNull);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.Property(e => e.CreatedAt)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -230,7 +248,7 @@ namespace TRAVEL.Data
                 entity.ToTable("Reviews");
             });
 
-            // ===== WAITING LIST ENTRY CONFIGURATION =====
+            // ===== WAITING LIST CONFIGURATION =====
             modelBuilder.Entity<WaitingListEntry>(entity =>
             {
                 entity.HasKey(e => e.WaitingListId);
@@ -249,6 +267,53 @@ namespace TRAVEL.Data
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.ToTable("WaitingListEntries");
+            });
+
+            // ===== CART CONFIGURATION =====
+            modelBuilder.Entity<Cart>(entity =>
+            {
+                entity.HasKey(e => e.CartId);
+
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.Property(e => e.CreatedAt)
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.Property(e => e.UpdatedAt)
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.HasIndex(e => new { e.UserId, e.IsActive });
+
+                entity.ToTable("Carts");
+            });
+
+            // ===== CART ITEM CONFIGURATION =====
+            modelBuilder.Entity<CartItem>(entity =>
+            {
+                entity.HasKey(e => e.CartItemId);
+
+                entity.HasOne(e => e.Cart)
+                    .WithMany(c => c.Items)
+                    .HasForeignKey(e => e.CartId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.TravelPackage)
+                    .WithMany()
+                    .HasForeignKey(e => e.PackageId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.Property(e => e.UnitPrice)
+                    .HasPrecision(10, 2);
+
+                entity.Property(e => e.DateAdded)
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.HasIndex(e => new { e.CartId, e.PackageId }).IsUnique();
+
+                entity.ToTable("CartItems");
             });
 
             // ===== INDEXES =====

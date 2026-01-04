@@ -1,40 +1,52 @@
 @{
-    ViewData["Title"] = "Package Management";
+    ViewData["Title"] = "Edit Package";
     Layout = null;
-    var packageId = ViewData["PackageId"]?.ToString();
-    var isEdit = !string.IsNullOrEmpty(packageId);
+    var packageId = ViewData["PackageId"];
+    var isEdit = packageId != null;
 }
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@(isEdit ? "Edit" : "Add") Package - TRAVIL Admin</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="/css/admin.css" rel="stylesheet" />
+
     <style>
         :root {
-            --color-midnight: #0a0a0f;
-            --color-navy: #12121a;
-            --color-slate: #1e1e2d;
-            --color-steel: #6b7280;
-            --color-silver: #9ca3af;
+            --color-midnight: #0d1117;
+            --color-navy: #161b22;
+            --color-slate: #21262d;
+            --color-charcoal: #30363d;
+            --color-steel: #484f58;
+            --color-silver: #8b949e;
             --color-white: #ffffff;
             --color-gold: #d4a853;
+            --color-gold-dark: #b8943f;
             --color-gold-muted: rgba(212, 168, 83, 0.15);
-            --color-success: #10b981;
-            --color-error: #ef4444;
-            --font-display: 'Playfair Display', serif;
-            --font-body: 'Plus Jakarta Sans', sans-serif;
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
+            --color-success: #3fb950;
+            --color-warning: #d29922;
+            --color-error: #f85149;
+            --sidebar-width: 280px;
+            --space-1: 4px;
+            --space-2: 8px;
             --space-3: 12px;
             --space-4: 16px;
             --space-5: 24px;
             --space-6: 32px;
-            --transition-fast: 0.2s ease;
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Outfit', sans-serif;
         }
 
         * {
@@ -47,7 +59,40 @@
             font-family: var(--font-body);
             background: var(--color-midnight);
             color: var(--color-white);
-            min-height: 100vh;
+        }
+
+        /* Page Transition */
+        .page-transition {
+            position: fixed;
+            inset: 0;
+            background: #0d1117;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+            .page-transition.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .page-transition .loader {
+                width: 48px;
+                height: 48px;
+                border: 3px solid #21262d;
+                border-top-color: #d4a853;
+                border-radius: 50%;
+                animation: spin 0.8s linear infinite;
+            }
+
+        @@keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .admin-layout {
@@ -57,106 +102,146 @@
 
         /* Sidebar */
         .sidebar {
-            width: 260px;
-            background: var(--color-navy);
-            border-right: 1px solid var(--color-slate);
-            padding: var(--space-5);
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, var(--color-navy) 0%, var(--color-midnight) 100%);
             position: fixed;
             height: 100vh;
             overflow-y: auto;
+            z-index: 1000;
+            border-right: 1px solid var(--color-slate);
         }
 
-        .sidebar-brand {
+        .sidebar-header {
+            padding: var(--space-5);
+            border-bottom: 1px solid var(--color-slate);
             display: flex;
             align-items: center;
             gap: var(--space-3);
-            padding-bottom: var(--space-5);
-            border-bottom: 1px solid var(--color-slate);
-            margin-bottom: var(--space-5);
-            text-decoration: none;
         }
 
-        .brand-logo {
-            width: 42px;
-            height: 42px;
-            background: linear-gradient(135deg, var(--color-gold) 0%, #c49a47 100%);
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--color-midnight);
-            font-size: 1.25rem;
+            .sidebar-header .logo {
+                width: 48px;
+                height: 48px;
+                background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+                border-radius: var(--radius-md);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.25rem;
+                color: var(--color-midnight);
+            }
+
+            .sidebar-header h1 {
+                font-family: var(--font-display);
+                font-size: 1.5rem;
+                font-weight: 500;
+                color: var(--color-white);
+                letter-spacing: 0.1em;
+                margin-bottom: 0;
+            }
+
+            .sidebar-header span {
+                font-size: 0.6875rem;
+                color: var(--color-gold);
+                text-transform: uppercase;
+                letter-spacing: 0.15em;
+            }
+
+        .nav-section {
+            padding: var(--space-4) var(--space-3);
         }
 
-        .brand-name {
-            font-family: var(--font-display);
-            font-size: 1.5rem;
+        .nav-section-title {
+            padding: 0 var(--space-3);
+            font-size: 0.6875rem;
             font-weight: 600;
-            color: var(--color-white);
-        }
-
-        .nav-menu {
-            list-style: none;
-        }
-
-        .nav-item {
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--color-steel);
             margin-bottom: var(--space-3);
         }
 
-        .nav-link {
+        .nav-item {
             display: flex;
             align-items: center;
             gap: var(--space-3);
             padding: var(--space-3) var(--space-4);
             color: var(--color-silver);
             text-decoration: none;
-            border-radius: var(--radius-sm);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 500;
             transition: all var(--transition-fast);
+            margin-bottom: var(--space-1);
+            border-left: 3px solid transparent;
         }
 
-            .nav-link:hover, .nav-link.active {
+            .nav-item i {
+                width: 20px;
+                text-align: center;
+                font-size: 1rem;
+            }
+
+            .nav-item:hover {
+                background: var(--color-slate);
+                color: var(--color-white);
+            }
+
+            .nav-item.active {
                 background: var(--color-gold-muted);
                 color: var(--color-gold);
+                border-left-color: var(--color-gold);
             }
 
         /* Main Content */
         .main-content {
             flex: 1;
-            margin-left: 260px;
+            margin-left: var(--sidebar-width);
             padding: var(--space-6);
         }
 
-        .page-header {
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: var(--space-6);
+            flex-wrap: wrap;
+            gap: var(--space-4);
         }
 
-        .page-title h1 {
-            font-family: var(--font-display);
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: var(--space-3);
-        }
+            .header h2 {
+                font-size: 1.75rem;
+                font-weight: 600;
+            }
 
-        .page-title p {
-            color: var(--color-silver);
-        }
+            .header .subtitle {
+                color: var(--color-silver);
+                font-size: 0.9375rem;
+                margin-top: var(--space-1);
+            }
 
         .btn {
-            padding: var(--space-3) var(--space-5);
-            border-radius: var(--radius-sm);
-            font-size: 0.9375rem;
-            font-weight: 500;
-            cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: var(--space-3);
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-5);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
             transition: all var(--transition-fast);
-            border: none;
             text-decoration: none;
+            border: none;
         }
+
+        .btn-primary {
+            background: var(--color-gold);
+            color: var(--color-midnight);
+        }
+
+            .btn-primary:hover {
+                background: var(--color-gold-dark);
+            }
 
         .btn-secondary {
             background: var(--color-slate);
@@ -167,14 +252,13 @@
                 background: var(--color-steel);
             }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--color-gold) 0%, #c49a47 100%);
-            color: var(--color-midnight);
+        .btn-danger {
+            background: var(--color-error);
+            color: var(--color-white);
         }
 
-            .btn-primary:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(212, 168, 83, 0.3);
+            .btn-danger:hover {
+                background: #d73a49;
             }
 
         /* Form Card */
@@ -183,7 +267,6 @@
             border: 1px solid var(--color-slate);
             border-radius: var(--radius-lg);
             padding: var(--space-6);
-            margin-bottom: var(--space-5);
         }
 
         .form-section {
@@ -193,21 +276,16 @@
         .form-section-title {
             font-size: 1.125rem;
             font-weight: 600;
-            color: var(--color-white);
             margin-bottom: var(--space-4);
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
+            padding-bottom: var(--space-3);
+            border-bottom: 1px solid var(--color-slate);
+            color: var(--color-gold);
         }
-
-            .form-section-title i {
-                color: var(--color-gold);
-            }
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: var(--space-5);
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-4);
         }
 
         .form-group {
@@ -215,33 +293,31 @@
         }
 
             .form-group.full-width {
-                grid-column: 1 / -1;
+                grid-column: span 2;
             }
 
-            .form-group label {
-                display: block;
-                font-size: 0.875rem;
-                font-weight: 500;
-                color: var(--color-silver);
-                margin-bottom: var(--space-3);
-            }
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--color-silver);
+            margin-bottom: var(--space-2);
+        }
 
         .form-control {
             width: 100%;
             padding: var(--space-3) var(--space-4);
             background: var(--color-slate);
-            border: 1px solid var(--color-steel);
-            border-radius: var(--radius-sm);
+            border: 1px solid var(--color-charcoal);
+            border-radius: var(--radius-md);
             color: var(--color-white);
             font-size: 0.9375rem;
-            font-family: var(--font-body);
-            transition: all var(--transition-fast);
+            transition: border-color var(--transition-fast);
         }
 
             .form-control:focus {
                 outline: none;
                 border-color: var(--color-gold);
-                box-shadow: 0 0 0 3px var(--color-gold-muted);
             }
 
             .form-control::placeholder {
@@ -253,715 +329,563 @@
             resize: vertical;
         }
 
-        /* Image Upload Section */
-        .image-upload-section {
-            background: var(--color-slate);
-            border: 2px dashed var(--color-steel);
-            border-radius: var(--radius-md);
+        select.form-control {
+            cursor: pointer;
+        }
+
+        /* Image Upload */
+        .image-upload-area {
+            border: 2px dashed var(--color-charcoal);
+            border-radius: var(--radius-lg);
             padding: var(--space-6);
             text-align: center;
             cursor: pointer;
             transition: all var(--transition-fast);
-            position: relative;
+            background: var(--color-slate);
         }
 
-            .image-upload-section:hover {
+            .image-upload-area:hover {
                 border-color: var(--color-gold);
                 background: var(--color-gold-muted);
             }
 
-            .image-upload-section.dragover {
-                border-color: var(--color-gold);
-                background: var(--color-gold-muted);
+            .image-upload-area i {
+                font-size: 3rem;
+                color: var(--color-steel);
+                margin-bottom: var(--space-3);
             }
 
-        .upload-icon {
-            font-size: 3rem;
-            color: var(--color-steel);
-            margin-bottom: var(--space-4);
-        }
-
-        .upload-text {
-            color: var(--color-silver);
-            font-size: 0.9375rem;
-        }
-
-            .upload-text strong {
-                color: var(--color-gold);
+            .image-upload-area p {
+                color: var(--color-silver);
+                margin-bottom: var(--space-2);
             }
 
-        .upload-hint {
-            font-size: 0.8125rem;
-            color: var(--color-steel);
-            margin-top: var(--space-3);
-        }
+            .image-upload-area span {
+                font-size: 0.8125rem;
+                color: var(--color-steel);
+            }
 
-        .file-input {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        /* Image Preview Grid */
         .image-preview-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: var(--space-4);
-            margin-top: var(--space-5);
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-3);
+            margin-top: var(--space-4);
         }
 
-        .image-preview-item {
+        .image-preview {
             position: relative;
             aspect-ratio: 4/3;
-            border-radius: var(--radius-sm);
+            border-radius: var(--radius-md);
             overflow: hidden;
             background: var(--color-slate);
         }
 
-            .image-preview-item img {
+            .image-preview img {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
             }
 
-            .image-preview-item.main-image {
-                border: 2px solid var(--color-gold);
-            }
-
-            .image-preview-item .badge-main {
+            .image-preview .remove-btn {
                 position: absolute;
-                top: 8px;
-                left: 8px;
-                background: var(--color-gold);
-                color: var(--color-midnight);
-                font-size: 0.6875rem;
-                font-weight: 600;
-                padding: 4px 8px;
-                border-radius: 4px;
-                text-transform: uppercase;
-            }
-
-            .image-preview-item .remove-image {
-                position: absolute;
-                top: 8px;
-                right: 8px;
+                top: var(--space-2);
+                right: var(--space-2);
                 width: 28px;
                 height: 28px;
-                background: var(--color-error);
-                color: var(--color-white);
-                border: none;
                 border-radius: 50%;
+                background: rgba(248, 81, 73, 0.9);
+                color: white;
+                border: none;
                 cursor: pointer;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                opacity: 0;
-                transition: all var(--transition-fast);
-            }
-
-            .image-preview-item:hover .remove-image {
-                opacity: 1;
-            }
-
-            .image-preview-item .set-main {
-                position: absolute;
-                bottom: 8px;
-                left: 8px;
-                right: 8px;
-                background: rgba(0, 0, 0, 0.8);
-                color: var(--color-white);
-                border: none;
-                padding: 6px;
-                border-radius: 4px;
                 font-size: 0.75rem;
-                cursor: pointer;
                 opacity: 0;
-                transition: all var(--transition-fast);
+                transition: opacity var(--transition-fast);
             }
 
-            .image-preview-item:hover .set-main {
+            .image-preview:hover .remove-btn {
                 opacity: 1;
             }
-
-        /* Upload Progress */
-        .upload-progress {
-            margin-top: var(--space-4);
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: var(--color-slate);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--color-gold) 0%, #c49a47 100%);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .progress-text {
-            font-size: 0.8125rem;
-            color: var(--color-silver);
-            margin-top: var(--space-3);
-            text-align: center;
-        }
-
-        /* Alerts */
-        .alert {
-            padding: var(--space-4);
-            border-radius: var(--radius-sm);
-            margin-bottom: var(--space-5);
-            display: none;
-            align-items: center;
-            gap: var(--space-3);
-        }
-
-            .alert.show {
-                display: flex;
-            }
-
-        .alert-success {
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--color-success);
-            border: 1px solid var(--color-success);
-        }
-
-        .alert-error {
-            background: rgba(239, 68, 68, 0.15);
-            color: var(--color-error);
-            border: 1px solid var(--color-error);
-        }
 
         /* Form Actions */
         .form-actions {
             display: flex;
-            gap: var(--space-4);
+            gap: var(--space-3);
             justify-content: flex-end;
             padding-top: var(--space-5);
             border-top: 1px solid var(--color-slate);
+            margin-top: var(--space-6);
         }
 
-        /* Loading Spinner */
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--color-charcoal);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-lg);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--color-white);
+            font-size: 0.9375rem;
+            z-index: 10000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+            .toast.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .toast.success {
+                border-color: var(--color-success);
+            }
+
+                .toast.success i {
+                    color: var(--color-success);
+                }
+
+            .toast.error {
+                border-color: var(--color-error);
+            }
+
+                .toast.error i {
+                    color: var(--color-error);
+                }
+
+        /* Loading State */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(13, 17, 23, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+            .loading-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
         .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--color-slate);
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--color-slate);
             border-top-color: var(--color-gold);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
 
-        @keyframes spin {
-            to
-
-        {
-            transform: rotate(360deg);
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--color-white);
+            font-size: 1.5rem;
+            cursor: pointer;
         }
 
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
         }
 
-        /* Checkbox */
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-        }
-
-            .checkbox-group input[type="checkbox"] {
-                width: 20px;
-                height: 20px;
-                accent-color: var(--color-gold);
+            .sidebar-overlay.active {
+                display: block;
             }
 
-        @media (max-width: 768px) {
-            .sidebar
+        @@media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
 
-        {
-            display: none;
+                .sidebar.active {
+                    transform: translateX(0);
+                }
+
+            .main-content {
+                margin-left: 0;
+                padding: var(--space-4);
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            .image-preview-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
-
-        .main-content {
-            margin-left: 0;
-        }
-
-        .form-grid {
-            grid-template-columns: 1fr;
-        }
-
-        }</style>
+    </style>
 </head>
 <body>
+    <!-- Page Transition -->
+    <div class="page-transition" id="pageTransition">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage"></span>
+    </div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
     <div class="admin-layout">
         <!-- Sidebar -->
-        <aside class="sidebar">
-            <a href="/admin" class="sidebar-brand">
-                <div class="brand-logo"><i class="fas fa-paper-plane"></i></div>
-                <span class="brand-name">TRAVIL</span>
-            </a>
-            <nav>
-                <ul class="nav-menu">
-                    <li class="nav-item"><a href="/admin" class="nav-link"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li class="nav-item"><a href="/admin/packages" class="nav-link active"><i class="fas fa-suitcase"></i> Packages</a></li>
-                    <li class="nav-item"><a href="/admin/bookings" class="nav-link"><i class="fas fa-calendar-check"></i> Bookings</a></li>
-                    <li class="nav-item"><a href="/admin/users" class="nav-link"><i class="fas fa-users"></i> Users</a></li>
-                    <li class="nav-item"><a href="/admin/waiting-list" class="nav-link"><i class="fas fa-clock"></i> Waiting List</a></li>
-                    <li class="nav-item"><a href="/" class="nav-link"><i class="fas fa-globe"></i> View Site</a></li>
-                </ul>
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo"><i class="fas fa-compass"></i></div>
+                <div>
+                    <h1>TRAVIL</h1>
+                    <span>Admin Panel</span>
+                </div>
+            </div>
+
+            <nav class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <a href="/admin" class="nav-item" onclick="navigateTo('/admin', event)">
+                    <i class="fas fa-th-large"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/admin/packages" class="nav-item active" onclick="navigateTo('/admin/packages', event)">
+                    <i class="fas fa-suitcase"></i>
+                    <span>Packages</span>
+                </a>
+                <a href="/admin/bookings" class="nav-item" onclick="navigateTo('/admin/bookings', event)">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Bookings</span>
+                </a>
+            </nav>
+
+            <nav class="nav-section">
+                <div class="nav-section-title">Management</div>
+                <a href="/admin/users" class="nav-item" onclick="navigateTo('/admin/users', event)">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </a>
+                <a href="/admin/reviews" class="nav-item" onclick="navigateTo('/admin/reviews', event)">
+                    <i class="fas fa-star"></i>
+                    <span>Reviews</span>
+                </a>
+                <a href="/admin/prices" class="nav-item" onclick="navigateTo('/admin/prices', event)">
+                    <i class="fas fa-tags"></i>
+                    <span>Discounts</span>
+                </a>
+            </nav>
+
+            <nav class="nav-section">
+                <div class="nav-section-title">Settings</div>
+                <a href="/admin/profile" class="nav-item" onclick="navigateTo('/admin/profile', event)">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Profile</span>
+                </a>
+                <a href="/" class="nav-item">
+                    <i class="fas fa-globe"></i>
+                    <span>View Site</span>
+                </a>
+                <a href="#" class="nav-item" onclick="logout(event)">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
             </nav>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
-            <div class="page-header">
-                <div class="page-title">
-                    <h1>@(isEdit ? "Edit Package" : "Add New Package")</h1>
-                    <p>@(isEdit ? "Update package details and images" : "Create a new travel package")</p>
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="header">
+                <div>
+                    <h2><i class="fas fa-@(isEdit ? "edit" : "plus")" style="color: var(--color-gold); margin-right: 12px;"></i>@(isEdit ? "Edit" : "Add New") Package</h2>
+                    <p class="subtitle">@(isEdit ? "Update package details" : "Create a new travel package")</p>
                 </div>
-                <a href="/admin/packages" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Back to Packages
-                </a>
+                <div>
+                    <a href="/admin/packages" class="btn btn-secondary" onclick="navigateTo('/admin/packages', event)">
+                        <i class="fas fa-arrow-left"></i> Back to Packages
+                    </a>
+                </div>
             </div>
 
-            <!-- Alert Messages -->
-            <div id="alertSuccess" class="alert alert-success">
-                <i class="fas fa-check-circle"></i>
-                <span id="alertSuccessText"></span>
-            </div>
-            <div id="alertError" class="alert alert-error">
-                <i class="fas fa-exclamation-circle"></i>
-                <span id="alertErrorText"></span>
-            </div>
-
-            <form id="packageForm">
-                <input type="hidden" id="packageId" value="@(packageId ?? "")" />
+            <form id="packageForm" class="form-card">
+                <input type="hidden" id="packageId" value="@(packageId ?? "")">
 
                 <!-- Basic Information -->
-                <div class="form-card">
-                    <div class="form-section">
-                        <h3 class="form-section-title"><i class="fas fa-info-circle"></i> Basic Information</h3>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="destination">Destination *</label>
-                                <input type="text" id="destination" class="form-control" placeholder="e.g., Bali Paradise" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="country">Country *</label>
-                                <input type="text" id="country" class="form-control" placeholder="e.g., Indonesia" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="packageType">Package Type *</label>
-                                <select id="packageType" class="form-control" required>
-                                    <option value="">Select Type</option>
-                                    <option value="Family">Family</option>
-                                    <option value="Honeymoon">Honeymoon</option>
-                                    <option value="Adventure">Adventure</option>
-                                    <option value="Cruise">Cruise</option>
-                                    <option value="Luxury">Luxury</option>
-                                    <option value="Budget">Budget</option>
-                                    <option value="Cultural">Cultural</option>
-                                    <option value="Beach">Beach</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="availableRooms">Available Rooms *</label>
-                                <input type="number" id="availableRooms" class="form-control" min="0" placeholder="e.g., 20" required>
-                            </div>
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-info-circle"></i> Basic Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Destination *</label>
+                            <input type="text" class="form-control" id="destination" placeholder="e.g., Paris" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Country *</label>
+                            <input type="text" class="form-control" id="country" placeholder="e.g., France" required>
                         </div>
                         <div class="form-group full-width">
-                            <label for="description">Description *</label>
-                            <textarea id="description" class="form-control" placeholder="Describe the travel package..." required></textarea>
+                            <label class="form-label">Description *</label>
+                            <textarea class="form-control" id="description" placeholder="Describe the travel package..." required></textarea>
                         </div>
                     </div>
                 </div>
 
-                <!-- Travel Dates -->
-                <div class="form-card">
-                    <div class="form-section">
-                        <h3 class="form-section-title"><i class="fas fa-calendar-alt"></i> Travel Dates</h3>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="startDate">Start Date *</label>
-                                <input type="date" id="startDate" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="endDate">End Date *</label>
-                                <input type="date" id="endDate" class="form-control" required>
-                            </div>
+                <!-- Trip Details -->
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-calendar-alt"></i> Trip Details</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Start Date *</label>
+                            <input type="date" class="form-control" id="startDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">End Date *</label>
+                            <input type="date" class="form-control" id="endDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Package Type *</label>
+                            <select class="form-control" id="packageType" required>
+                                <option value="">Select type</option>
+                                <option value="0">Family</option>
+                                <option value="1">Honeymoon</option>
+                                <option value="2">Adventure</option>
+                                <option value="3">Cruise</option>
+                                <option value="4">Luxury</option>
+                                <option value="5">Budget</option>
+                                <option value="6">Cultural</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Available Rooms *</label>
+                            <input type="number" class="form-control" id="availableRooms" min="0" placeholder="e.g., 20" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Maximum Guests per Room</label>
+                            <input type="number" class="form-control" id="maxGuests" min="1" value="2" placeholder="e.g., 2">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Age Restriction (Minimum)</label>
+                            <input type="number" class="form-control" id="ageRestriction" min="0" value="0" placeholder="e.g., 18">
                         </div>
                     </div>
                 </div>
 
                 <!-- Pricing -->
-                <div class="form-card">
-                    <div class="form-section">
-                        <h3 class="form-section-title"><i class="fas fa-tag"></i> Pricing</h3>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="price">Regular Price ($) *</label>
-                                <input type="number" id="price" class="form-control" step="0.01" min="0" placeholder="e.g., 1299.00" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="discountedPrice">Discounted Price ($)</label>
-                                <input type="number" id="discountedPrice" class="form-control" step="0.01" min="0" placeholder="e.g., 999.00">
-                            </div>
-                            <div class="form-group">
-                                <label for="discountStartDate">Discount Start Date</label>
-                                <input type="date" id="discountStartDate" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="discountEndDate">Discount End Date</label>
-                                <input type="date" id="discountEndDate" class="form-control">
-                            </div>
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-dollar-sign"></i> Pricing</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Price per Person *</label>
+                            <input type="number" class="form-control" id="price" min="0" step="0.01" placeholder="e.g., 1299.99" required>
                         </div>
-                        <p style="color: var(--color-steel); font-size: 0.8125rem; margin-top: var(--space-3);">
-                            <i class="fas fa-info-circle"></i> Discounts are active for a limited time only (max 1 week). Previous price will show with strikethrough.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Age Requirements -->
-                <div class="form-card">
-                    <div class="form-section">
-                        <h3 class="form-section-title"><i class="fas fa-user-friends"></i> Age Requirements</h3>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="minimumAge">Minimum Age</label>
-                                <input type="number" id="minimumAge" class="form-control" min="0" placeholder="e.g., 18">
-                            </div>
-                            <div class="form-group">
-                                <label for="maximumAge">Maximum Age</label>
-                                <input type="number" id="maximumAge" class="form-control" min="0" placeholder="e.g., 65">
-                            </div>
+                        <div class="form-group">
+                            <label class="form-label">Discounted Price (optional)</label>
+                            <input type="number" class="form-control" id="discountedPrice" min="0" step="0.01" placeholder="Leave empty if no discount">
                         </div>
                     </div>
                 </div>
 
-                <!-- Package Images - IMPORTANT FOR PROJECT REQUIREMENTS -->
-                <div class="form-card">
-                    <div class="form-section">
-                        <h3 class="form-section-title"><i class="fas fa-images"></i> Package Images</h3>
-                        <p style="color: var(--color-silver); margin-bottom: var(--space-4);">
-                            Upload images for this package. The first image will be used as the main image.
-                        </p>
-
-                        <!-- Drag and Drop Upload Area -->
-                        <div class="image-upload-section" id="uploadArea">
-                            <input type="file" id="imageInput" class="file-input" accept="image/jpeg,image/png,image/gif,image/webp" multiple>
-                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                            <p class="upload-text">
-                                <strong>Click to upload</strong> or drag and drop images here
-                            </p>
-                            <p class="upload-hint">JPG, PNG, GIF, WebP • Max 10MB per file</p>
+                <!-- Images -->
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-images"></i> Images</h3>
+                    <div class="form-group">
+                        <label class="form-label">Main Image URL *</label>
+                        <input type="url" class="form-control" id="imageUrl" placeholder="https://example.com/image.jpg" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Additional Images</label>
+                        <div class="image-upload-area" id="imageDropArea" onclick="document.getElementById('additionalImages').click()">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Drag & drop images here or click to upload</p>
+                            <span>Supports: JPG, PNG, WebP (Max 5MB each)</span>
+                            <input type="file" id="additionalImages" multiple accept="image/*" style="display: none" onchange="handleImageUpload(event)">
                         </div>
-
-                        <!-- Upload Progress -->
-                        <div class="upload-progress" id="uploadProgress" style="display: none;">
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="progressFill"></div>
-                            </div>
-                            <p class="progress-text" id="progressText">Uploading...</p>
-                        </div>
-
-                        <!-- Image Previews -->
                         <div class="image-preview-grid" id="imagePreviewGrid"></div>
-
-                        <!-- Hidden field to store image URLs -->
-                        <input type="hidden" id="mainImageUrl" value="">
-                        <input type="hidden" id="additionalImageUrls" value="">
-                    </div>
-                </div>
-
-                <!-- Itinerary -->
-                <div class="form-card">
-                    <div class="form-section">
-                        <h3 class="form-section-title"><i class="fas fa-route"></i> Itinerary</h3>
-                        <div class="form-group full-width">
-                            <label for="itinerary">Travel Itinerary</label>
-                            <textarea id="itinerary" class="form-control" placeholder="Day 1: Arrival and hotel check-in...&#10;Day 2: City tour...&#10;Day 3: Beach activities..." rows="8"></textarea>
-                        </div>
                     </div>
                 </div>
 
                 <!-- Status -->
-                <div class="form-card">
-                    <div class="form-section">
-                        <h3 class="form-section-title"><i class="fas fa-toggle-on"></i> Status</h3>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="isActive" checked>
-                            <label for="isActive" style="margin-bottom: 0; cursor: pointer;">Package is Active</label>
-                        </div>
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-toggle-on"></i> Status</h3>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <input type="checkbox" id="isActive" checked style="margin-right: 8px;">
+                            Package is Active (visible to users)
+                        </label>
                     </div>
+                </div>
 
-                    <!-- Form Actions -->
-                    <div class="form-actions">
-                        <a href="/admin/packages" class="btn btn-secondary">Cancel</a>
-                        <button type="submit" class="btn btn-primary" id="submitBtn">
-                            <span id="submitText"><i class="fas fa-save"></i> @(isEdit ? "Update Package" : "Create Package")</span>
-                            <span id="submitLoader" class="spinner" style="display: none;"></span>
-                        </button>
-                    </div>
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <a href="/admin/packages" class="btn btn-secondary" onclick="navigateTo('/admin/packages', event)">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <i class="fas fa-save"></i> @(isEdit ? "Update Package" : "Create Package")
+                    </button>
                 </div>
             </form>
         </main>
     </div>
 
     <script>
-        let uploadedImages = []; // Store uploaded image URLs
-        let mainImageIndex = 0;
+        let uploadedImages = [];
+        const isEditMode = @(isEdit ? "true" : "false");
+        const packageId = '@(packageId ?? "")';
 
+        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = '/account/login?returnUrl=/admin/packages';
-                return;
+            checkAdminAuth();
+            if (isEditMode && packageId) {
+                loadPackageData();
             }
-
-            const packageId = document.getElementById('packageId').value;
-            if (packageId) {
-                loadPackageData(packageId);
-            }
-
-            setupImageUpload();
+            setupFormValidation();
+            setupDragAndDrop();
         });
 
-        // Setup drag and drop and file input for images
-        function setupImageUpload() {
-            const uploadArea = document.getElementById('uploadArea');
-            const fileInput = document.getElementById('imageInput');
-
-            // Click to upload
-            uploadArea.addEventListener('click', () => fileInput.click());
-
-            // Drag and drop
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.classList.add('dragover');
-            });
-
-            uploadArea.addEventListener('dragleave', () => {
-                uploadArea.classList.remove('dragover');
-            });
-
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.classList.remove('dragover');
-                handleFiles(e.dataTransfer.files);
-            });
-
-            // File input change
-            fileInput.addEventListener('change', (e) => {
-                handleFiles(e.target.files);
-                e.target.value = ''; // Reset for re-upload of same file
-            });
-        }
-
-        // Handle multiple file uploads
-        async function handleFiles(files) {
-            if (files.length === 0) return;
-
+        // Check admin authentication
+        function checkAdminAuth() {
             const token = localStorage.getItem('token');
-            const progressDiv = document.getElementById('uploadProgress');
-            const progressFill = document.getElementById('progressFill');
-            const progressText = document.getElementById('progressText');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-            progressDiv.style.display = 'block';
-
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-
-                // Validate file
-                if (!file.type.startsWith('image/')) {
-                    showAlert('error', `${file.name} is not a valid image file`);
-                    continue;
-                }
-
-                if (file.size > 10 * 1024 * 1024) { // 10MB
-                    showAlert('error', `${file.name} exceeds 10MB limit`);
-                    continue;
-                }
-
-                progressText.textContent = `Uploading ${file.name} (${i + 1}/${files.length})...`;
-                progressFill.style.width = `${((i + 1) / files.length) * 100}%`;
-
-                const formData = new FormData();
-                formData.append('file', file);
-
-                try {
-                    const response = await fetch('/api/images/upload?folder=packages', {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: formData
-                    });
-
-                    const result = await response.json();
-
-                    if (result.success) {
-                        uploadedImages.push(result.data.url);
-                        renderImagePreviews();
-                    } else {
-                        showAlert('error', `Failed to upload ${file.name}: ${result.message}`);
-                    }
-                } catch (error) {
-                    console.error('Upload error:', error);
-                    showAlert('error', `Error uploading ${file.name}`);
-                }
+            if (!token || user.role !== 0) {
+                showToast('Admin access required', 'error');
+                setTimeout(() => navigateTo('/account/login'), 1500);
             }
-
-            progressDiv.style.display = 'none';
-            progressFill.style.width = '0%';
-            updateHiddenImageFields();
         }
 
-        // Render image previews
-        function renderImagePreviews() {
-            const grid = document.getElementById('imagePreviewGrid');
-            grid.innerHTML = '';
-
-            uploadedImages.forEach((url, index) => {
-                const item = document.createElement('div');
-                item.className = 'image-preview-item' + (index === mainImageIndex ? ' main-image' : '');
-                item.innerHTML = `
-                    <img src="${url}" alt="Package Image ${index + 1}" onerror="this.src='https://via.placeholder.com/200x150?text=Error'">
-                    ${index === mainImageIndex ? '<span class="badge-main">Main</span>' : ''}
-                    <button type="button" class="remove-image" onclick="removeImage(${index})">
-                        <i class="fas fa-times"></i>
-                    </button>
-                    ${index !== mainImageIndex ? `<button type="button" class="set-main" onclick="setMainImage(${index})">Set as Main</button>` : ''}
-                `;
-                grid.appendChild(item);
-            });
-        }
-
-        // Remove an image
-        function removeImage(index) {
-            uploadedImages.splice(index, 1);
-            if (mainImageIndex >= uploadedImages.length) {
-                mainImageIndex = Math.max(0, uploadedImages.length - 1);
-            }
-            if (index < mainImageIndex) {
-                mainImageIndex--;
-            }
-            renderImagePreviews();
-            updateHiddenImageFields();
-        }
-
-        // Set main image
-        function setMainImage(index) {
-            mainImageIndex = index;
-            renderImagePreviews();
-            updateHiddenImageFields();
-        }
-
-        // Update hidden fields for form submission
-        function updateHiddenImageFields() {
-            document.getElementById('mainImageUrl').value = uploadedImages[mainImageIndex] || '';
-            const additionalUrls = uploadedImages.filter((_, i) => i !== mainImageIndex);
-            document.getElementById('additionalImageUrls').value = JSON.stringify(additionalUrls);
-        }
-
-        // Load existing package data
-        async function loadPackageData(packageId) {
+        // Load existing package data for editing
+        async function loadPackageData() {
+            showLoading(true);
             try {
                 const token = localStorage.getItem('token');
                 const response = await fetch(`/api/packages/${packageId}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
-                if (!response.ok) throw new Error('Failed to load package');
-
-                const pkg = await response.json();
-
-                document.getElementById('destination').value = pkg.destination || '';
-                document.getElementById('country').value = pkg.country || '';
-                document.getElementById('packageType').value = pkg.packageType || '';
-                document.getElementById('availableRooms').value = pkg.availableRooms || '';
-                document.getElementById('description').value = pkg.description || '';
-                document.getElementById('startDate').value = pkg.startDate ? pkg.startDate.split('T')[0] : '';
-                document.getElementById('endDate').value = pkg.endDate ? pkg.endDate.split('T')[0] : '';
-                document.getElementById('price').value = pkg.price || '';
-                document.getElementById('discountedPrice').value = pkg.discountedPrice || '';
-                document.getElementById('discountStartDate').value = pkg.discountStartDate ? pkg.discountStartDate.split('T')[0] : '';
-                document.getElementById('discountEndDate').value = pkg.discountEndDate ? pkg.discountEndDate.split('T')[0] : '';
-                document.getElementById('minimumAge').value = pkg.minimumAge || '';
-                document.getElementById('maximumAge').value = pkg.maximumAge || '';
-                document.getElementById('itinerary').value = pkg.itinerary || '';
-                document.getElementById('isActive').checked = pkg.isActive !== false;
-
-                // Load existing images
-                if (pkg.imageUrl) {
-                    uploadedImages.push(pkg.imageUrl);
+                if (response.ok) {
+                    const result = await response.json();
+                    const pkg = result.data || result;
+                    populateForm(pkg);
+                } else {
+                    showToast('Failed to load package data', 'error');
                 }
-                if (pkg.images && pkg.images.length > 0) {
-                    pkg.images.forEach(img => {
-                        if (img.imageUrl && !uploadedImages.includes(img.imageUrl)) {
-                            uploadedImages.push(img.imageUrl);
-                        }
-                    });
-                }
-                renderImagePreviews();
-                updateHiddenImageFields();
-
             } catch (error) {
                 console.error('Error loading package:', error);
-                showAlert('error', 'Failed to load package data');
+                showToast('Error loading package data', 'error');
             }
+            showLoading(false);
         }
 
-        // Form submission
-        document.getElementById('packageForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+        // Populate form with package data
+        function populateForm(pkg) {
+            document.getElementById('destination').value = pkg.destination || '';
+            document.getElementById('country').value = pkg.country || '';
+            document.getElementById('description').value = pkg.description || '';
+            document.getElementById('startDate').value = formatDateForInput(pkg.startDate);
+            document.getElementById('endDate').value = formatDateForInput(pkg.endDate);
+            document.getElementById('packageType').value = pkg.packageType ?? '';
+            document.getElementById('availableRooms').value = pkg.availableRooms || '';
+            document.getElementById('maxGuests').value = pkg.maxGuests || 2;
+            document.getElementById('ageRestriction').value = pkg.ageRestriction || 0;
+            document.getElementById('price').value = pkg.price || '';
+            document.getElementById('discountedPrice').value = pkg.discountedPrice || '';
+            document.getElementById('imageUrl').value = pkg.imageUrl || '';
+            document.getElementById('isActive').checked = pkg.isActive !== false;
+        }
 
-            const submitBtn = document.getElementById('submitBtn');
-            const submitText = document.getElementById('submitText');
-            const submitLoader = document.getElementById('submitLoader');
+        // Format date for input field
+        function formatDateForInput(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toISOString().split('T')[0];
+        }
 
-            submitBtn.disabled = true;
-            submitText.style.display = 'none';
-            submitLoader.style.display = 'inline-block';
+        // Setup form validation and submission
+        function setupFormValidation() {
+            const form = document.getElementById('packageForm');
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                await submitPackage();
+            });
+        }
 
-            const packageId = document.getElementById('packageId').value;
-            const isEdit = !!packageId;
+        // Submit package (create or update)
+        async function submitPackage() {
+            showLoading(true);
 
-            const data = {
+            const formData = {
                 destination: document.getElementById('destination').value.trim(),
                 country: document.getElementById('country').value.trim(),
-                packageType: document.getElementById('packageType').value,
-                availableRooms: parseInt(document.getElementById('availableRooms').value) || 0,
                 description: document.getElementById('description').value.trim(),
                 startDate: document.getElementById('startDate').value,
                 endDate: document.getElementById('endDate').value,
-                price: parseFloat(document.getElementById('price').value) || 0,
-                discountedPrice: parseFloat(document.getElementById('discountedPrice').value) || null,
-                discountStartDate: document.getElementById('discountStartDate').value || null,
-                discountEndDate: document.getElementById('discountEndDate').value || null,
-                minimumAge: parseInt(document.getElementById('minimumAge').value) || null,
-                maximumAge: parseInt(document.getElementById('maximumAge').value) || null,
-                itinerary: document.getElementById('itinerary').value.trim(),
-                isActive: document.getElementById('isActive').checked,
-                imageUrl: document.getElementById('mainImageUrl').value || null
+                packageType: parseInt(document.getElementById('packageType').value),
+                availableRooms: parseInt(document.getElementById('availableRooms').value),
+                maxGuests: parseInt(document.getElementById('maxGuests').value) || 2,
+                ageRestriction: parseInt(document.getElementById('ageRestriction').value) || 0,
+                price: parseFloat(document.getElementById('price').value),
+                discountedPrice: document.getElementById('discountedPrice').value ? parseFloat(document.getElementById('discountedPrice').value) : null,
+                imageUrl: document.getElementById('imageUrl').value.trim(),
+                isActive: document.getElementById('isActive').checked
             };
 
-            // Validate required fields
-            if (!data.destination || !data.country || !data.packageType || !data.availableRooms || !data.startDate || !data.endDate || !data.price) {
-                showAlert('error', 'Please fill in all required fields');
-                resetSubmitButton();
+            // Validation
+            if (!formData.destination || !formData.country || !formData.description) {
+                showToast('Please fill in all required fields', 'error');
+                showLoading(false);
+                return;
+            }
+
+            if (new Date(formData.startDate) >= new Date(formData.endDate)) {
+                showToast('End date must be after start date', 'error');
+                showLoading(false);
                 return;
             }
 
             try {
                 const token = localStorage.getItem('token');
-                const url = isEdit ? `/api/packages/${packageId}` : '/api/packages';
-                const method = isEdit ? 'PUT' : 'POST';
+                const url = isEditMode ? `/api/packages/${packageId}` : '/api/packages';
+                const method = isEditMode ? 'PUT' : 'POST';
 
                 const response = await fetch(url, {
                     method: method,
@@ -969,52 +893,142 @@
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify(formData)
                 });
 
-                const result = await response.json();
-
-                if (response.ok || result.success) {
-                    showAlert('success', isEdit ? 'Package updated successfully!' : 'Package created successfully!');
-                    setTimeout(() => {
-                        window.location.href = '/admin/packages';
-                    }, 1500);
+                if (response.ok) {
+                    showToast(isEditMode ? 'Package updated successfully!' : 'Package created successfully!', 'success');
+                    setTimeout(() => navigateTo('/admin/packages'), 1500);
                 } else {
-                    showAlert('error', result.message || 'Failed to save package');
-                    resetSubmitButton();
+                    const error = await response.json();
+                    showToast(error.message || 'Failed to save package', 'error');
                 }
             } catch (error) {
-                console.error('Error:', error);
-                showAlert('error', 'Error saving package. Please try again.');
-                resetSubmitButton();
+                console.error('Error saving package:', error);
+                showToast('Error saving package', 'error');
             }
-        });
 
-        function resetSubmitButton() {
-            const submitBtn = document.getElementById('submitBtn');
-            const submitText = document.getElementById('submitText');
-            const submitLoader = document.getElementById('submitLoader');
-            submitBtn.disabled = false;
-            submitText.style.display = 'inline-flex';
-            submitLoader.style.display = 'none';
+            showLoading(false);
         }
 
-        function showAlert(type, message) {
-            const successAlert = document.getElementById('alertSuccess');
-            const errorAlert = document.getElementById('alertError');
+        // Image upload handling
+        function setupDragAndDrop() {
+            const dropArea = document.getElementById('imageDropArea');
 
-            successAlert.classList.remove('show');
-            errorAlert.classList.remove('show');
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
 
-            if (type === 'success') {
-                document.getElementById('alertSuccessText').textContent = message;
-                successAlert.classList.add('show');
-            } else {
-                document.getElementById('alertErrorText').textContent = message;
-                errorAlert.classList.add('show');
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
             }
 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => dropArea.classList.add('highlight'), false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => dropArea.classList.remove('highlight'), false);
+            });
+
+            dropArea.addEventListener('drop', handleDrop, false);
+        }
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+
+        function handleImageUpload(e) {
+            handleFiles(e.target.files);
+        }
+
+        function handleFiles(files) {
+            [...files].forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    if (file.size > 5 * 1024 * 1024) {
+                        showToast('Image must be less than 5MB', 'error');
+                        return;
+                    }
+                    previewImage(file);
+                }
+            });
+        }
+
+        function previewImage(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedImages.push(e.target.result);
+                renderImagePreviews();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderImagePreviews() {
+            const grid = document.getElementById('imagePreviewGrid');
+            grid.innerHTML = uploadedImages.map((src, index) => `
+                <div class="image-preview">
+                    <img src="${src}" alt="Preview ${index + 1}">
+                    <button type="button" class="remove-btn" onclick="removeImage(${index})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function removeImage(index) {
+            uploadedImages.splice(index, 1);
+            renderImagePreviews();
+        }
+
+        // Navigation
+        function navigateTo(url, event) {
+            if (event) event.preventDefault();
+            const pageTransition = document.getElementById('pageTransition');
+            pageTransition.classList.add('active');
+            setTimeout(() => { window.location.href = url; }, 400);
+        }
+
+        // Toggle sidebar (mobile)
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // Show/hide loading
+        function showLoading(show) {
+            const overlay = document.getElementById('loadingOverlay');
+            if (show) {
+                overlay.classList.add('active');
+            } else {
+                overlay.classList.remove('active');
+            }
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const icon = toast.querySelector('i');
+
+            toastMessage.textContent = message;
+            toast.className = 'toast ' + type;
+            icon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Logout
+        function logout(event) {
+            if (event) event.preventDefault();
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            navigateTo('/account/login');
         }
     </script>
 </body>

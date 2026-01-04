@@ -24,7 +24,7 @@ builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IUserManagementService, UserManagementService>();
-
+builder.Services.AddScoped<ICartService, CartService>();
 // JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JWT");
 var secretKeyString = jwtSettings["SecretKey"];
