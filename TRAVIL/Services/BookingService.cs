@@ -69,9 +69,16 @@ namespace TRAVEL.Services
             if (!package.IsActive)
                 return new BookingResult { Success = false, Message = "This package is no longer available" };
 
-            // Check if booking deadline has passed
-            if (package.StartDate <= DateTime.UtcNow.AddDays(1))
-                return new BookingResult { Success = false, Message = "Booking deadline has passed for this trip" };
+            // Check if trip end date has already passed (more lenient - allow booking up until trip ends)
+            if (package.EndDate < DateTime.UtcNow)
+                return new BookingResult { Success = false, Message = "This trip has already ended" };
+
+            // Check if trip has already started (optional - you can remove this for even more flexibility)
+            if (package.StartDate < DateTime.UtcNow)
+            {
+                // Allow bookings for trips that started but haven't ended (late joiners)
+                _logger.LogWarning($"Booking for already started trip: Package {packageId}");
+            }
 
             // Check user's active bookings (max 3)
             var activeBookings = await GetActiveBookingCountAsync(userId);
@@ -206,7 +213,7 @@ namespace TRAVEL.Services
 
             // Check cancellation policy (e.g., cannot cancel within 3 days of departure)
             var daysUntilTrip = (booking.TravelPackage.StartDate - DateTime.UtcNow).TotalDays;
-            if (daysUntilTrip < 3)
+            if (daysUntilTrip < 3 && daysUntilTrip > 0)
                 return new BookingResult { Success = false, Message = "Cannot cancel booking within 3 days of departure" };
 
             using var transaction = await _context.Database.BeginTransactionAsync();
@@ -227,7 +234,7 @@ namespace TRAVEL.Services
                 await transaction.CommitAsync();
 
                 // Send cancellation email
-                await _emailService.SendCancellationConfirmationAsync(
+                await _emailService.SendBookingCancellationAsync(
                     booking.User.Email,
                     booking.BookingReference,
                     booking.TravelPackage.Destination);
@@ -253,7 +260,6 @@ namespace TRAVEL.Services
         {
             return await _context.Bookings
                 .Include(b => b.TravelPackage)
-                    .ThenInclude(p => p.Images)
                 .Include(b => b.Payment)
                 .Where(b => b.UserId == userId)
                 .OrderByDescending(b => b.BookingDate)
@@ -284,45 +290,37 @@ namespace TRAVEL.Services
         {
             return await _context.Bookings
                 .CountAsync(b => b.UserId == userId &&
-                                (b.Status == BookingStatus.Pending || b.Status == BookingStatus.Confirmed));
+                               (b.Status == BookingStatus.Pending || b.Status == BookingStatus.Confirmed));
         }
 
         public async Task<bool> CanUserBookAsync(int userId)
         {
-            var activeCount = await GetActiveBookingCountAsync(userId);
-            return activeCount < MAX_ACTIVE_BOOKINGS;
+            var activeBookings = await GetActiveBookingCountAsync(userId);
+            return activeBookings < MAX_ACTIVE_BOOKINGS;
         }
 
         // Waiting List Methods
         public async Task<WaitingListResult> JoinWaitingListAsync(int userId, int packageId, int numberOfRooms)
         {
-            // Check if user already in waiting list
+            // Check if already in waiting list
             var existing = await _context.WaitingListEntries
                 .FirstOrDefaultAsync(w => w.UserId == userId && w.PackageId == packageId);
 
             if (existing != null)
-                return new WaitingListResult { Success = false, Message = "You are already in the waiting list" };
+                return new WaitingListResult { Success = false, Message = "You are already on the waiting list for this package" };
 
-            // Check if user already has a booking
-            var hasBooking = await _context.Bookings
-                .AnyAsync(b => b.UserId == userId &&
-                              b.PackageId == packageId &&
-                              (b.Status == BookingStatus.Pending || b.Status == BookingStatus.Confirmed));
-
-            if (hasBooking)
-                return new WaitingListResult { Success = false, Message = "You already have a booking for this package" };
-
-            // Get current position
-            var currentCount = await _context.WaitingListEntries
-                .CountAsync(w => w.PackageId == packageId);
+            // Get next position
+            var maxPosition = await _context.WaitingListEntries
+                .Where(w => w.PackageId == packageId)
+                .MaxAsync(w => (int?)w.Position) ?? 0;
 
             var entry = new WaitingListEntry
             {
                 UserId = userId,
                 PackageId = packageId,
                 NumberOfRooms = numberOfRooms,
-                DateAdded = DateTime.UtcNow,
-                Position = (currentCount + 1).ToString()
+                Position = maxPosition + 1,
+                DateJoined = DateTime.UtcNow
             };
 
             _context.WaitingListEntries.Add(entry);
@@ -346,22 +344,18 @@ namespace TRAVEL.Services
             if (entry == null)
                 return false;
 
+            var position = entry.Position;
             _context.WaitingListEntries.Remove(entry);
-            await _context.SaveChangesAsync();
 
-            // Reorder positions
-            var remainingEntries = await _context.WaitingListEntries
-                .Where(w => w.PackageId == packageId)
-                .OrderBy(w => w.DateAdded)
+            // Update positions of others
+            var laterEntries = await _context.WaitingListEntries
+                .Where(w => w.PackageId == packageId && w.Position > position)
                 .ToListAsync();
 
-            for (int i = 0; i < remainingEntries.Count; i++)
-            {
-                remainingEntries[i].Position = (i + 1).ToString();
-            }
+            foreach (var e in laterEntries)
+                e.Position--;
 
             await _context.SaveChangesAsync();
-
             return true;
         }
 
@@ -370,7 +364,7 @@ namespace TRAVEL.Services
             return await _context.WaitingListEntries
                 .Include(w => w.User)
                 .Where(w => w.PackageId == packageId)
-                .OrderBy(w => w.DateAdded)
+                .OrderBy(w => w.Position)
                 .ToListAsync();
         }
 
@@ -379,7 +373,7 @@ namespace TRAVEL.Services
             return await _context.WaitingListEntries
                 .Include(w => w.TravelPackage)
                 .Where(w => w.UserId == userId)
-                .OrderBy(w => w.DateAdded)
+                .OrderBy(w => w.DateJoined)
                 .ToListAsync();
         }
 
@@ -387,10 +381,10 @@ namespace TRAVEL.Services
         {
             var firstInLine = await _context.WaitingListEntries
                 .Where(w => w.PackageId == packageId)
-                .OrderBy(w => w.DateAdded)
+                .OrderBy(w => w.Position)
                 .FirstOrDefaultAsync();
 
-            return firstInLine?.UserId == userId;
+            return firstInLine != null && firstInLine.UserId == userId;
         }
 
         public async Task ProcessWaitingListAsync(int packageId)
@@ -399,18 +393,13 @@ namespace TRAVEL.Services
             if (package == null || package.AvailableRooms <= 0)
                 return;
 
-            // Get next person in waiting list
             var nextInLine = await _context.WaitingListEntries
                 .Include(w => w.User)
                 .Where(w => w.PackageId == packageId && !w.IsNotified)
-                .OrderBy(w => w.DateAdded)
+                .OrderBy(w => w.Position)
                 .FirstOrDefaultAsync();
 
-            if (nextInLine == null)
-                return;
-
-            // Check if enough rooms available
-            if (package.AvailableRooms >= nextInLine.NumberOfRooms)
+            if (nextInLine != null)
             {
                 // Notify user
                 await _emailService.SendWaitingListNotificationAsync(

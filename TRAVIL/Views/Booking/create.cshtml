@@ -1,351 +1,538 @@
 @{
     ViewData["Title"] = "Book Package";
     Layout = null;
+    var packageId = ViewData["PackageId"] ?? 1;
 }
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Book Your Trip - TRAVIL</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Your Booking - TRAVIL</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    
     <style>
         :root {
             --color-midnight: #0d1117;
             --color-navy: #161b22;
             --color-slate: #21262d;
-            --color-charcoal: #30363d;
             --color-steel: #484f58;
-            --color-gold: #d4a853;
-            --color-gold-light: #e8c875;
-            --color-gold-dark: #b8923f;
-            --color-gold-muted: rgba(212, 168, 83, 0.15);
-            --color-white: #ffffff;
             --color-silver: #8b949e;
-            --color-mist: #c9d1d9;
+            --color-white: #ffffff;
+            --color-gold: #d4a853;
+            --color-gold-dark: #b8943f;
             --color-success: #3fb950;
-            --color-warning: #d29922;
             --color-error: #f85149;
-            --font-display: 'Cormorant Garamond', Georgia, serif;
-            --font-body: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-            --radius-md: 10px;
-            --radius-lg: 16px;
-            --radius-full: 9999px;
-            --shadow-gold: 0 8px 32px rgba(212, 168, 83, 0.25);
-            --transition-fast: 150ms ease;
-            --transition-normal: 300ms ease;
-            --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
-            --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Outfit', sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: var(--font-body);
             background: var(--color-midnight);
-            color: var(--color-mist);
-            line-height: 1.6;
+            color: var(--color-white);
             min-height: 100vh;
         }
 
-        .page-transition {
-            position: fixed; inset: 0; background: var(--color-midnight);
-            z-index: 10000; display: flex; align-items: center; justify-content: center;
-            opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease;
-        }
-        .page-transition.active { opacity: 1; visibility: visible; }
-        .page-transition .loader {
-            width: 48px; height: 48px; border: 3px solid var(--color-slate);
-            border-top-color: var(--color-gold); border-radius: 50%; animation: spin 0.8s linear infinite;
-        }
-        @@keyframes spin { to { transform: rotate(360deg); } }
-
-        .navbar {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-            padding: 16px 0; background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(20px);
+        /* Header */
+        .header {
+            background: var(--color-navy);
             border-bottom: 1px solid var(--color-slate);
-        }
-        .navbar .container {
-            max-width: 1400px; margin: 0 auto; padding: 0 24px;
-            display: flex; align-items: center; justify-content: space-between;
-        }
-        .nav-brand {
-            display: flex; align-items: center; gap: 12px; text-decoration: none;
-        }
-        .nav-brand .logo {
-            width: 42px; height: 42px;
-            background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
-            border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;
-            font-size: 1.125rem; color: var(--color-midnight);
-        }
-        .nav-brand span {
-            font-family: var(--font-display); font-size: 1.5rem; font-weight: 500;
-            color: var(--color-white); letter-spacing: 0.1em;
+            padding: 16px 24px;
         }
 
-        .booking-container {
-            max-width: 1200px; margin: 0 auto; padding: 120px 24px 64px;
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .booking-header { margin-bottom: var(--space-6); }
-        .booking-header h1 {
-            font-family: var(--font-display); font-size: 2.5rem; font-weight: 500;
-            color: var(--color-white); margin-bottom: var(--space-2);
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--color-white);
         }
-        .booking-header p { color: var(--color-silver); }
 
-        .booking-grid { display: grid; grid-template-columns: 1fr 400px; gap: var(--space-6); }
-        @@media (max-width: 1024px) { .booking-grid { grid-template-columns: 1fr; } }
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--color-midnight);
+        }
 
-        .booking-form-section {
-            background: var(--color-navy); border: 1px solid var(--color-slate);
-            border-radius: var(--radius-lg); overflow: hidden;
+        .logo-text {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .page-title {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: var(--color-silver);
+            margin-bottom: 32px;
+        }
+
+        /* Grid */
+        .booking-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 32px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
         }
 
         .section-header {
-            padding: var(--space-5); border-bottom: 1px solid var(--color-slate);
-            display: flex; align-items: center; gap: var(--space-3);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
         }
+
         .section-number {
-            width: 32px; height: 32px;
-            background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-weight: 700; color: var(--color-midnight); font-size: 0.875rem;
+            width: 32px;
+            height: 32px;
+            background: var(--color-gold);
+            color: var(--color-midnight);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
         }
+
         .section-header h2 {
-            font-family: var(--font-display); font-size: 1.25rem; font-weight: 500; color: var(--color-white);
+            font-size: 1.125rem;
+            font-weight: 600;
         }
 
-        .section-body { padding: var(--space-5); }
-
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
-        @@media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
-
-        .form-group { margin-bottom: var(--space-4); }
-        .form-group label {
-            display: block; font-size: 0.8125rem; font-weight: 500;
-            color: var(--color-mist); margin-bottom: var(--space-2);
+        /* Form */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
         }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+            .form-group label {
+                display: block;
+                font-size: 0.875rem;
+                color: var(--color-silver);
+                margin-bottom: 8px;
+            }
+
         .form-control {
-            width: 100%; padding: 14px 16px; background: var(--color-slate);
-            border: 1px solid var(--color-charcoal); border-radius: var(--radius-md);
-            font-family: var(--font-body); font-size: 0.9375rem; color: var(--color-white);
-            transition: all var(--transition-fast);
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--color-slate);
+            border: 1px solid var(--color-steel);
+            border-radius: 8px;
+            color: var(--color-white);
+            font-size: 0.9375rem;
         }
-        .form-control:focus { outline: none; border-color: var(--color-gold); background: var(--color-charcoal); }
-        .form-control::placeholder { color: var(--color-steel); }
 
+            .form-control:focus {
+                outline: none;
+                border-color: var(--color-gold);
+            }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Guest Selector */
         .guests-selector {
-            display: flex; align-items: center; gap: var(--space-4);
-            background: var(--color-slate); border: 1px solid var(--color-charcoal);
-            border-radius: var(--radius-md); padding: var(--space-3);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--color-slate);
+            border: 1px solid var(--color-steel);
+            border-radius: 8px;
+            padding: 8px 16px;
         }
-        .guest-btn {
-            width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
-            background: var(--color-charcoal); border: 1px solid var(--color-steel);
-            border-radius: 50%; color: var(--color-mist); cursor: pointer; transition: all var(--transition-fast);
-        }
-        .guest-btn:hover { background: var(--color-gold); color: var(--color-midnight); border-color: var(--color-gold); }
-        .guest-count { flex: 1; text-align: center; font-size: 1.25rem; font-weight: 600; color: var(--color-white); }
 
-        .special-requests { min-height: 120px; resize: vertical; }
+        .guest-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid var(--color-steel);
+            background: transparent;
+            color: var(--color-white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+            .guest-btn:hover {
+                border-color: var(--color-gold);
+                color: var(--color-gold);
+            }
+
+        .guest-count {
+            font-size: 1.25rem;
+            font-weight: 600;
+            min-width: 40px;
+            text-align: center;
+        }
 
         /* Booking Summary */
-        .booking-summary {
-            background: var(--color-navy); border: 1px solid var(--color-slate);
-            border-radius: var(--radius-lg); overflow: hidden; position: sticky; top: 100px;
+        .summary-card {
+            position: sticky;
+            top: 24px;
         }
-        .summary-header { padding: var(--space-5); border-bottom: 1px solid var(--color-slate); }
+
         .summary-header h3 {
-            font-family: var(--font-display); font-size: 1.25rem; font-weight: 500; color: var(--color-white);
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 20px;
         }
-        .summary-body { padding: var(--space-5); }
 
         .package-preview {
-            display: flex; gap: var(--space-4); padding-bottom: var(--space-5);
-            border-bottom: 1px solid var(--color-slate); margin-bottom: var(--space-5);
+            display: flex;
+            gap: 16px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--color-slate);
+            margin-bottom: 20px;
         }
-        .package-preview img { width: 100px; height: 80px; border-radius: var(--radius-md); object-fit: cover; }
-        .package-preview-info { flex: 1; }
-        .package-preview-title { font-weight: 600; color: var(--color-white); margin-bottom: var(--space-1); }
-        .package-preview-location { font-size: 0.875rem; color: var(--color-silver); display: flex; align-items: center; gap: 6px; }
-        .package-preview-location i { color: var(--color-gold); }
 
-        .price-breakdown { margin-bottom: var(--space-5); }
-        .price-row { display: flex; justify-content: space-between; padding: var(--space-3) 0; font-size: 0.9375rem; }
-        .price-row .label { color: var(--color-silver); }
-        .price-row .value { color: var(--color-mist); }
-        .price-row.total {
-            border-top: 1px solid var(--color-slate); padding-top: var(--space-4);
-            margin-top: var(--space-3); font-weight: 600;
+            .package-preview img {
+                width: 100px;
+                height: 80px;
+                object-fit: cover;
+                border-radius: 8px;
+            }
+
+        .package-preview-info h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
         }
-        .price-row.total .value { color: var(--color-gold); font-size: 1.5rem; }
 
+        .package-preview-info p {
+            font-size: 0.875rem;
+            color: var(--color-gold);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--color-slate);
+        }
+
+            .price-row:last-of-type {
+                border-bottom: none;
+            }
+
+            .price-row .label {
+                color: var(--color-silver);
+            }
+
+            .price-row.total {
+                font-size: 1.25rem;
+                font-weight: 600;
+                padding-top: 16px;
+                margin-top: 8px;
+                border-top: 1px solid var(--color-slate);
+            }
+
+                .price-row.total .value {
+                    color: var(--color-gold);
+                }
+
+        /* Button */
         .btn {
-            display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
-            padding: var(--space-4) var(--space-6); border: none; border-radius: var(--radius-md);
-            font-family: var(--font-body); font-size: 1rem; font-weight: 600;
-            cursor: pointer; transition: all var(--transition-normal); text-decoration: none; width: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            border: none;
+            margin-top: 20px;
         }
+
         .btn-primary {
-            background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
             color: var(--color-midnight);
         }
-        .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: var(--shadow-gold); }
-        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+            .btn-primary:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(212, 168, 83, 0.4);
+            }
+
+            .btn-primary:disabled {
+                opacity: 0.7;
+                cursor: not-allowed;
+            }
 
         .secure-notice {
-            display: flex; align-items: center; justify-content: center; gap: var(--space-2);
-            margin-top: var(--space-4); font-size: 0.8125rem; color: var(--color-silver);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+            font-size: 0.8125rem;
+            color: var(--color-success);
         }
-        .secure-notice i { color: var(--color-success); }
 
+        /* Toast */
         .toast {
-            position: fixed; bottom: 24px; right: 24px; background: var(--color-charcoal);
-            border: 1px solid var(--color-slate); border-radius: var(--radius-lg);
-            padding: 16px 24px; display: flex; align-items: center; gap: 12px;
-            color: var(--color-white); font-size: 0.9375rem; z-index: 10000;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            opacity: 0; transform: translateY(20px); transition: all 0.3s ease;
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--color-slate);
+            border: 1px solid var(--color-steel);
+            border-radius: 12px;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s;
         }
-        .toast.show { opacity: 1; transform: translateY(0); }
-        .toast.success i { color: var(--color-success); }
-        .toast.error i { color: var(--color-error); }
+
+            .toast.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .toast.success i {
+                color: var(--color-success);
+            }
+
+            .toast.error i {
+                color: var(--color-error);
+            }
+
+        /* Page Transition */
+        .page-transition {
+            position: fixed;
+            inset: 0;
+            background: var(--color-midnight);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s;
+        }
+
+            .page-transition.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--color-slate);
+            border-top-color: var(--color-gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @@keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive */
+        @@media (max-width: 900px) {
+            .booking-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-card {
+                position: static;
+            }
+        }
+
+        @@media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="page-transition" id="pageTransition"><div class="loader"></div></div>
+    <div class="page-transition" id="pageTransition">
+        <div class="loader"></div>
+    </div>
 
-    <nav class="navbar">
-        <div class="container">
-            <a href="/" class="nav-brand" onclick="navigateTo('/', event)">
-                <div class="logo"><i class="fas fa-compass"></i></div>
-                <span>TRAVIL</span>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">
+                <div class="logo-icon"><i class="fas fa-compass"></i></div>
+                <span class="logo-text">TRAVIL</span>
             </a>
         </div>
-    </nav>
+    </header>
 
-    <div class="booking-container">
-        <div class="booking-header">
-            <h1>Complete Your Booking</h1>
-            <p>You're just a few steps away from your dream vacation</p>
-        </div>
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="page-title">Complete Your Booking</h1>
+        <p class="page-subtitle">You're just a few steps away from your dream vacation</p>
 
-        <form id="bookingForm">
-            <div class="booking-grid">
-                <div>
-                    <!-- Traveler Details -->
-                    <div class="booking-form-section" style="margin-bottom: 24px;">
-                        <div class="section-header">
-                            <div class="section-number">1</div>
-                            <h2>Traveler Details</h2>
+        <form id="bookingForm" class="booking-grid">
+            <!-- Left Column - Forms -->
+            <div>
+                <!-- Traveler Details -->
+                <div class="card">
+                    <div class="section-header">
+                        <div class="section-number">1</div>
+                        <h2>Traveler Details</h2>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" class="form-control" required>
                         </div>
-                        <div class="section-body">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="firstName">First Name</label>
-                                    <input type="text" id="firstName" class="form-control" placeholder="John" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lastName">Last Name</label>
-                                    <input type="text" id="lastName" class="form-control" placeholder="Doe" required>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="email">Email Address</label>
-                                    <input type="email" id="email" class="form-control" placeholder="john@example.com" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="phone">Phone Number</label>
-                                    <input type="tel" id="phone" class="form-control" placeholder="+1 (555) 123-4567" required>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" class="form-control" required>
                         </div>
                     </div>
-
-                    <!-- Trip Details -->
-                    <div class="booking-form-section" style="margin-bottom: 24px;">
-                        <div class="section-header">
-                            <div class="section-number">2</div>
-                            <h2>Trip Details</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" class="form-control" required>
                         </div>
-                        <div class="section-body">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="travelDate">Travel Date</label>
-                                    <input type="date" id="travelDate" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Number of Guests</label>
-                                    <div class="guests-selector">
-                                        <button type="button" class="guest-btn" onclick="updateGuests(-1)"><i class="fas fa-minus"></i></button>
-                                        <span class="guest-count" id="guestCount">2</span>
-                                        <button type="button" class="guest-btn" onclick="updateGuests(1)"><i class="fas fa-plus"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="specialRequests">Special Requests (Optional)</label>
-                                <textarea id="specialRequests" class="form-control special-requests" placeholder="Dietary requirements, accessibility needs, celebrations..."></textarea>
-                            </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" class="form-control" required>
                         </div>
                     </div>
                 </div>
 
-                <!-- Booking Summary -->
-                <div>
-                    <div class="booking-summary">
-                        <div class="summary-header">
-                            <h3>Booking Summary</h3>
+                <!-- Trip Details -->
+                <div class="card">
+                    <div class="section-header">
+                        <div class="section-number">2</div>
+                        <h2>Trip Details</h2>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="travelDate">Travel Date</label>
+                            <input type="date" id="travelDate" class="form-control" required>
                         </div>
-                        <div class="summary-body">
-                            <div class="package-preview">
-                                <img id="packageImage" src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=200&q=80" alt="Package">
-                                <div class="package-preview-info">
-                                    <div class="package-preview-title" id="packageTitle">Bali Paradise Escape</div>
-                                    <div class="package-preview-location">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                        <span id="packageLocation">Bali, Indonesia</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="price-breakdown">
-                                <div class="price-row">
-                                    <span class="label">$<span id="pricePerPerson">1,299</span> × <span id="guestCountDisplay">2</span> guests</span>
-                                    <span class="value" id="subtotal">$2,598</span>
-                                </div>
-                                <div class="price-row">
-                                    <span class="label">Service fee</span>
-                                    <span class="value">$150</span>
-                                </div>
-                                <div class="price-row">
-                                    <span class="label">Taxes</span>
-                                    <span class="value" id="taxes">$260</span>
-                                </div>
-                                <div class="price-row total">
-                                    <span class="label">Total</span>
-                                    <span class="value" id="totalPrice">$3,008</span>
-                                </div>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary" id="submitBtn">
-                                <i class="fas fa-lock"></i>
-                                Proceed to Payment
-                            </button>
-
-                            <div class="secure-notice">
-                                <i class="fas fa-shield-alt"></i>
-                                <span>Secure SSL encrypted payment</span>
+                        <div class="form-group">
+                            <label>Number of Guests</label>
+                            <div class="guests-selector">
+                                <button type="button" class="guest-btn" onclick="updateGuests(-1)">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span class="guest-count" id="guestCount">2</span>
+                                <button type="button" class="guest-btn" onclick="updateGuests(1)">
+                                    <i class="fas fa-plus"></i>
+                                </button>
                             </div>
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="specialRequests">Special Requests (Optional)</label>
+                        <textarea id="specialRequests" class="form-control" placeholder="Dietary requirements, accessibility needs, celebrations..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Summary -->
+            <div>
+                <div class="card summary-card">
+                    <div class="summary-header">
+                        <h3>Booking Summary</h3>
+                    </div>
+
+                    <div class="package-preview">
+                        <img id="packageImage" src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=200&q=80" alt="Package">
+                        <div class="package-preview-info">
+                            <h4 id="packageTitle">Loading...</h4>
+                            <p><i class="fas fa-map-marker-alt"></i> <span id="packageLocation">Loading...</span></p>
+                        </div>
+                    </div>
+
+                    <div class="price-row">
+                        <span class="label">$<span id="pricePerPerson">0</span> × <span id="guestCountDisplay">2</span> guests</span>
+                        <span class="value" id="subtotal">$0</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="label">Service fee</span>
+                        <span class="value">$150</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="label">Taxes</span>
+                        <span class="value" id="taxes">$0</span>
+                    </div>
+                    <div class="price-row total">
+                        <span class="label">Total</span>
+                        <span class="value" id="totalPrice">$0</span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <i class="fas fa-lock"></i>
+                        Proceed to Payment
+                    </button>
+
+                    <div class="secure-notice">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Secure SSL encrypted payment</span>
                     </div>
                 </div>
             </div>
@@ -358,52 +545,36 @@
     </div>
 
     <script>
-        let guests = 2;
-        const pricePerPerson = 1299;
-        const serviceFee = 150;
-        const packageId = getPackageId();
+        var guests = 2;
+        var serviceFee = 150;
+        var packageId = @packageId;
+        var packageData = null;
 
-        function getPackageId() {
-            const path = window.location.pathname;
-            const match = path.match(/\/(\d+)$/);
-            return match ? parseInt(match[1]) : 1;
-        }
+        // Load package data from API
+        async function loadPackage() {
+            try {
+                var response = await fetch('/api/packages/' + packageId);
+                if (response.ok) {
+                    var result = await response.json();
+                    packageData = result.data || result;
 
-        const packages = {
-            1: { title: 'Bali Paradise Escape', location: 'Bali, Indonesia', price: 1299, image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=200&q=80' },
-            2: { title: 'Romantic Paris Getaway', location: 'Paris, France', price: 1599, image: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=200&q=80' },
-            3: { title: 'Ancient Kyoto Discovery', location: 'Kyoto, Japan', price: 2199, image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=200&q=80' },
-            4: { title: 'Maldives Luxury Resort', location: 'Maldives', price: 3499, image: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=200&q=80' }
-        };
+                    document.getElementById('packageTitle').textContent = packageData.destination || 'Travel Package';
+                    document.getElementById('packageLocation').textContent = (packageData.destination || '') + ', ' + (packageData.country || '');
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const token = localStorage.getItem('token');
-            const user = localStorage.getItem('user');
+                    var imageUrl = packageData.imageUrl || 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=200&q=80';
+                    document.getElementById('packageImage').src = imageUrl;
 
-            if (!token || !user) {
-                showToast('Please login to book', 'error');
-                setTimeout(() => navigateTo('/account/login'), 1500);
-                return;
+                    document.getElementById('pricePerPerson').textContent = Math.round(packageData.discountedPrice || packageData.price || 0).toLocaleString();
+
+                    updatePriceBreakdown();
+                } else {
+                    showToast('Failed to load package details', 'error');
+                }
+            } catch (error) {
+                console.error('Error loading package:', error);
+                showToast('Error loading package', 'error');
             }
-
-            const userData = JSON.parse(user);
-            document.getElementById('firstName').value = userData.firstName || '';
-            document.getElementById('lastName').value = userData.lastName || '';
-            document.getElementById('email').value = userData.email || '';
-            document.getElementById('phone').value = userData.phone || '';
-
-            const pkg = packages[packageId] || packages[1];
-            document.getElementById('packageTitle').textContent = pkg.title;
-            document.getElementById('packageLocation').textContent = pkg.location;
-            document.getElementById('packageImage').src = pkg.image;
-            document.getElementById('pricePerPerson').textContent = pkg.price.toLocaleString();
-
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            document.getElementById('travelDate').min = tomorrow.toISOString().split('T')[0];
-
-            updatePriceBreakdown();
-        });
+        }
 
         function updateGuests(change) {
             guests = Math.max(1, Math.min(12, guests + change));
@@ -412,46 +583,120 @@
         }
 
         function updatePriceBreakdown() {
-            const pkg = packages[packageId] || packages[1];
-            const subtotal = pkg.price * guests;
-            const taxes = Math.round(subtotal * 0.1);
-            const total = subtotal + serviceFee + taxes;
+            if (!packageData) return;
+
+            var price = packageData.discountedPrice || packageData.price || 0;
+            var subtotal = price * guests;
+            var taxes = Math.round(subtotal * 0.1);
+            var total = subtotal + serviceFee + taxes;
 
             document.getElementById('guestCountDisplay').textContent = guests;
-            document.getElementById('subtotal').textContent = `$${subtotal.toLocaleString()}`;
-            document.getElementById('taxes').textContent = `$${taxes.toLocaleString()}`;
-            document.getElementById('totalPrice').textContent = `$${total.toLocaleString()}`;
+            document.getElementById('subtotal').textContent = '$' + subtotal.toLocaleString();
+            document.getElementById('taxes').textContent = '$' + taxes.toLocaleString();
+            document.getElementById('totalPrice').textContent = '$' + total.toLocaleString();
         }
 
-        document.getElementById('bookingForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const btn = document.getElementById('submitBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-
-            setTimeout(() => {
-                showToast('Booking submitted! Redirecting to payment...');
-                setTimeout(() => navigateTo('/booking/payment/1'), 1500);
-            }, 1500);
-        });
-
-        function navigateTo(url, event) {
-            if (event) event.preventDefault();
-            document.getElementById('pageTransition').classList.add('active');
-            setTimeout(() => { window.location.href = url; }, 400);
-        }
-
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
+        function showToast(message, type) {
+            type = type || 'success';
+            var toast = document.getElementById('toast');
             document.getElementById('toastMessage').textContent = message;
             toast.className = 'toast ' + type;
             toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+            setTimeout(function() { toast.classList.remove('show'); }, 3000);
         }
 
-        window.addEventListener('pageshow', () => document.getElementById('pageTransition').classList.remove('active'));
+        function navigateTo(url) {
+            document.getElementById('pageTransition').classList.add('active');
+            setTimeout(function() { window.location.href = url; }, 400);
+        }
+
+        // Form submission - Create booking via API
+        document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            var token = localStorage.getItem('token');
+            if (!token) {
+                showToast('Please login to book', 'error');
+                setTimeout(function() { navigateTo('/account/login'); }, 1500);
+                return;
+            }
+
+            var btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Booking...';
+
+            try {
+                // Create booking via API
+                var response = await fetch('/api/booking', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({
+                        packageId: packageId,
+                        numberOfRooms: 1,
+                        numberOfGuests: guests
+                    })
+                });
+
+                var result = await response.json();
+
+                if (response.ok && result.success) {
+                    showToast('Booking created! Redirecting to payment...');
+
+                    // Redirect to payment page with the ACTUAL booking ID
+                    var bookingId = result.data.bookingId;
+                    setTimeout(function() {
+                        navigateTo('/booking/payment/' + bookingId);
+                    }, 1500);
+                } else {
+                    showToast(result.message || 'Failed to create booking', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-lock"></i> Proceed to Payment';
+                }
+            } catch (error) {
+                console.error('Error creating booking:', error);
+                showToast('An error occurred. Please try again.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-lock"></i> Proceed to Payment';
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            var token = localStorage.getItem('token');
+            var userStr = localStorage.getItem('user');
+
+            if (!token || !userStr) {
+                showToast('Please login to book', 'error');
+                setTimeout(function() { navigateTo('/account/login'); }, 1500);
+                return;
+            }
+
+            // Pre-fill user data
+            try {
+                var userData = JSON.parse(userStr);
+                document.getElementById('firstName').value = userData.firstName || '';
+                document.getElementById('lastName').value = userData.lastName || '';
+                document.getElementById('email').value = userData.email || '';
+                document.getElementById('phone').value = userData.phone || '';
+            } catch (e) {}
+
+            // Set minimum date to tomorrow
+            var tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            document.getElementById('travelDate').min = tomorrow.toISOString().split('T')[0];
+
+            // Load package data
+            loadPackage();
+        });
+
+        // Page transition on load
+        window.addEventListener('pageshow', function() {
+            document.getElementById('pageTransition').classList.remove('active');
+        });
     </script>
 </body>
 </html>

@@ -3,49 +3,54 @@ using Microsoft.AspNetCore.Mvc;
 namespace TRAVEL.Controllers
 {
     /// <summary>
-    /// Controller for Admin Panel Views
+    /// Controller for Admin Views
     /// </summary>
+    [Route("admin")]
     public class AdminViewController : Controller
     {
         /// <summary>
-        /// Admin Dashboard - route: /admin
+        /// Admin Dashboard
         /// </summary>
-        [HttpGet]
-        [Route("admin")]
-        [Route("admin/index")]
-        [Route("admin/dashboard")]
-        public IActionResult Index()
+        [HttpGet("")]
+        [HttpGet("dashboard")]
+        public IActionResult Dashboard()
         {
-            return View("~/Views/Admin/Index.cshtml");
+            return View("~/Views/Admin/Dashboard.cshtml");
         }
 
         /// <summary>
-        /// Packages Management - route: /admin/packages
+        /// Admin Profile
         /// </summary>
-        [HttpGet]
-        [Route("admin/packages")]
+        [HttpGet("profile")]
+        public IActionResult Profile()
+        {
+            return View("~/Views/Admin/Profile.cshtml");
+        }
+
+        /// <summary>
+        /// Admin Packages List
+        /// </summary>
+        [HttpGet("packages")]
         public IActionResult Packages()
         {
             return View("~/Views/Admin/Packages.cshtml");
         }
 
         /// <summary>
-        /// Create New Package - route: /admin/packages/create
+        /// Create New Package (no ID)
         /// </summary>
-        [HttpGet]
-        [Route("admin/packages/create")]
-        [Route("admin/package/create")]
+        [HttpGet("packages/edit")]
+        [HttpGet("packages/create")]
         public IActionResult CreatePackage()
         {
+            ViewData["PackageId"] = null;
             return View("~/Views/Admin/EditPackage.cshtml");
         }
 
         /// <summary>
-        /// Edit Package - route: /admin/packages/edit/{id}
+        /// Edit Existing Package (with ID)
         /// </summary>
-        [HttpGet]
-        [Route("admin/packages/edit/{id:int}")]
-        [Route("admin/package/edit/{id:int}")]
+        [HttpGet("packages/edit/{id:int}")]
         public IActionResult EditPackage(int id)
         {
             ViewData["PackageId"] = id;
@@ -53,44 +58,48 @@ namespace TRAVEL.Controllers
         }
 
         /// <summary>
-        /// Bookings Management - route: /admin/bookings
+        /// Admin Bookings
         /// </summary>
-        [HttpGet]
-        [Route("admin/bookings")]
+        [HttpGet("bookings")]
         public IActionResult Bookings()
         {
             return View("~/Views/Admin/Bookings.cshtml");
         }
 
         /// <summary>
-        /// Users Management - route: /admin/users
+        /// Admin Users
         /// </summary>
-        [HttpGet]
-        [Route("admin/users")]
+        [HttpGet("users")]
         public IActionResult Users()
         {
             return View("~/Views/Admin/Users.cshtml");
         }
 
         /// <summary>
-        /// Waiting List Management - route: /admin/waiting-list
+        /// Admin Reviews
         /// </summary>
-        [HttpGet]
-        [Route("admin/waiting-list")]
-        [Route("admin/waitlist")]
-        public IActionResult WaitingList()
+        [HttpGet("reviews")]
+        public IActionResult Reviews()
         {
-            return View("~/Views/Admin/WaitingList.cshtml");
+            return View("~/Views/Admin/Reviews.cshtml");
         }
 
         /// <summary>
-        /// Admin Profile - route: /admin/profile
+        /// Admin Prices/Discounts
         /// </summary>
-        [HttpGet]
-        [Route("admin/profile")]
-        public IActionResult Profile()
+        [HttpGet("prices")]
+        public IActionResult Prices()
         {
-            return View("~/Views/Admin/Profile.cshtml");
+            return View("~/Views/Admin/Prices.cshtml");
+        }
+
+        /// <summary>
+        /// Admin Settings
+        /// </summary>
+        [HttpGet("settings")]
+        public IActionResult Settings()
+        {
+            return View("~/Views/Admin/Settings.cshtml");
         }
     }
 }
