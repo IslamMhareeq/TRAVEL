@@ -8,7 +8,7 @@ namespace TRAVEL.Controllers
     public class CartViewController : Controller
     {
         /// <summary>
-        /// Shopping Cart page - route: /cart
+        /// Cart page - shows all items in cart
         /// </summary>
         [HttpGet]
         [Route("cart")]
@@ -18,13 +18,25 @@ namespace TRAVEL.Controllers
         }
 
         /// <summary>
-        /// Checkout page - route: /checkout
+        /// Checkout page
         /// </summary>
         [HttpGet]
+        [Route("cart/checkout")]
         [Route("checkout")]
         public IActionResult Checkout()
         {
             return View("~/Views/Cart/Checkout.cshtml");
+        }
+
+        /// <summary>
+        /// Order confirmation page
+        /// </summary>
+        [HttpGet]
+        [Route("cart/confirmation")]
+        [Route("order/confirmation")]
+        public IActionResult Confirmation()
+        {
+            return View("~/Views/Cart/Confirmation.cshtml");
         }
     }
 }

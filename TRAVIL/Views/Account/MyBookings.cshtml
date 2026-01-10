@@ -1,35 +1,75 @@
 @{
-    ViewData["Title"] = "My Bookings - TRAVIL";
+    ViewData["Title"] = "My Bookings";
     Layout = null;
 }
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link rel="stylesheet" href="/css/site.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings - TRAVIL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --color-bg: #0a0a0f;
+            --color-surface: #12121a;
+            --color-surface-2: #1a1a24;
+            --color-border: #2a2a3a;
+            --color-gold: #d4a853;
+            --color-gold-hover: #e4b863;
+            --color-white: #ffffff;
+            --color-silver: #a0a0b0;
+            --color-success: #3fb950;
+            --color-warning: #d29922;
+            --color-danger: #f85149;
+            --color-info: #58a6ff;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --space-1: 4px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-5: 24px;
+            --space-6: 32px;
+            --sidebar-width: 260px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--color-bg);
+            color: var(--color-white);
+            min-height: 100vh;
+        }
+
         .dashboard-layout {
             display: flex;
             min-height: 100vh;
         }
 
+        /* Sidebar */
         .sidebar {
-            width: 260px;
-            background: var(--color-navy);
+            width: var(--sidebar-width);
+            background: var(--color-surface);
             border-right: 1px solid var(--color-border);
             position: fixed;
             top: 0;
             left: 0;
-            bottom: 0;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             z-index: 100;
+            transition: transform 0.3s ease;
         }
 
         .sidebar-header {
@@ -38,35 +78,21 @@
         }
 
         .sidebar-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-gold);
+            text-decoration: none;
             display: flex;
             align-items: center;
-            gap: var(--space-3);
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--color-white);
+            gap: var(--space-2);
         }
-
-            .sidebar-logo i {
-                color: var(--color-gold);
-            }
 
         .sidebar-nav {
             flex: 1;
             padding: var(--space-4);
-            overflow-y: auto;
-        }
-
-        .nav-section {
-            margin-bottom: var(--space-6);
-        }
-
-        .nav-section-title {
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: var(--color-muted);
-            margin-bottom: var(--space-3);
-            padding: 0 var(--space-3);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
         }
 
         .nav-item {
@@ -74,19 +100,19 @@
             align-items: center;
             gap: var(--space-3);
             padding: var(--space-3) var(--space-4);
-            border-radius: var(--radius-md);
             color: var(--color-silver);
-            transition: all var(--transition-fast);
-            margin-bottom: var(--space-1);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease;
         }
 
-            .nav-item:hover {
-                background: var(--color-slate);
+            .nav-item:hover, .nav-item.active {
+                background: var(--color-surface-2);
                 color: var(--color-white);
             }
 
             .nav-item.active {
-                background: rgba(212, 168, 83, 0.1);
+                background: linear-gradient(135deg, rgba(212, 168, 83, 0.2), rgba(212, 168, 83, 0.1));
                 color: var(--color-gold);
             }
 
@@ -109,8 +135,8 @@
         .user-avatar {
             width: 40px;
             height: 40px;
-            border-radius: var(--radius-full);
-            background: var(--color-gold);
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-gold), #b8934a);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -120,360 +146,350 @@
 
         .user-details {
             flex: 1;
-            min-width: 0;
         }
 
         .user-name {
-            font-weight: 500;
-            color: var(--color-white);
+            font-weight: 600;
+            font-size: 0.9rem;
         }
 
         .user-email {
-            font-size: 0.8125rem;
-            color: var(--color-muted);
+            font-size: 0.8rem;
+            color: var(--color-silver);
         }
 
+        /* Main Content */
         .main-content {
             flex: 1;
-            margin-left: 260px;
+            margin-left: var(--sidebar-width);
             padding: var(--space-6);
         }
 
-        .page-header {
+        .header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: var(--space-6);
+            flex-wrap: wrap;
+            gap: var(--space-4);
         }
 
-            .page-header h1 {
+            .header h2 {
                 font-size: 1.75rem;
-                font-weight: 600;
-                color: var(--color-white);
+                font-weight: 700;
             }
 
-        .tabs {
+        .subtitle {
+            color: var(--color-silver);
+            margin-top: var(--space-1);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-gold), #b8934a);
+            color: var(--color-bg);
+        }
+
+            .btn-primary:hover {
+                background: linear-gradient(135deg, var(--color-gold-hover), var(--color-gold));
+                transform: translateY(-2px);
+            }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--color-border);
+            color: var(--color-white);
+        }
+
+            .btn-outline:hover {
+                background: var(--color-surface-2);
+                border-color: var(--color-gold);
+            }
+
+        .btn-sm {
+            padding: var(--space-2) var(--space-3);
+            font-size: 0.85rem;
+        }
+
+        .btn-danger {
+            background: var(--color-danger);
+            color: white;
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
             display: flex;
             gap: var(--space-2);
-            margin-bottom: var(--space-6);
-            border-bottom: 1px solid var(--color-border);
-            padding-bottom: var(--space-3);
+            margin-bottom: var(--space-5);
+            flex-wrap: wrap;
         }
 
-        .tab-btn {
-            padding: var(--space-3) var(--space-5);
-            background: transparent;
-            border: none;
+        .filter-tab {
+            padding: var(--space-2) var(--space-4);
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
             color: var(--color-silver);
-            font-weight: 500;
             cursor: pointer;
-            border-radius: var(--radius-md) var(--radius-md) 0 0;
-            transition: all var(--transition-fast);
+            transition: all 0.2s;
         }
 
-            .tab-btn:hover {
-                color: var(--color-white);
-            }
-
-            .tab-btn.active {
-                background: var(--color-charcoal);
+            .filter-tab:hover, .filter-tab.active {
+                background: var(--color-surface-2);
+                border-color: var(--color-gold);
                 color: var(--color-gold);
             }
 
-            .tab-btn .count {
-                background: var(--color-slate);
-                padding: 2px 8px;
-                border-radius: var(--radius-full);
-                font-size: 0.75rem;
-                margin-left: var(--space-2);
-            }
-
-            .tab-btn.active .count {
-                background: var(--color-gold);
-                color: var(--color-bg);
-            }
-
+        /* Bookings Grid */
         .bookings-grid {
             display: grid;
-            gap: var(--space-5);
+            gap: var(--space-4);
         }
 
         .booking-card {
-            background: var(--color-charcoal);
+            background: var(--color-surface);
             border: 1px solid var(--color-border);
             border-radius: var(--radius-lg);
             overflow: hidden;
             display: grid;
-            grid-template-columns: 250px 1fr;
-            transition: all var(--transition-normal);
+            grid-template-columns: 200px 1fr auto;
+            transition: all 0.3s;
         }
 
             .booking-card:hover {
                 border-color: var(--color-gold);
+                transform: translateY(-2px);
             }
 
         .booking-image {
-            position: relative;
-            height: 200px;
-        }
-
-            .booking-image img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-
-        .booking-countdown {
-            position: absolute;
-            top: var(--space-3);
-            left: var(--space-3);
-            background: rgba(0,0,0,0.7);
-            padding: var(--space-2) var(--space-3);
-            border-radius: var(--radius-md);
-        }
-
-            .booking-countdown .days {
-                font-size: 1.25rem;
-                font-weight: 700;
-                color: var(--color-gold);
-            }
-
-            .booking-countdown .label {
-                font-size: 0.75rem;
-                color: var(--color-silver);
-            }
-
-        .booking-status-badge {
-            position: absolute;
-            top: var(--space-3);
-            right: var(--space-3);
-            padding: var(--space-1) var(--space-3);
-            border-radius: var(--radius-sm);
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-            .booking-status-badge.confirmed {
-                background: var(--color-success);
-                color: white;
-            }
-
-            .booking-status-badge.pending {
-                background: var(--color-warning);
-                color: var(--color-bg);
-            }
-
-            .booking-status-badge.cancelled {
-                background: var(--color-error);
-                color: white;
-            }
-
-            .booking-status-badge.completed {
-                background: var(--color-info);
-                color: white;
-            }
-
-        .booking-content {
-            padding: var(--space-5);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .booking-header {
-            margin-bottom: var(--space-4);
-        }
-
-        .booking-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--color-white);
-            margin-bottom: var(--space-2);
-        }
-
-        .booking-location {
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
-            color: var(--color-gold);
-            font-size: 0.875rem;
+            width: 100%;
+            height: 100%;
+            min-height: 150px;
+            object-fit: cover;
         }
 
         .booking-details {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--space-4);
-            margin-bottom: var(--space-4);
-            padding: var(--space-4);
-            background: var(--color-slate);
-            border-radius: var(--radius-md);
+            padding: var(--space-5);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
         }
 
-        .booking-detail {
-            text-align: center;
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
         }
 
-        .booking-detail-label {
-            font-size: 0.75rem;
-            color: var(--color-muted);
-            margin-bottom: var(--space-1);
-        }
-
-        .booking-detail-value {
+        .booking-destination {
+            font-size: 1.25rem;
             font-weight: 600;
-            color: var(--color-white);
         }
 
-        .booking-ref {
-            font-size: 0.8125rem;
+        .booking-reference {
+            font-size: 0.85rem;
             color: var(--color-silver);
-            margin-bottom: var(--space-4);
+            background: var(--color-surface-2);
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
         }
 
-            .booking-ref strong {
+        .booking-meta {
+            display: flex;
+            gap: var(--space-5);
+            flex-wrap: wrap;
+        }
+
+        .booking-meta-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--color-silver);
+            font-size: 0.9rem;
+        }
+
+            .booking-meta-item i {
                 color: var(--color-gold);
             }
 
-        .booking-actions {
-            display: flex;
-            gap: var(--space-3);
-            margin-top: auto;
+        .booking-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
         }
 
-        .show-past-toggle {
+            .booking-status.confirmed {
+                background: rgba(63, 185, 80, 0.2);
+                color: var(--color-success);
+            }
+
+            .booking-status.pending {
+                background: rgba(210, 153, 34, 0.2);
+                color: var(--color-warning);
+            }
+
+            .booking-status.cancelled {
+                background: rgba(248, 81, 73, 0.2);
+                color: var(--color-danger);
+            }
+
+            .booking-status.completed {
+                background: rgba(88, 166, 255, 0.2);
+                color: var(--color-info);
+            }
+
+        .booking-actions {
+            padding: var(--space-5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: var(--space-3);
+            border-left: 1px solid var(--color-border);
+        }
+
+        .booking-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-gold);
+            text-align: center;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: var(--space-6) * 2;
+            color: var(--color-silver);
+        }
+
+            .empty-state i {
+                font-size: 4rem;
+                margin-bottom: var(--space-5);
+                opacity: 0.5;
+            }
+
+            .empty-state h3 {
+                font-size: 1.5rem;
+                color: var(--color-white);
+                margin-bottom: var(--space-3);
+            }
+
+            .empty-state p {
+                margin-bottom: var(--space-5);
+            }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            padding: var(--space-6) * 2;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--color-border);
+            border-top-color: var(--color-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @@keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--color-surface-2);
+            border: 1px solid var(--color-border);
+            padding: var(--space-4) var(--space-5);
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             gap: var(--space-3);
-            margin-bottom: var(--space-4);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
         }
 
-        .toggle-switch {
-            position: relative;
-            width: 44px;
-            height: 24px;
-            background: var(--color-slate);
-            border-radius: var(--radius-full);
-            cursor: pointer;
-            transition: background var(--transition-fast);
-        }
-
-            .toggle-switch.active {
-                background: var(--color-gold);
+            .toast.show {
+                transform: translateY(0);
+                opacity: 1;
             }
 
-            .toggle-switch::after {
-                content: '';
-                position: absolute;
-                top: 2px;
-                left: 2px;
-                width: 20px;
-                height: 20px;
-                background: white;
-                border-radius: var(--radius-full);
-                transition: transform var(--transition-fast);
+            .toast.success {
+                border-color: var(--color-success);
             }
 
-            .toggle-switch.active::after {
-                transform: translateX(20px);
+            .toast.error {
+                border-color: var(--color-danger);
             }
 
+        /* Mobile */
         .mobile-menu-btn {
             display: none;
+            background: none;
+            border: none;
+            color: var(--color-white);
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-right: var(--space-3);
         }
 
         .sidebar-overlay {
             display: none;
             position: fixed;
-            inset: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background: rgba(0,0,0,0.5);
             z-index: 99;
         }
 
-        /* Review Modal */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all var(--transition-normal);
-        }
-
-            .modal-overlay.active {
-                opacity: 1;
-                visibility: visible;
-            }
-
-        .modal {
-            background: var(--color-charcoal);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-lg);
-            width: 100%;
-            max-width: 500px;
-        }
-
-        .modal-header {
-            padding: var(--space-5);
-            border-bottom: 1px solid var(--color-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-            .modal-header h3 {
-                font-size: 1.25rem;
-                font-weight: 600;
-                color: var(--color-white);
-            }
-
-        .modal-close {
-            background: none;
-            border: none;
-            color: var(--color-silver);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            padding: var(--space-5);
-        }
-
-        .modal-footer {
-            padding: var(--space-5);
-            border-top: 1px solid var(--color-border);
-            display: flex;
-            justify-content: flex-end;
-            gap: var(--space-3);
-        }
-
-        .star-rating {
-            display: flex;
-            gap: var(--space-2);
-            margin-bottom: var(--space-4);
-        }
-
-            .star-rating i {
-                font-size: 1.5rem;
-                color: var(--color-muted);
-                cursor: pointer;
-                transition: color var(--transition-fast);
-            }
-
-                .star-rating i.active, .star-rating i:hover {
-                    color: var(--color-gold);
-                }
-
         @@media (max-width: 1024px) {
+            .booking-card {
+                grid-template-columns: 150px 1fr;
+            }
+
+            .booking-actions {
+                grid-column: span 2;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                border-left: none;
+                border-top: 1px solid var(--color-border);
+            }
+        }
+
+        @@media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
-                transition: transform var(--transition-normal);
             }
 
-                .sidebar.open {
+                .sidebar.active {
                     transform: translateX(0);
                 }
 
@@ -483,20 +499,11 @@
 
             .main-content {
                 margin-left: 0;
+                padding: var(--space-4);
             }
 
             .mobile-menu-btn {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 40px;
-                height: 40px;
-                background: var(--color-slate);
-                border: none;
-                border-radius: var(--radius-md);
-                color: var(--color-pearl);
-                cursor: pointer;
-                margin-right: var(--space-4);
+                display: block;
             }
 
             .booking-card {
@@ -504,281 +511,321 @@
             }
 
             .booking-image {
-                height: 180px;
+                height: 150px;
             }
 
-            .booking-details {
-                grid-template-columns: 1fr;
+            .booking-actions {
+                border-left: none;
+                border-top: 1px solid var(--color-border);
             }
         }
     </style>
 </head>
 <body>
     <div class="dashboard-layout">
-        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-
+        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header"><a href="/" class="sidebar-logo"><i class="fas fa-compass"></i> TRAVIL</a></div>
+            <div class="sidebar-header">
+                <a href="/" class="sidebar-logo" onclick="navigateTo('/', event)">
+                    <i class="fas fa-plane"></i> TRAVIL
+                </a>
+            </div>
+
             <nav class="sidebar-nav">
-                <div class="nav-section">
-                    <div class="nav-section-title">Main</div>
-                    <a href="/account/dashboard" class="nav-item"><i class="fas fa-th-large"></i> Dashboard</a>
-                    <a href="/packages" class="nav-item"><i class="fas fa-globe"></i> Browse Packages</a>
-                </div>
-                <div class="nav-section">
-                    <div class="nav-section-title">My Travel</div>
-                    <a href="/account/bookings" class="nav-item active"><i class="fas fa-calendar-check"></i> My Bookings</a>
-                    <a href="/account/wishlist" class="nav-item"><i class="fas fa-heart"></i> Wishlist</a>
-                    <a href="/cart" class="nav-item"><i class="fas fa-shopping-cart"></i> Cart</a>
-                </div>
-                <div class="nav-section">
-                    <div class="nav-section-title">Account</div>
-                    <a href="/account/profile" class="nav-item"><i class="fas fa-user"></i> Profile</a>
-                    <a href="/account/reviews" class="nav-item"><i class="fas fa-star"></i> My Reviews</a>
-                    <a href="#" onclick="logout(event)" class="nav-item"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                </div>
+                <a href="/account/dashboard" class="nav-item" onclick="navigateTo('/account/dashboard', event)">
+                    <i class="fas fa-th-large"></i><span>Dashboard</span>
+                </a>
+                <a href="/account/bookings" class="nav-item active">
+                    <i class="fas fa-calendar-check"></i><span>My Bookings</span>
+                </a>
+                <a href="/account/wishlist" class="nav-item" onclick="navigateTo('/account/wishlist', event)">
+                    <i class="fas fa-heart"></i><span>Wishlist</span>
+                </a>
+                <a href="/packages" class="nav-item" onclick="navigateTo('/packages', event)">
+                    <i class="fas fa-suitcase"></i><span>Browse Packages</span>
+                </a>
+                <a href="/account/profile" class="nav-item" onclick="navigateTo('/account/profile', event)">
+                    <i class="fas fa-user"></i><span>Profile</span>
+                </a>
+                <a href="#" class="nav-item" onclick="logout(event)">
+                    <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+                </a>
             </nav>
+
             <div class="sidebar-footer">
                 <div class="user-info">
                     <div class="user-avatar" id="userAvatar">U</div>
                     <div class="user-details">
                         <div class="user-name" id="userName">User</div>
-                        <div class="user-email" id="userEmail">user&#64;email.com</div>
+                        <div class="user-email" id="userEmail">user@example.com</div>
                     </div>
                 </div>
             </div>
         </aside>
 
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Main Content -->
         <main class="main-content">
-            <div class="page-header">
-                <div style="display: flex; align-items: center;">
-                    <button class="mobile-menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
-                    <h1>My Bookings</h1>
+            <div class="header">
+                <div>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2>My Bookings</h2>
+                    <p class="subtitle">View and manage your travel bookings</p>
                 </div>
+                <a href="/packages" class="btn btn-primary" onclick="navigateTo('/packages', event)">
+                    <i class="fas fa-plus"></i> Book New Trip
+                </a>
             </div>
 
-            <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('upcoming')">Upcoming <span class="count" id="upcomingCount">0</span></button>
-                <button class="tab-btn" onclick="switchTab('past')">Past Trips <span class="count" id="pastCount">0</span></button>
-                <button class="tab-btn" onclick="switchTab('cancelled')">Cancelled <span class="count" id="cancelledCount">0</span></button>
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">All Bookings</button>
+                <button class="filter-tab" data-filter="confirmed">Confirmed</button>
+                <button class="filter-tab" data-filter="pending">Pending</button>
+                <button class="filter-tab" data-filter="cancelled">Cancelled</button>
+                <button class="filter-tab" data-filter="completed">Completed</button>
             </div>
 
-            <div class="bookings-grid" id="bookingsGrid">
-                <div class="loading"><div class="spinner"></div><p>Loading your bookings...</p></div>
+            <!-- Bookings Container -->
+            <div id="bookingsContainer">
+                <div class="loading" id="loader">
+                    <div class="spinner"></div>
+                </div>
+
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <i class="fas fa-calendar-times"></i>
+                    <h3>No Bookings Yet</h3>
+                    <p>You haven't made any bookings yet. Start exploring our amazing travel packages!</p>
+                    <a href="/packages" class="btn btn-primary" onclick="navigateTo('/packages', event)">
+                        <i class="fas fa-search"></i> Browse Packages
+                    </a>
+                </div>
+
+                <div class="bookings-grid" id="bookingsGrid"></div>
             </div>
         </main>
     </div>
 
-    <!-- Review Modal -->
-    <div class="modal-overlay" id="reviewModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>Write a Review</h3>
-                <button class="modal-close" onclick="closeReviewModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="reviewPackageId" />
-                <div class="form-group">
-                    <label class="form-label">Rating</label>
-                    <div class="star-rating" id="starRating">
-                        <i class="far fa-star" data-rating="1"></i>
-                        <i class="far fa-star" data-rating="2"></i>
-                        <i class="far fa-star" data-rating="3"></i>
-                        <i class="far fa-star" data-rating="4"></i>
-                        <i class="far fa-star" data-rating="5"></i>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Your Review</label>
-                    <textarea class="form-control" id="reviewComment" rows="4" placeholder="Share your experience..."></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" onclick="closeReviewModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="submitReview()">Submit Review</button>
-            </div>
-        </div>
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Message</span>
     </div>
 
-    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">Success!</span></div>
-
     <script>
-        var token = localStorage.getItem('token');
-        var user = localStorage.getItem('user');
-        if (!token || !user) window.location.href = '/account/login';
+        let allBookings = [];
+        let currentFilter = 'all';
 
-        var userData = null;
-        try { userData = JSON.parse(user); } catch (e) { window.location.href = '/account/login'; }
-
-        var allBookings = [];
-        var currentTab = 'upcoming';
-        var selectedRating = 0;
-
-        function showToast(msg, type) { type = type || 'success'; var t = document.getElementById('toast'); document.getElementById('toastMessage').textContent = msg; t.className = 'toast ' + type; t.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle'; t.classList.add('show'); setTimeout(function() { t.classList.remove('show'); }, 3000); }
-        function formatDate(d) { if (!d) return ''; return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
-        function daysUntil(d) { if (!d) return 0; return Math.ceil((new Date(d) - new Date()) / 86400000); }
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
-        function logout(e) { e.preventDefault(); localStorage.removeItem('token'); localStorage.removeItem('user'); window.location.href = '/'; }
-
-        function updateUserInfo() {
-            if (!userData) return;
-            var initials = ((userData.firstName || 'U')[0] + (userData.lastName || '')[0]).toUpperCase();
-            document.getElementById('userAvatar').textContent = initials;
-            document.getElementById('userName').textContent = userData.firstName + ' ' + (userData.lastName || '');
-            document.getElementById('userEmail').textContent = userData.email || '';
+        function navigateTo(url, event) {
+            if (event) event.preventDefault();
+            window.location.href = url;
         }
 
-        async function loadBookings() {
-            try {
-                var res = await fetch('/api/booking/my-bookings', { headers: { 'Authorization': 'Bearer ' + token } });
-                var data = await res.json();
-                allBookings = data.data || data || [];
-                updateCounts();
+        function logout(event) {
+            if (event) event.preventDefault();
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            navigateTo('/account/login');
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.className = `toast ${type} show`;
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        function getStatusClass(status) {
+            const s = (status || '').toLowerCase();
+            if (s === 'confirmed') return 'confirmed';
+            if (s === 'pending') return 'pending';
+            if (s === 'cancelled') return 'cancelled';
+            if (s === 'completed') return 'completed';
+            return 'pending';
+        }
+
+        function getStatusIcon(status) {
+            const s = (status || '').toLowerCase();
+            if (s === 'confirmed') return 'fa-check-circle';
+            if (s === 'pending') return 'fa-clock';
+            if (s === 'cancelled') return 'fa-times-circle';
+            if (s === 'completed') return 'fa-flag-checkered';
+            return 'fa-clock';
+        }
+
+        // Mobile menu
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        });
+
+        document.getElementById('sidebarOverlay').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('active');
+            this.classList.remove('active');
+        });
+
+        // Filter tabs
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.filter;
                 renderBookings();
-            } catch (e) {
-                console.error('Error:', e);
-                document.getElementById('bookingsGrid').innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Failed to load bookings</p></div>';
-            }
-        }
-
-        function updateCounts() {
-            var now = new Date();
-            var upcoming = allBookings.filter(function(b) { return b.status !== 'Cancelled' && new Date(b.package?.startDate) > now; });
-            var past = allBookings.filter(function(b) { return b.status !== 'Cancelled' && new Date(b.package?.endDate) < now; });
-            var cancelled = allBookings.filter(function(b) { return b.status === 'Cancelled'; });
-            document.getElementById('upcomingCount').textContent = upcoming.length;
-            document.getElementById('pastCount').textContent = past.length;
-            document.getElementById('cancelledCount').textContent = cancelled.length;
-        }
-
-        function switchTab(tab) {
-            currentTab = tab;
-            document.querySelectorAll('.tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
-            event.target.classList.add('active');
-            renderBookings();
-        }
+            });
+        });
 
         function renderBookings() {
-            var grid = document.getElementById('bookingsGrid');
-            var now = new Date();
-            var filtered = [];
+            const grid = document.getElementById('bookingsGrid');
+            const emptyState = document.getElementById('emptyState');
 
-            if (currentTab === 'upcoming') {
-                filtered = allBookings.filter(function(b) { return b.status !== 'Cancelled' && new Date(b.package?.startDate) > now; });
-            } else if (currentTab === 'past') {
-                filtered = allBookings.filter(function(b) { return b.status !== 'Cancelled' && new Date(b.package?.endDate) < now; });
-            } else {
-                filtered = allBookings.filter(function(b) { return b.status === 'Cancelled'; });
+            let filtered = allBookings;
+            if (currentFilter !== 'all') {
+                filtered = allBookings.filter(b => (b.status || '').toLowerCase() === currentFilter);
             }
 
             if (filtered.length === 0) {
-                var msg = currentTab === 'upcoming' ? 'No upcoming trips' : currentTab === 'past' ? 'No past trips' : 'No cancelled bookings';
-                grid.innerHTML = '<div class="empty-state"><i class="fas fa-suitcase"></i><h3>' + msg + '</h3><p>' + (currentTab === 'upcoming' ? 'Start planning your next adventure!' : '') + '</p>' + (currentTab === 'upcoming' ? '<a href="/packages" class="btn btn-primary" style="margin-top: var(--space-4);">Browse Packages</a>' : '') + '</div>';
+                grid.innerHTML = '';
+                emptyState.style.display = 'block';
                 return;
             }
 
-            var html = '';
-            filtered.forEach(function(b) {
-                var pkg = b.package || {};
-                var days = daysUntil(pkg.startDate);
-                var isPast = new Date(pkg.endDate) < now;
-                var canCancel = !isPast && days > 3 && b.status !== 'Cancelled';
-                var statusClass = b.status === 'Confirmed' ? 'confirmed' : b.status === 'Pending' ? 'pending' : b.status === 'Cancelled' ? 'cancelled' : 'completed';
-                var img = pkg.images && pkg.images.length > 0 ? (pkg.images[0].startsWith('http') ? pkg.images[0] : '/images/travel-packages/' + pkg.images[0]) : 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80';
+            emptyState.style.display = 'none';
+            grid.innerHTML = filtered.map(booking => {
+                const pkg = booking.travelPackage || {};
+                const imageUrl = pkg.imageUrl || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80';
 
-                html += '<div class="booking-card">' +
-                    '<div class="booking-image">' +
-                        '<img src="' + img + '" alt="' + (pkg.destination || 'Trip') + '" />' +
-                        (!isPast && b.status !== 'Cancelled' ? '<div class="booking-countdown"><div class="days">' + Math.max(0, days) + '</div><div class="label">days left</div></div>' : '') +
-                        '<span class="booking-status-badge ' + statusClass + '">' + (isPast && b.status !== 'Cancelled' ? 'Completed' : b.status || 'Pending') + '</span>' +
-                    '</div>' +
-                    '<div class="booking-content">' +
-                        '<div class="booking-header">' +
-                            '<div class="booking-title">' + (pkg.destination || 'Trip') + ' Package</div>' +
-                            '<div class="booking-location"><i class="fas fa-map-marker-alt"></i> ' + (pkg.destination || '') + ', ' + (pkg.country || '') + '</div>' +
-                        '</div>' +
-                        '<div class="booking-details">' +
-                            '<div class="booking-detail"><div class="booking-detail-label">Check-in</div><div class="booking-detail-value">' + formatDate(pkg.startDate) + '</div></div>' +
-                            '<div class="booking-detail"><div class="booking-detail-label">Check-out</div><div class="booking-detail-value">' + formatDate(pkg.endDate) + '</div></div>' +
-                            '<div class="booking-detail"><div class="booking-detail-label">Total Paid</div><div class="booking-detail-value">$' + Math.round(b.totalPrice || pkg.price || 0) + '</div></div>' +
-                        '</div>' +
-                        '<div class="booking-ref">Booking Reference: <strong>' + (b.bookingReference || b.bookingId || 'N/A') + '</strong></div>' +
-                        '<div class="booking-actions">' +
-                            '<a href="/booking/itinerary/' + b.bookingId + '" class="btn btn-outline btn-sm"><i class="fas fa-file-pdf"></i> Download Itinerary</a>' +
-                            (isPast && b.status !== 'Cancelled' ? '<button class="btn btn-primary btn-sm" onclick="openReviewModal(' + pkg.packageId + ')"><i class="fas fa-star"></i> Write Review</button>' : '') +
-                            (canCancel ? '<button class="btn btn-danger btn-sm" onclick="cancelBooking(' + b.bookingId + ')"><i class="fas fa-times"></i> Cancel</button>' : '') +
-                        '</div>' +
-                    '</div>' +
-                '</div>';
-            });
-            grid.innerHTML = html;
+                return `
+                    <div class="booking-card">
+                        <img src="${imageUrl}" alt="${pkg.destination || 'Package'}" class="booking-image"
+                             onerror="this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80'">
+                        <div class="booking-details">
+                            <div class="booking-header">
+                                <div class="booking-destination">${pkg.destination || 'Unknown Destination'}</div>
+                                <div class="booking-reference">${booking.bookingReference || 'N/A'}</div>
+                            </div>
+                            <div class="booking-meta">
+                                <div class="booking-meta-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>${pkg.country || 'N/A'}</span>
+                                </div>
+                                <div class="booking-meta-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>${formatDate(pkg.startDate)} - ${formatDate(pkg.endDate)}</span>
+                                </div>
+                                <div class="booking-meta-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>${booking.numberOfGuests || 1} Guest(s)</span>
+                                </div>
+                                <div class="booking-meta-item">
+                                    <i class="fas fa-door-open"></i>
+                                    <span>${booking.numberOfRooms || 1} Room(s)</span>
+                                </div>
+                            </div>
+                            <span class="booking-status ${getStatusClass(booking.status)}">
+                                <i class="fas ${getStatusIcon(booking.status)}"></i>
+                                ${booking.status || 'Pending'}
+                            </span>
+                        </div>
+                        <div class="booking-actions">
+                            <div class="booking-price">$${(booking.totalPrice || 0).toLocaleString()}</div>
+                            <a href="/booking/details/${booking.bookingId}" class="btn btn-outline btn-sm" onclick="navigateTo('/booking/details/${booking.bookingId}', event)">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
+                            ${booking.status === 'Pending' ? `
+                                <button class="btn btn-danger btn-sm" onclick="cancelBooking(${booking.bookingId})">
+                                    <i class="fas fa-times"></i> Cancel
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
         async function cancelBooking(bookingId) {
             if (!confirm('Are you sure you want to cancel this booking?')) return;
+
+            const token = localStorage.getItem('token');
             try {
-                var res = await fetch('/api/booking/' + bookingId + '/cancel', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token } });
-                if (res.ok) {
+                const response = await fetch(`/api/booking/${bookingId}/cancel`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ reason: 'Cancelled by user' })
+                });
+
+                if (response.ok) {
                     showToast('Booking cancelled successfully');
                     loadBookings();
                 } else {
-                    showToast('Failed to cancel booking', 'error');
+                    const error = await response.json();
+                    showToast(error.message || 'Failed to cancel booking', 'error');
                 }
-            } catch (e) { showToast('Error cancelling booking', 'error'); }
-        }
-
-        function openReviewModal(packageId) {
-            document.getElementById('reviewPackageId').value = packageId;
-            document.getElementById('reviewModal').classList.add('active');
-            selectedRating = 0;
-            updateStars();
-        }
-
-        function closeReviewModal() {
-            document.getElementById('reviewModal').classList.remove('active');
-            document.getElementById('reviewComment').value = '';
-            selectedRating = 0;
-            updateStars();
-        }
-
-        function updateStars() {
-            document.querySelectorAll('#starRating i').forEach(function(star, i) {
-                star.className = i < selectedRating ? 'fas fa-star active' : 'far fa-star';
-            });
-        }
-
-        document.getElementById('starRating').addEventListener('click', function(e) {
-            if (e.target.tagName === 'I') {
-                selectedRating = parseInt(e.target.dataset.rating);
-                updateStars();
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('An error occurred', 'error');
             }
-        });
+        }
 
-        async function submitReview() {
-            var packageId = document.getElementById('reviewPackageId').value;
-            var comment = document.getElementById('reviewComment').value;
-
-            if (selectedRating === 0) { showToast('Please select a rating', 'error'); return; }
-            if (!comment.trim()) { showToast('Please write a review', 'error'); return; }
+        async function loadBookings() {
+            const token = localStorage.getItem('token');
+            const loader = document.getElementById('loader');
+            const emptyState = document.getElementById('emptyState');
+            const grid = document.getElementById('bookingsGrid');
 
             try {
-                var res = await fetch('/api/review/package/' + packageId, {
-                    method: 'POST',
-                    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ rating: selectedRating, comment: comment })
+                const response = await fetch('/api/booking/my-bookings', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
                 });
-                if (res.ok) {
-                    showToast('Review submitted successfully!');
-                    closeReviewModal();
+
+                loader.style.display = 'none';
+
+                if (response.ok) {
+                    const result = await response.json();
+                    allBookings = result.data || [];
+                    renderBookings();
                 } else {
-                    showToast('Failed to submit review', 'error');
+                    emptyState.style.display = 'block';
                 }
-            } catch (e) { showToast('Error submitting review', 'error'); }
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+                loader.style.display = 'none';
+                emptyState.style.display = 'block';
+            }
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            updateUserInfo();
-            loadBookings();
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async function() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+
+            if (!token || !user) {
+                navigateTo('/account/login');
+                return;
+            }
+
+            try {
+                const userData = JSON.parse(user);
+                document.getElementById('userName').textContent = `${userData.firstName || ''} ${userData.lastName || ''}`.trim();
+                document.getElementById('userEmail').textContent = userData.email || '';
+                document.getElementById('userAvatar').textContent = (userData.firstName || 'U').charAt(0).toUpperCase();
+
+                await loadBookings();
+            } catch (error) {
+                console.error('Error:', error);
+            }
         });
     </script>
 </body>

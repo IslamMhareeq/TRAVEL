@@ -11,8 +11,8 @@ namespace TRAVEL.Services
 {
     public interface ICartService
     {
-        Task<Cart> GetOrCreateCartAsync(int userId);
-        Task<Cart> GetCartAsync(int userId);
+        Task<CartModels> GetOrCreateCartAsync(int userId);
+        Task<CartModels> GetCartAsync(int userId);
         Task<CartItem?> AddToCartAsync(int userId, int packageId, int quantity = 1, int numberOfGuests = 1, string? specialRequests = null);
         Task<bool> UpdateCartItemAsync(int userId, int cartItemId, int quantity, int? numberOfGuests = null);
         Task<bool> RemoveFromCartAsync(int userId, int cartItemId);
@@ -33,7 +33,7 @@ namespace TRAVEL.Services
             _logger = logger;
         }
 
-        public async Task<Cart> GetOrCreateCartAsync(int userId)
+        public async Task<CartModels> GetOrCreateCartAsync(int userId)
         {
             var cart = await _context.Carts
                 .Include(c => c.Items)
@@ -42,7 +42,7 @@ namespace TRAVEL.Services
 
             if (cart == null)
             {
-                cart = new Cart
+                cart = new CartModels
                 {
                     UserId = userId,
                     CreatedAt = DateTime.UtcNow
@@ -56,7 +56,7 @@ namespace TRAVEL.Services
             return cart;
         }
 
-        public async Task<Cart> GetCartAsync(int userId)
+        public async Task<CartModels> GetCartAsync(int userId)
         {
             return await GetOrCreateCartAsync(userId);
         }

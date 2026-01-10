@@ -1,61 +1,104 @@
 @{
-    ViewData["Title"] = "Travel Packages - TRAVIL";
+    ViewData["Title"] = "Travel Packages";
     Layout = null;
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link rel="stylesheet" href="/css/site.css" />
+    <title>Travel Packages - TRAVIL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
+        :root {
+            --color-bg: #0a0a0f;
+            --color-navy: #0d1117;
+            --color-charcoal: #161b22;
+            --color-slate: #21262d;
+            --color-border: #30363d;
+            --color-gold: #d4a853;
+            --color-gold-muted: rgba(212, 168, 83, 0.15);
+            --color-white: #ffffff;
+            --color-silver: #8b949e;
+            --color-success: #3fb950;
+            --color-error: #f85149;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --space-1: 4px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-5: 24px;
+            --space-6: 32px;
+            --space-7: 48px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--color-bg);
+            color: var(--color-white);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--space-5);
+        }
+
+        /* Header */
         .site-header {
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1000;
-            padding: var(--space-4) var(--space-6);
-            background: rgba(10, 15, 28, 0.95);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--color-border);
+            z-index: 100;
         }
 
         .header-content {
-            max-width: var(--max-width);
-            margin: 0 auto;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
+            padding: var(--space-4) var(--space-5);
+            max-width: 1280px;
+            margin: 0 auto;
         }
 
         .logo {
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--color-white);
+            color: var(--color-gold);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
         }
-
-            .logo i {
-                color: var(--color-gold);
-            }
 
         .nav-links {
             display: flex;
-            gap: var(--space-8);
+            gap: var(--space-6);
         }
 
             .nav-links a {
                 color: var(--color-silver);
-                font-weight: 500;
-                transition: color var(--transition-fast);
+                text-decoration: none;
+                font-size: 0.9375rem;
+                transition: color 0.2s;
             }
 
                 .nav-links a:hover, .nav-links a.active {
@@ -65,165 +108,235 @@
         .header-actions {
             display: flex;
             align-items: center;
-            gap: var(--space-4);
+            gap: var(--space-3);
         }
 
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--color-gold);
+            color: var(--color-bg);
+        }
+
+            .btn-primary:hover {
+                background: #e4b863;
+                transform: translateY(-1px);
+            }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--color-border);
+            color: var(--color-white);
+        }
+
+            .btn-outline:hover {
+                border-color: var(--color-gold);
+                color: var(--color-gold);
+            }
+
+        .btn-success {
+            background: var(--color-success);
+            color: white;
+        }
+
+            .btn-success:hover {
+                background: #4fc760;
+            }
+
+        .btn-sm {
+            padding: var(--space-2) var(--space-3);
+            font-size: 0.8125rem;
+        }
+
+        /* Page Header */
         .page-header {
-            padding: 120px var(--space-6) var(--space-12);
-            background: linear-gradient(180deg, var(--color-navy) 0%, var(--color-bg) 100%);
+            background: linear-gradient(135deg, var(--color-navy), var(--color-charcoal));
+            padding: calc(var(--space-7) + 70px) 0 var(--space-7);
             text-align: center;
+            border-bottom: 1px solid var(--color-border);
         }
 
             .page-header h1 {
                 font-size: 2.5rem;
                 font-weight: 700;
-                color: var(--color-white);
                 margin-bottom: var(--space-3);
             }
 
             .page-header p {
                 color: var(--color-silver);
                 font-size: 1.125rem;
+                margin-bottom: var(--space-4);
             }
 
         .package-count {
             display: inline-flex;
             align-items: center;
             gap: var(--space-2);
-            background: rgba(212, 168, 83, 0.15);
-            border: 1px solid rgba(212, 168, 83, 0.3);
-            border-radius: var(--radius-full);
             padding: var(--space-2) var(--space-4);
+            background: var(--color-gold-muted);
+            border-radius: 20px;
             color: var(--color-gold);
             font-size: 0.875rem;
             font-weight: 500;
-            margin-top: var(--space-4);
         }
 
-        .main-content {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 0 var(--space-6) var(--space-16);
-        }
-
+        /* Filters Section */
         .filters-section {
+            background: var(--color-navy);
+            padding: var(--space-5) 0;
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 70px;
+            z-index: 50;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: 1fr repeat(6, auto);
+            gap: var(--space-3);
+            align-items: end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-1);
+        }
+
+            .filter-group label {
+                font-size: 0.75rem;
+                color: var(--color-silver);
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+        .filter-control {
+            padding: var(--space-3) var(--space-4);
             background: var(--color-charcoal);
             border: 1px solid var(--color-border);
-            border-radius: var(--radius-lg);
-            padding: var(--space-5);
-            margin-bottom: var(--space-6);
-        }
-
-        .filters-row {
-            display: flex;
-            gap: var(--space-4);
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .search-box {
-            flex: 2;
-            min-width: 250px;
-            position: relative;
-        }
-
-            .search-box i {
-                position: absolute;
-                left: var(--space-4);
-                top: 50%;
-                transform: translateY(-50%);
-                color: var(--color-muted);
-            }
-
-            .search-box input {
-                width: 100%;
-                padding: var(--space-3) var(--space-4) var(--space-3) 44px;
-                background: var(--color-slate);
-                border: 1px solid var(--color-border);
-                border-radius: var(--radius-md);
-                color: var(--color-pearl);
-                font-size: 0.9375rem;
-            }
-
-                .search-box input:focus {
-                    outline: none;
-                    border-color: var(--color-gold);
-                }
-
-        .filter-select {
-            flex: 1;
-            min-width: 150px;
-            padding: var(--space-3) var(--space-4);
-            background: var(--color-slate);
-            border: 1px solid var(--color-border);
             border-radius: var(--radius-md);
-            color: var(--color-pearl);
-            font-size: 0.9375rem;
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 12px center;
-            background-repeat: no-repeat;
-            background-size: 16px;
-            padding-right: 40px;
+            color: var(--color-white);
+            font-size: 0.875rem;
+            font-family: var(--font-main);
+            min-width: 140px;
         }
 
-            .filter-select:focus {
+            .filter-control:focus {
                 outline: none;
                 border-color: var(--color-gold);
             }
 
-        .filter-actions {
-            display: flex;
-            gap: var(--space-3);
+        .search-input {
+            width: 100%;
+            padding: var(--space-3) var(--space-4) var(--space-3) 40px;
+            background: var(--color-charcoal);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-white);
+            font-size: 0.875rem;
         }
 
-        .sale-toggle {
+            .search-input:focus {
+                outline: none;
+                border-color: var(--color-gold);
+            }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+            .search-wrapper i {
+                position: absolute;
+                left: 14px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: var(--color-silver);
+            }
+
+        .filter-toggle {
             display: flex;
             align-items: center;
             gap: var(--space-2);
             padding: var(--space-3) var(--space-4);
-            background: var(--color-slate);
+            background: var(--color-charcoal);
             border: 1px solid var(--color-border);
             border-radius: var(--radius-md);
             color: var(--color-silver);
             cursor: pointer;
-            transition: all var(--transition-fast);
+            transition: all 0.2s;
         }
 
-            .sale-toggle:hover {
+            .filter-toggle:hover {
                 border-color: var(--color-gold);
+                color: var(--color-gold);
             }
 
-            .sale-toggle.active {
-                background: var(--color-error);
-                border-color: var(--color-error);
-                color: white;
+            .filter-toggle.active {
+                background: var(--color-gold-muted);
+                border-color: var(--color-gold);
+                color: var(--color-gold);
+            }
+
+        /* Packages Section */
+        .packages-section {
+            padding: var(--space-6) 0 var(--space-7);
+        }
+
+        .results-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-5);
+            padding-bottom: var(--space-4);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .results-count {
+            color: var(--color-silver);
+            font-size: 0.9375rem;
+        }
+
+            .results-count span {
+                color: var(--color-gold);
+                font-weight: 600;
             }
 
         .packages-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: var(--space-6);
+            gap: var(--space-5);
         }
 
+        /* Package Card */
         .package-card {
             background: var(--color-charcoal);
             border: 1px solid var(--color-border);
             border-radius: var(--radius-lg);
             overflow: hidden;
-            transition: all var(--transition-normal);
+            transition: all 0.3s;
         }
 
             .package-card:hover {
-                border-color: var(--color-gold);
                 transform: translateY(-4px);
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+                border-color: var(--color-gold);
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
             }
 
         .package-image {
             position: relative;
-            height: 220px;
+            height: 200px;
             overflow: hidden;
         }
 
@@ -231,7 +344,7 @@
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
-                transition: transform var(--transition-normal);
+                transition: transform 0.5s;
             }
 
         .package-card:hover .package-image img {
@@ -247,106 +360,94 @@
             gap: var(--space-2);
         }
 
-        .package-badge {
+        .badge {
             padding: var(--space-1) var(--space-3);
+            border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 600;
-            border-radius: var(--radius-sm);
-            text-transform: uppercase;
         }
 
-            .package-badge.category {
-                background: var(--color-gold);
-                color: var(--color-bg);
-            }
-
-            .package-badge.sale {
-                background: var(--color-error);
-                color: white;
-            }
-
-        .package-wishlist {
-            position: absolute;
-            top: var(--space-3);
-            right: var(--space-3);
-            width: 36px;
-            height: 36px;
-            background: rgba(0, 0, 0, 0.5);
-            border: none;
-            border-radius: var(--radius-full);
-            color: var(--color-white);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all var(--transition-fast);
+        .badge-sale {
+            background: var(--color-success);
+            color: white;
         }
 
-            .package-wishlist:hover, .package-wishlist.active {
-                background: var(--color-error);
-            }
+        .badge-category {
+            background: var(--color-gold);
+            color: var(--color-bg);
+        }
+
+        .badge-age {
+            background: rgba(0,0,0,0.7);
+            color: white;
+        }
 
         .package-content {
-            padding: var(--space-5);
+            padding: var(--space-4);
         }
 
         .package-location {
-            font-size: 0.8125rem;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
             color: var(--color-gold);
+            font-size: 0.8125rem;
             margin-bottom: var(--space-2);
         }
 
         .package-title {
             font-size: 1.125rem;
             font-weight: 600;
-            color: var(--color-white);
             margin-bottom: var(--space-3);
+            line-height: 1.3;
         }
 
         .package-meta {
             display: flex;
             flex-wrap: wrap;
-            gap: var(--space-4);
+            gap: var(--space-3);
             margin-bottom: var(--space-4);
+            padding-bottom: var(--space-4);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
             font-size: 0.8125rem;
             color: var(--color-silver);
         }
 
-            .package-meta span {
-                display: flex;
-                align-items: center;
-                gap: var(--space-1);
+            .meta-item i {
+                color: var(--color-gold);
+                font-size: 0.75rem;
             }
 
         .package-footer {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding-top: var(--space-4);
-            border-top: 1px solid var(--color-border);
+            align-items: center;
         }
 
         .package-price {
-            display: flex;
-            align-items: baseline;
-            gap: var(--space-2);
-            flex-wrap: wrap;
         }
 
-            .package-price .current {
-                font-size: 1.5rem;
+            .package-price .old-price {
+                font-size: 0.875rem;
+                color: var(--color-silver);
+                text-decoration: line-through;
+                margin-right: var(--space-2);
+            }
+
+            .package-price .current-price {
+                font-size: 1.25rem;
                 font-weight: 700;
                 color: var(--color-gold);
             }
 
-            .package-price .original {
-                font-size: 0.875rem;
-                color: var(--color-muted);
-                text-decoration: line-through;
-            }
-
-            .package-price .per {
-                font-size: 0.8125rem;
+            .package-price .per-person {
+                font-size: 0.75rem;
                 color: var(--color-silver);
             }
 
@@ -355,80 +456,119 @@
             gap: var(--space-2);
         }
 
-        .user-menu {
-            position: relative;
-        }
-
-        .user-menu-btn {
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-            padding: var(--space-2) var(--space-3);
-            background: var(--color-slate);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-full);
-            cursor: pointer;
-        }
-
-            .user-menu-btn:hover {
-                border-color: var(--color-gold);
-            }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: var(--radius-full);
-            background: var(--color-gold);
+        /* Wishlist Button */
+        .wishlist-btn {
+            position: absolute;
+            top: var(--space-3);
+            right: var(--space-3);
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
-            color: var(--color-bg);
-            font-size: 0.875rem;
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 2;
         }
 
-        .user-menu-dropdown {
-            position: absolute;
-            top: calc(100% + 8px);
-            right: 0;
-            width: 200px;
+            .wishlist-btn:hover {
+                background: var(--color-error);
+                transform: scale(1.1);
+            }
+
+            .wishlist-btn.active {
+                background: var(--color-error);
+                color: white;
+            }
+
+                .wishlist-btn.active i {
+                    font-weight: 900;
+                }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: var(--space-7);
+            grid-column: 1 / -1;
+        }
+
+            .empty-state i {
+                font-size: 3rem;
+                color: var(--color-silver);
+                margin-bottom: var(--space-4);
+                opacity: 0.5;
+            }
+
+            .empty-state h3 {
+                margin-bottom: var(--space-2);
+            }
+
+            .empty-state p {
+                color: var(--color-silver);
+            }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: var(--space-7);
+            grid-column: 1 / -1;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--color-border);
+            border-top-color: var(--color-gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto var(--space-4);
+        }
+
+        @@keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
             background: var(--color-charcoal);
             border: 1px solid var(--color-border);
             border-radius: var(--radius-md);
-            overflow: hidden;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all var(--transition-fast);
-        }
-
-        .user-menu:hover .user-menu-dropdown {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .user-menu-dropdown a {
+            padding: var(--space-4) var(--space-5);
             display: flex;
             align-items: center;
             gap: var(--space-3);
-            padding: var(--space-3) var(--space-4);
-            color: var(--color-silver);
-            transition: all var(--transition-fast);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 2000;
         }
 
-            .user-menu-dropdown a:hover {
-                background: var(--color-slate);
-                color: var(--color-gold);
+            .toast.show {
+                transform: translateY(0);
+                opacity: 1;
             }
 
+            .toast.success i {
+                color: var(--color-success);
+            }
+
+            .toast.error i {
+                color: var(--color-error);
+            }
+
+        /* Responsive */
         @@media (max-width: 1024px) {
-            .filters-row {
-                flex-direction: column;
-            }
-
-            .search-box, .filter-select {
-                width: 100%;
+            .filters-grid {
+                grid-template-columns: 1fr 1fr;
             }
         }
 
@@ -439,6 +579,10 @@
 
             .page-header h1 {
                 font-size: 1.75rem;
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
             }
 
             .packages-grid {
@@ -470,81 +614,96 @@
             <p>Discover handcrafted journeys to the world's most incredible destinations</p>
             <div class="package-count">
                 <i class="fas fa-suitcase"></i>
-                <span id="packageCount">Loading...</span>
+                <span id="totalPackages">0</span> packages available
             </div>
         </div>
     </section>
 
-    <main class="main-content">
-        <div class="filters-section">
-            <div class="filters-row">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Search by destination, country, or keyword..." oninput="filterPackages()" />
+    <section class="filters-section">
+        <div class="container">
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label>Search</label>
+                    <div class="search-wrapper">
+                        <i class="fas fa-search"></i>
+                        <input type="text" class="search-input" id="searchInput" placeholder="Search destinations..." oninput="filterPackages()">
+                    </div>
                 </div>
-                <select class="filter-select" id="countryFilter" onchange="filterPackages()">
-                    <option value="">All Countries</option>
-                </select>
-                <select class="filter-select" id="categoryFilter" onchange="filterPackages()">
-                    <option value="">All Categories</option>
-                    <option value="0">Family</option>
-                    <option value="1">Honeymoon</option>
-                    <option value="2">Adventure</option>
-                    <option value="3">Cruise</option>
-                    <option value="4">Luxury</option>
-                    <option value="5">Budget</option>
-                    <option value="6">Cultural</option>
-                    <option value="7">Beach</option>
-                </select>
-                <select class="filter-select" id="priceFilter" onchange="filterPackages()">
-                    <option value="">All Prices</option>
-                    <option value="0-500">Under $500</option>
-                    <option value="500-1000">$500 - $1,000</option>
-                    <option value="1000-2000">$1,000 - $2,000</option>
-                    <option value="2000-5000">$2,000 - $5,000</option>
-                    <option value="5000-999999">$5,000+</option>
-                </select>
-                <select class="filter-select" id="sortFilter" onchange="filterPackages()">
-                    <option value="default">Sort By</option>
-                    <option value="price-low">Price: Low to High</option>
-                    <option value="price-high">Price: High to Low</option>
-                    <option value="popular">Most Popular</option>
-                    <option value="date">Travel Date</option>
-                </select>
-                <div class="filter-actions">
-                    <button class="sale-toggle" id="saleToggle" onclick="toggleSale()">
+                <div class="filter-group">
+                    <label>Country</label>
+                    <select class="filter-control" id="countryFilter" onchange="filterPackages()">
+                        <option value="">All Countries</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Category</label>
+                    <select class="filter-control" id="categoryFilter" onchange="filterPackages()">
+                        <option value="">All Categories</option>
+                        <option value="0">Family</option>
+                        <option value="1">Honeymoon</option>
+                        <option value="2">Adventure</option>
+                        <option value="3">Cruise</option>
+                        <option value="4">Luxury</option>
+                        <option value="5">Budget</option>
+                        <option value="6">Cultural</option>
+                        <option value="7">Beach</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Price Range</label>
+                    <select class="filter-control" id="priceFilter" onchange="filterPackages()">
+                        <option value="">All Prices</option>
+                        <option value="0-1000">Under $1,000</option>
+                        <option value="1000-2000">$1,000 - $2,000</option>
+                        <option value="2000-3500">$2,000 - $3,500</option>
+                        <option value="3500-5000">$3,500 - $5,000</option>
+                        <option value="5000-99999">$5,000+</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Travel Date</label>
+                    <input type="month" class="filter-control" id="dateFilter" onchange="filterPackages()">
+                </div>
+                <div class="filter-group">
+                    <label>Sort By</label>
+                    <select class="filter-control" id="sortFilter" onchange="filterPackages()">
+                        <option value="default">Default</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="popular">Most Popular</option>
+                        <option value="date">Travel Date</option>
+                        <option value="category">Category</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>&nbsp;</label>
+                    <button class="filter-toggle" id="saleToggle" onclick="toggleSaleFilter()">
                         <i class="fas fa-tag"></i> On Sale
-                    </button>
-                    <button class="btn btn-outline btn-sm" onclick="resetFilters()">
-                        <i class="fas fa-undo"></i> Reset
                     </button>
                 </div>
             </div>
         </div>
+    </section>
 
-        <div class="packages-grid" id="packagesGrid">
-            <div class="loading"><div class="spinner"></div><p>Loading packages...</p></div>
+    <section class="packages-section">
+        <div class="container">
+            <div class="results-info">
+                <div class="results-count">Showing <span id="resultsCount">0</span> packages</div>
+                <button class="btn btn-outline btn-sm" onclick="resetFilters()"><i class="fas fa-redo"></i> Reset Filters</button>
+            </div>
+            <div class="packages-grid" id="packagesGrid">
+                <div class="loading"><div class="spinner"></div><p>Loading packages...</p></div>
+            </div>
         </div>
+    </section>
 
-        <div class="pagination" id="pagination"></div>
-    </main>
-
-    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">Success!</span></div>
+    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage"></span></div>
 
     <script>
         var allPackages = [];
         var filteredPackages = [];
         var saleOnly = false;
-        var currentPage = 1;
-        var pageSize = 12;
         var categoryNames = ['Family', 'Honeymoon', 'Adventure', 'Cruise', 'Luxury', 'Budget', 'Cultural', 'Beach'];
-        var defaultImages = [
-            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80',
-            'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&q=80',
-            'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&q=80',
-            'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80',
-            'https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=800&q=80'
-        ];
 
         function showToast(message, type) {
             type = type || 'success';
@@ -554,34 +713,6 @@
             toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
             toast.classList.add('show');
             setTimeout(function() { toast.classList.remove('show'); }, 3000);
-        }
-
-        function formatDate(dateString) {
-            if (!dateString) return '';
-            return new Date(dateString).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        }
-
-        function calculateDuration(startDate, endDate) {
-            if (!startDate || !endDate) return 0;
-            return Math.ceil(Math.abs(new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24));
-        }
-
-                function getPackageImage(pkg, index) {
-            // Check for images array with objects
-            if (pkg.images && pkg.images.length > 0) {
-                var img = pkg.images[0];
-                // Handle both object format and string format
-                var imageUrl = typeof img === 'object' ? (img.imageUrl || img.ImageUrl) : img;
-                if (imageUrl && imageUrl.startsWith('http')) return imageUrl;
-                if (imageUrl) return '/images/travel-packages/' + imageUrl;
-            }
-            // Check for single imageUrl property
-            if (pkg.imageUrl) {
-                if (pkg.imageUrl.startsWith('http')) return pkg.imageUrl;
-                return '/images/travel-packages/' + pkg.imageUrl;
-            }
-            // Fallback to default images
-            return defaultImages[index % defaultImages.length];
         }
 
         function updateNav() {
@@ -594,73 +725,79 @@
                     var userData = JSON.parse(user);
                     var isAdmin = userData.role === 0 || userData.role === '0' || userData.role === 'Admin';
                     var dashUrl = isAdmin ? '/admin/dashboard' : '/account/dashboard';
-                    var initials = ((userData.firstName || 'U')[0] + (userData.lastName || '')[0]).toUpperCase();
-
-                    nav.innerHTML = '<div class="user-menu">' +
-                        '<div class="user-menu-btn">' +
-                            '<div class="user-avatar">' + initials + '</div>' +
-                            '<span style="color: var(--color-pearl); font-weight: 500;">' + userData.firstName + '</span>' +
-                            '<i class="fas fa-chevron-down" style="color: var(--color-muted); font-size: 0.75rem;"></i>' +
-                        '</div>' +
-                        '<div class="user-menu-dropdown">' +
-                            '<a href="' + dashUrl + '"><i class="fas fa-th-large"></i> Dashboard</a>' +
-                            '<a href="/account/bookings"><i class="fas fa-calendar-check"></i> My Bookings</a>' +
-                            '<a href="/account/wishlist"><i class="fas fa-heart"></i> Wishlist</a>' +
-                            '<a href="/account/profile"><i class="fas fa-user"></i> Profile</a>' +
-                            '<a href="#" onclick="logout(event)"><i class="fas fa-sign-out-alt"></i> Logout</a>' +
-                        '</div>' +
-                    '</div>';
-                } catch (e) { console.error('Error:', e); }
+                    var name = userData.firstName || 'Account';
+                    nav.innerHTML = '<a href="/cart" class="btn btn-outline"><i class="fas fa-shopping-cart"></i></a>' +
+                                   '<a href="' + dashUrl + '" class="btn btn-primary"><i class="fas fa-user"></i> ' + name + '</a>';
+                } catch (e) { }
             }
         }
 
-        function logout(e) {
-            e.preventDefault();
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.reload();
+        function getDefaultImage(index) {
+            var images = [
+                'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800',
+                'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800',
+                'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800',
+                'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800'
+            ];
+            return images[index % images.length];
+        }
+
+        function calcDuration(start, end) {
+            if (!start || !end) return 7;
+            var s = new Date(start);
+            var e = new Date(end);
+            return Math.ceil((e - s) / (1000 * 60 * 60 * 24)) || 7;
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         }
 
         async function loadPackages() {
             try {
                 var response = await fetch('/api/packages');
-                var data = await response.json();
-                allPackages = data.data || data || [];
+                if (!response.ok) throw new Error('Failed to load');
 
-                populateCountryFilter();
-                applyUrlFilters();
+                var result = await response.json();
+                allPackages = result.data || result || [];
+
+                // Update total count
+                document.getElementById('totalPackages').textContent = allPackages.length;
+
+                // Populate country filter
+                var countries = {};
+                allPackages.forEach(function(p) {
+                    if (p.country && !countries[p.country]) {
+                        countries[p.country] = true;
+                    }
+                });
+
+                var countrySelect = document.getElementById('countryFilter');
+                Object.keys(countries).sort().forEach(function(country) {
+                    var option = document.createElement('option');
+                    option.value = country;
+                    option.textContent = country;
+                    countrySelect.appendChild(option);
+                });
+
                 filterPackages();
 
-                document.getElementById('packageCount').textContent = allPackages.length + ' packages available';
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('packagesGrid').innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Failed to load packages.</p></div>';
+                document.getElementById('packagesGrid').innerHTML =
+                    '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h3>Error Loading Packages</h3><p>Please try again later</p></div>';
             }
         }
 
-        function populateCountryFilter() {
-            var countries = {};
-            allPackages.forEach(function(p) { if (p.country) countries[p.country] = true; });
-
-            var select = document.getElementById('countryFilter');
-            Object.keys(countries).sort().forEach(function(country) {
-                var option = document.createElement('option');
-                option.value = country;
-                option.textContent = country;
-                select.appendChild(option);
-            });
-        }
-
-        function applyUrlFilters() {
-            var params = new URLSearchParams(window.location.search);
-            if (params.get('country')) document.getElementById('countryFilter').value = params.get('country');
-            if (params.get('category')) document.getElementById('categoryFilter').value = params.get('category');
-            if (params.get('search')) document.getElementById('searchInput').value = params.get('search');
-        }
-
-        function toggleSale() {
+        function toggleSaleFilter() {
             saleOnly = !saleOnly;
-            document.getElementById('saleToggle').classList.toggle('active', saleOnly);
+            var btn = document.getElementById('saleToggle');
+            if (saleOnly) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
             filterPackages();
         }
 
@@ -669,10 +806,10 @@
             document.getElementById('countryFilter').value = '';
             document.getElementById('categoryFilter').value = '';
             document.getElementById('priceFilter').value = '';
+            document.getElementById('dateFilter').value = '';
             document.getElementById('sortFilter').value = 'default';
             saleOnly = false;
             document.getElementById('saleToggle').classList.remove('active');
-            currentPage = 1;
             filterPackages();
         }
 
@@ -681,17 +818,23 @@
             var country = document.getElementById('countryFilter').value;
             var category = document.getElementById('categoryFilter').value;
             var price = document.getElementById('priceFilter').value;
+            var dateFilter = document.getElementById('dateFilter').value;
             var sort = document.getElementById('sortFilter').value;
 
             filteredPackages = allPackages.filter(function(p) {
+                // Search
                 var matchesSearch = !search ||
                     (p.destination && p.destination.toLowerCase().indexOf(search) >= 0) ||
                     (p.country && p.country.toLowerCase().indexOf(search) >= 0) ||
                     (p.description && p.description.toLowerCase().indexOf(search) >= 0);
 
+                // Country
                 var matchesCountry = !country || p.country === country;
+
+                // Category
                 var matchesCategory = !category || p.packageType === parseInt(category);
 
+                // Price
                 var matchesPrice = true;
                 if (price) {
                     var range = price.split('-');
@@ -699,103 +842,131 @@
                     matchesPrice = pkgPrice >= parseInt(range[0]) && pkgPrice <= parseInt(range[1]);
                 }
 
+                // Date
+                var matchesDate = true;
+                if (dateFilter && p.startDate) {
+                    var startMonth = p.startDate.substring(0, 7);
+                    matchesDate = startMonth === dateFilter;
+                }
+
+                // On Sale
                 var matchesSale = !saleOnly || (p.discountedPrice && p.discountedPrice < p.price);
 
-                return matchesSearch && matchesCountry && matchesCategory && matchesPrice && matchesSale;
+                return matchesSearch && matchesCountry && matchesCategory && matchesPrice && matchesDate && matchesSale;
             });
 
             // Sort
             if (sort === 'price-low') {
-                filteredPackages.sort(function(a, b) { return (a.discountedPrice || a.price) - (b.discountedPrice || b.price); });
+                filteredPackages.sort(function(a, b) {
+                    return (a.discountedPrice || a.price) - (b.discountedPrice || b.price);
+                });
             } else if (sort === 'price-high') {
-                filteredPackages.sort(function(a, b) { return (b.discountedPrice || b.price) - (a.discountedPrice || a.price); });
+                filteredPackages.sort(function(a, b) {
+                    return (b.discountedPrice || b.price) - (a.discountedPrice || a.price);
+                });
             } else if (sort === 'popular') {
-                filteredPackages.sort(function(a, b) { return (b.totalBookings || 0) - (a.totalBookings || 0); });
+                filteredPackages.sort(function(a, b) {
+                    var aBookings = (a.bookings ? a.bookings.length : 0) + (a.reviews ? a.reviews.length : 0);
+                    var bBookings = (b.bookings ? b.bookings.length : 0) + (b.reviews ? b.reviews.length : 0);
+                    return bBookings - aBookings;
+                });
             } else if (sort === 'date') {
-                filteredPackages.sort(function(a, b) { return new Date(a.startDate) - new Date(b.startDate); });
+                filteredPackages.sort(function(a, b) {
+                    return new Date(a.startDate) - new Date(b.startDate);
+                });
+            } else if (sort === 'category') {
+                filteredPackages.sort(function(a, b) {
+                    return (a.packageType || 0) - (b.packageType || 0);
+                });
             }
 
-            currentPage = 1;
             renderPackages();
         }
 
         function renderPackages() {
             var grid = document.getElementById('packagesGrid');
-            var totalPages = Math.ceil(filteredPackages.length / pageSize);
-            var start = (currentPage - 1) * pageSize;
-            var pagePackages = filteredPackages.slice(start, start + pageSize);
+            document.getElementById('resultsCount').textContent = filteredPackages.length;
 
-            if (pagePackages.length === 0) {
-                grid.innerHTML = '<div class="empty-state" style="grid-column: 1/-1;"><i class="fas fa-search"></i><h3>No Packages Found</h3><p>Try adjusting your filters</p></div>';
-                document.getElementById('pagination').innerHTML = '';
+            if (filteredPackages.length === 0) {
+                grid.innerHTML = '<div class="empty-state"><i class="fas fa-search"></i><h3>No Packages Found</h3><p>Try adjusting your filters</p></div>';
                 return;
             }
 
             var html = '';
-            pagePackages.forEach(function(pkg, index) {
-                var image = getPackageImage(pkg, start + index);
-                var hasDiscount = pkg.discountedPrice && pkg.discountedPrice < pkg.price;
-                var displayPrice = hasDiscount ? pkg.discountedPrice : pkg.price;
-                var duration = calculateDuration(pkg.startDate, pkg.endDate);
-                var categoryName = categoryNames[pkg.packageType] || 'Travel';
+            for (var i = 0; i < filteredPackages.length; i++) {
+                var p = filteredPackages[i];
+                var img = p.imageUrl || getDefaultImage(i);
+                var duration = calcDuration(p.startDate, p.endDate);
+                var hasDiscount = p.discountedPrice && p.discountedPrice < p.price;
+                var displayPrice = hasDiscount ? p.discountedPrice : p.price;
+                var categoryName = categoryNames[p.packageType] || 'Travel';
+                var ageText = '';
+                if (p.minimumAge || p.maximumAge) {
+                    if (p.minimumAge && p.maximumAge) {
+                        ageText = p.minimumAge + '-' + p.maximumAge + ' yrs';
+                    } else if (p.minimumAge) {
+                        ageText = p.minimumAge + '+ yrs';
+                    } else {
+                        ageText = 'Up to ' + p.maximumAge + ' yrs';
+                    }
+                }
 
-                html += '<div class="package-card">' +
-                    '<div class="package-image">' +
-                        '<img src="' + image + '" alt="' + (pkg.destination || 'Package') + '" loading="lazy" />' +
-                        '<div class="package-badges">' +
-                            '<span class="package-badge category">' + categoryName + '</span>' +
-                            (hasDiscount ? '<span class="package-badge sale">Sale</span>' : '') +
-                        '</div>' +
-                        '<button class="package-wishlist" onclick="toggleWishlist(' + pkg.packageId + ', this, event)"><i class="far fa-heart"></i></button>' +
-                    '</div>' +
-                    '<div class="package-content">' +
-                        '<div class="package-location"><i class="fas fa-map-marker-alt"></i> ' + (pkg.destination || 'Unknown') + ', ' + (pkg.country || '') + '</div>' +
-                        '<div class="package-title">' + (pkg.destination || 'Travel') + ' ' + categoryName + ' Package</div>' +
-                        '<div class="package-meta">' +
-                            '<span><i class="far fa-calendar"></i> ' + formatDate(pkg.startDate) + ' - ' + formatDate(pkg.endDate) + '</span>' +
-                            '<span><i class="far fa-clock"></i> ' + duration + ' days</span>' +
-                        '</div>' +
-                        '<div class="package-meta">' +
-                            '<span><i class="fas fa-door-open"></i> ' + (pkg.availableRooms || 0) + ' rooms</span>' +
-                            (pkg.ageRestriction ? '<span><i class="fas fa-user"></i> ' + pkg.ageRestriction + '+</span>' : '') +
-                        '</div>' +
-                        '<div class="package-footer">' +
-                            '<div class="package-price">' +
-                                (hasDiscount ? '<span class="original">$' + Math.round(pkg.price) + '</span>' : '') +
-                                '<span class="current">$' + Math.round(displayPrice) + '</span>' +
-                                '<span class="per">/person</span>' +
-                            '</div>' +
-                            '<div class="package-actions">' +
-                                '<a href="/packages/' + pkg.packageId + '" class="btn btn-outline btn-sm">Details</a>' +
-                                '<a href="/booking/create/' + pkg.packageId + '" class="btn btn-primary btn-sm">Book Now</a>' +
-                            '</div>' +
-                        '</div>' +
-                    '</div>' +
-                '</div>';
-            });
+                html += '<div class="package-card">';
+                html += '<div class="package-image">';
+                html += '<img src="' + img + '" alt="' + (p.destination || 'Package') + '" onerror="this.src=\'' + getDefaultImage(i) + '\'">';
+                html += '<button class="wishlist-btn" onclick="toggleWishlist(event, ' + p.packageId + ')" title="Add to Wishlist"><i class="far fa-heart"></i></button>';
+                html += '<div class="package-badges">';
+                if (hasDiscount) {
+                    var discount = Math.round((1 - p.discountedPrice / p.price) * 100);
+                    html += '<span class="badge badge-sale">' + discount + '% OFF</span>';
+                }
+                html += '<span class="badge badge-category">' + categoryName + '</span>';
+                if (ageText) {
+                    html += '<span class="badge badge-age"><i class="fas fa-user"></i> ' + ageText + '</span>';
+                }
+                html += '</div></div>';
+
+                html += '<div class="package-content">';
+                html += '<div class="package-location"><i class="fas fa-map-marker-alt"></i> ' + (p.country || 'Unknown') + '</div>';
+                html += '<h3 class="package-title"><a href="/packages/' + p.packageId + '" style="color: inherit; text-decoration: none;">' + (p.destination || 'Travel Package') + '</a></h3>';
+
+                html += '<div class="package-meta">';
+                html += '<span class="meta-item"><i class="far fa-clock"></i> ' + duration + ' Days</span>';
+                html += '<span class="meta-item"><i class="fas fa-bed"></i> ' + (p.availableRooms || 0) + ' Rooms</span>';
+                html += '<span class="meta-item"><i class="far fa-calendar"></i> ' + formatDate(p.startDate) + '</span>';
+                html += '</div>';
+
+                html += '<div class="package-footer">';
+                html += '<div class="package-price">';
+                if (hasDiscount) {
+                    html += '<span class="old-price">$' + Math.round(p.price) + '</span>';
+                }
+                html += '<span class="current-price">$' + Math.round(displayPrice) + '</span>';
+                html += '<span class="per-person"> /person</span>';
+                html += '</div>';
+
+                html += '<div class="package-actions">';
+                html += '<a href="/packages/' + p.packageId + '" class="btn btn-outline btn-sm" title="View Details"><i class="fas fa-eye"></i></a>';
+                if (p.availableRooms > 0) {
+                    html += '<a href="/booking/create/' + p.packageId + '" class="btn btn-primary btn-sm" title="Book"><i class="fas fa-calendar-check"></i></a>';
+                    html += '<a href="/booking/buynow/' + p.packageId + '" class="btn btn-success btn-sm" title="Buy Now"><i class="fas fa-bolt"></i></a>';
+                } else {
+                    html += '<span class="btn btn-outline btn-sm" style="opacity: 0.5;">Sold Out</span>';
+                }
+                html += '</div>';
+                html += '</div></div></div>';
+            }
 
             grid.innerHTML = html;
-            renderPagination(totalPages);
         }
 
-        function renderPagination(totalPages) {
-            var pagination = document.getElementById('pagination');
-            if (totalPages <= 1) { pagination.innerHTML = ''; return; }
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNav();
+            loadPackages();
+        });
 
-            var html = '';
-            for (var i = 1; i <= totalPages; i++) {
-                html += '<button class="page-btn ' + (i === currentPage ? 'active' : '') + '" onclick="goToPage(' + i + ')">' + i + '</button>';
-            }
-            pagination.innerHTML = html;
-        }
-
-        function goToPage(page) {
-            currentPage = page;
-            renderPackages();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        async function toggleWishlist(packageId, button, event) {
+        // Wishlist functionality
+        async function toggleWishlist(event, packageId) {
             event.preventDefault();
             event.stopPropagation();
 
@@ -806,32 +977,48 @@
                 return;
             }
 
-            var icon = button.querySelector('i');
-            var isActive = button.classList.contains('active');
+            var btn = event.currentTarget;
+            var icon = btn.querySelector('i');
 
             try {
-                if (isActive) {
-                    var response = await fetch('/api/wishlist/' + packageId, { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } });
-                    if (response.ok) {
-                        button.classList.remove('active');
-                        icon.className = 'far fa-heart';
-                        showToast('Removed from wishlist');
+                var response = await fetch('/api/wishlist/' + packageId, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
                     }
+                });
+
+                if (response.ok) {
+                    btn.classList.add('active');
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    showToast('Added to wishlist!', 'success');
                 } else {
-                    var response = await fetch('/api/wishlist/' + packageId, { method: 'POST', headers: { 'Authorization': 'Bearer ' + token } });
-                    if (response.ok) {
-                        button.classList.add('active');
-                        icon.className = 'fas fa-heart';
-                        showToast('Added to wishlist!');
+                    var error = await response.json();
+                    if (error.message && error.message.indexOf('already') >= 0) {
+                        // Already in wishlist, try to remove
+                        var removeResponse = await fetch('/api/wishlist/' + packageId, {
+                            method: 'DELETE',
+                            headers: {
+                                'Authorization': 'Bearer ' + token
+                            }
+                        });
+                        if (removeResponse.ok) {
+                            btn.classList.remove('active');
+                            icon.classList.remove('fas');
+                            icon.classList.add('far');
+                            showToast('Removed from wishlist', 'success');
+                        }
+                    } else {
+                        showToast(error.message || 'Failed to update wishlist', 'error');
                     }
                 }
-            } catch (error) { showToast('Error updating wishlist', 'error'); }
+            } catch (error) {
+                console.error('Wishlist error:', error);
+                showToast('Error updating wishlist', 'error');
+            }
         }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            updateNav();
-            loadPackages();
-        });
     </script>
 </body>
 </html>

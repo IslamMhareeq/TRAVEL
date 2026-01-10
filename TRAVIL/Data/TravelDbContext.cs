@@ -47,7 +47,6 @@ namespace TRAVEL.Data
         /// </summary>
         public DbSet<Review> Reviews { get; set; }
 
-        public DbSet<SiteReview> SiteReviews { get; set; }
         /// <summary>
         /// Waiting list entries table
         /// </summary>
@@ -61,7 +60,7 @@ namespace TRAVEL.Data
         /// <summary>
         /// Shopping carts table
         /// </summary>
-        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartModels> Carts { get; set; }
 
         /// <summary>
         /// Cart items table
@@ -318,7 +317,7 @@ namespace TRAVEL.Data
              });*/
 
             // Cart Configuration
-            modelBuilder.Entity<Cart>(entity =>
+            modelBuilder.Entity<CartModels>(entity =>
             {
                 entity.HasKey(e => e.CartId);
                 entity.HasOne(e => e.User)

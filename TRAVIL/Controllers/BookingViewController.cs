@@ -5,13 +5,14 @@ namespace TRAVEL.Controllers
     /// <summary>
     /// Controller for Booking Views
     /// </summary>
+    [Route("booking")]
     public class BookingViewController : Controller
     {
         /// <summary>
-        /// Create Booking - route: /booking/create/{packageId}
+        /// Create Booking page - /booking/create/{packageId}
         /// </summary>
-        [HttpGet]
-        [Route("booking/create/{packageId?}")]
+        [HttpGet("create")]
+        [HttpGet("create/{packageId:int}")]
         public IActionResult Create(int? packageId)
         {
             ViewData["PackageId"] = packageId ?? 1;
@@ -19,22 +20,10 @@ namespace TRAVEL.Controllers
         }
 
         /// <summary>
-        /// Buy Now (Direct Payment) - route: /booking/buynow/{packageId}
+        /// Booking Details - /booking/{id} or /booking/details/{id}
         /// </summary>
-        [HttpGet]
-        [Route("booking/buynow/{packageId}")]
-        public IActionResult BuyNow(int packageId)
-        {
-            ViewData["PackageId"] = packageId;
-            return View("~/Views/Booking/BuyNow.cshtml");
-        }
-
-        /// <summary>
-        /// Booking Details - route: /booking/{id} OR /booking/details/{id}
-        /// </summary>
-        [HttpGet]
-        [Route("booking/{id:int}")]
-        [Route("booking/details/{id}")]
+        [HttpGet("{id:int}")]
+        [HttpGet("details/{id:int}")]
         public IActionResult Details(int id)
         {
             ViewData["BookingId"] = id;
@@ -42,14 +31,40 @@ namespace TRAVEL.Controllers
         }
 
         /// <summary>
-        /// Payment page
+        /// Payment page - /booking/payment/{bookingId}
         /// </summary>
-        [HttpGet]
-        [Route("booking/payment/{id}")]
+        [HttpGet("payment/{id:int}")]
         public IActionResult Payment(int id)
         {
             ViewData["BookingId"] = id;
             return View("~/Views/Booking/Payment.cshtml");
+        }
+
+        /// <summary>
+        /// Checkout page (for cart) - /booking/checkout
+        /// </summary>
+        [HttpGet("checkout")]
+        public IActionResult Checkout()
+        {
+            return View("~/Views/Booking/Checkout.cshtml");
+        }
+
+        /// <summary>
+        /// Payment Success page - /booking/success
+        /// </summary>
+        [HttpGet("success")]
+        public IActionResult Success()
+        {
+            return View("~/Views/Booking/Success.cshtml");
+        }
+
+        /// <summary>
+        /// My Bookings page - /booking/my-bookings
+        /// </summary>
+        [HttpGet("my-bookings")]
+        public IActionResult MyBookings()
+        {
+            return View("~/Views/Account/MyBookings.cshtml");
         }
     }
 }

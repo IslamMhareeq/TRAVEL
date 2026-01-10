@@ -1,409 +1,280 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using TRAVEL.Models;
-using TRAVEL.Data;
-using TRAVEL.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using TRAVEL.Services;
 
-namespace TRAVIL.Controllers
+namespace TRAVEL.Controllers
 {
     [ApiController]
-    [Route("api/review")]
+    [Route("api/[controller]")]
+    [Produces("application/json")]
     public class ReviewController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IReviewService _reviewService;
+        private readonly ILogger<ReviewController> _logger;
 
-        public ReviewController(ApplicationDbContext context)
+        public ReviewController(
+            IReviewService reviewService,
+            ILogger<ReviewController> logger)
         {
-            _context = context;
-        }
-
-        #region Package Reviews
-
-        /// <summary>
-        /// Get reviews for a specific package
-        /// GET /api/review/package/{packageId}
-        /// </summary>
-        [HttpGet("package/{packageId}")]
-        public async Task<IActionResult> GetPackageReviews(int packageId)
-        {
-            try
-            {
-                var reviews = await _context.Reviews
-                    .Where(r => r.PackageId == packageId && r.IsApproved)
-                    .OrderByDescending(r => r.CreatedAt)
-                    .Include(r => r.User)
-                    .Select(r => new
-                    {
-                        r.ReviewId,
-                        r.Rating,
-                        r.Comment,
-                        r.CreatedAt,
-                        User = r.User != null ? new
-                        {
-                            r.User.UserId,
-                            r.User.FirstName,
-                            r.User.LastName,
-                            r.User.ProfileImageUrl
-                        } : null
-                    })
-                    .ToListAsync();
-
-                return Ok(new { success = true, data = reviews });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { success = false, message = "Failed to load reviews", error = ex.Message });
-            }
+            _reviewService = reviewService;
+            _logger = logger;
         }
 
         /// <summary>
-        /// Submit a package review
-        /// POST /api/review/package
+        /// Create a review for a package
         /// </summary>
         [HttpPost("package")]
         [Authorize]
-        public async Task<IActionResult> CreatePackageReview([FromBody] CreatePackageReviewDto dto)
+        public async Task<IActionResult> CreatePackageReview([FromBody] CreateReviewRequest request)
         {
-            try
+            var userIdClaim = User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+                return Unauthorized(new { success = false, message = "User not authenticated" });
+
+            if (request.Rating < 1 || request.Rating > 5)
+                return BadRequest(new { success = false, message = "Rating must be between 1 and 5" });
+
+            if (string.IsNullOrWhiteSpace(request.Comment))
+                return BadRequest(new { success = false, message = "Comment is required" });
+
+            var result = await _reviewService.CreatePackageReviewAsync(
+                userId, request.PackageId, request.Rating, request.Comment);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
+            _logger.LogInformation($"Package review created by user {userId} for package {request.PackageId}");
+
+            return Ok(new
             {
-                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                    ?? User.FindFirst("UserId")?.Value
-                    ?? User.FindFirst("sub")?.Value;
-
-                if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
-                {
-                    return Unauthorized(new { success = false, message = "Invalid user token" });
-                }
-
-                // Check if package exists
-                var packageExists = await _context.TravelPackages.AnyAsync(p => p.PackageId == dto.PackageId);
-                if (!packageExists)
-                {
-                    return NotFound(new { success = false, message = "Package not found" });
-                }
-
-                // Check if user already reviewed this package
-                var existingReview = await _context.Reviews
-                    .FirstOrDefaultAsync(r => r.UserId == userId && r.PackageId == dto.PackageId);
-
-                if (existingReview != null)
-                {
-                    existingReview.Rating = dto.Rating;
-                    existingReview.Comment = dto.Comment;
-                    existingReview.CreatedAt = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
-                    await _context.SaveChangesAsync();
-                    return Ok(new { success = true, message = "Review updated", data = existingReview });
-                }
-
-                var review = new Review
-                {
-                    UserId = userId,
-                    PackageId = dto.PackageId,
-                    Rating = dto.Rating,
-                    Comment = dto.Comment,
-                    ReviewType = ReviewType.Package,
-                    IsApproved = true,
-                    CreatedAt = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc)
-                };
-
-                _context.Reviews.Add(review);
-                await _context.SaveChangesAsync();
-
-                return Ok(new { success = true, message = "Review submitted", data = review });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { success = false, message = "Failed to submit review", error = ex.Message });
-            }
-        }
-
-        #endregion
-
-        #region Site Reviews (Testimonials for Homepage)
-
-        /// <summary>
-        /// Get approved site reviews for homepage testimonials
-        /// GET /api/review/site
-        /// </summary>
-        [HttpGet("site")]
-        public async Task<IActionResult> GetSiteReviews([FromQuery] int limit = 10)
-        {
-            try
-            {
-                var reviews = await _context.Reviews
-                    .Where(r => r.ReviewType == ReviewType.Site && r.IsApproved)
-                    .OrderByDescending(r => r.CreatedAt)
-                    .Take(limit)
-                    .Include(r => r.User)
-                    .Select(r => new
-                    {
-                        r.ReviewId,
-                        r.Rating,
-                        r.Comment,
-                        r.CreatedAt,
-                        User = r.User != null ? new
-                        {
-                            r.User.UserId,
-                            r.User.FirstName,
-                            r.User.LastName,
-                            r.User.ProfileImageUrl
-                        } : null
-                    })
-                    .ToListAsync();
-
-                return Ok(new { success = true, data = reviews });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { success = false, message = "Failed to load reviews", error = ex.Message });
-            }
+                success = true,
+                message = result.Message,
+                reviewId = result.Review?.ReviewId
+            });
         }
 
         /// <summary>
-        /// Submit a site review (testimonial)
-        /// POST /api/review/site
+        /// Create a site review
         /// </summary>
         [HttpPost("site")]
         [Authorize]
-        public async Task<IActionResult> CreateSiteReview([FromBody] CreateSiteReviewDto dto)
+        public async Task<IActionResult> CreateSiteReview([FromBody] CreateSiteReviewRequest request)
         {
-            try
+            var userIdClaim = User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+                return Unauthorized(new { success = false, message = "User not authenticated" });
+
+            if (request.Rating < 1 || request.Rating > 5)
+                return BadRequest(new { success = false, message = "Rating must be between 1 and 5" });
+
+            if (string.IsNullOrWhiteSpace(request.Comment))
+                return BadRequest(new { success = false, message = "Comment is required" });
+
+            var result = await _reviewService.CreateSiteReviewAsync(userId, request.Rating, request.Comment);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
+            _logger.LogInformation($"Site review created by user {userId}");
+
+            return Ok(new
             {
-                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                    ?? User.FindFirst("UserId")?.Value
-                    ?? User.FindFirst("sub")?.Value;
-
-                if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
-                {
-                    return Unauthorized(new { success = false, message = "Invalid user token" });
-                }
-
-                var existingReview = await _context.Reviews
-                    .FirstOrDefaultAsync(r => r.UserId == userId && r.ReviewType == ReviewType.Site);
-
-                if (existingReview != null)
-                {
-                    existingReview.Rating = dto.Rating;
-                    existingReview.Comment = dto.Comment;
-                    existingReview.CreatedAt = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
-                    await _context.SaveChangesAsync();
-                    return Ok(new { success = true, message = "Review updated", data = existingReview });
-                }
-
-                var review = new Review
-                {
-                    UserId = userId,
-                    PackageId = null,
-                    Rating = dto.Rating,
-                    Comment = dto.Comment,
-                    ReviewType = ReviewType.Site,
-                    IsApproved = true,
-                    CreatedAt = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc)
-                };
-
-                _context.Reviews.Add(review);
-                await _context.SaveChangesAsync();
-
-                return Ok(new { success = true, message = "Thank you for your feedback!", data = review });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { success = false, message = "Failed to submit review", error = ex.Message });
-            }
+                success = true,
+                message = result.Message,
+                reviewId = result.Review?.ReviewId
+            });
         }
 
         /// <summary>
-        /// Delete user's own site review
-        /// DELETE /api/review/site
+        /// Get reviews for a package
         /// </summary>
-        [HttpDelete("site")]
-        [Authorize]
-        public async Task<IActionResult> DeleteSiteReview()
+        [HttpGet("package/{packageId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPackageReviews(int packageId)
         {
-            try
+            var reviews = await _reviewService.GetPackageReviewsAsync(packageId, true);
+
+            var result = reviews.Select(r => new
             {
-                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                    ?? User.FindFirst("UserId")?.Value;
+                reviewId = r.ReviewId,
+                userName = $"{r.User?.FirstName} {r.User?.LastName?.Substring(0, 1)}.",
+                rating = r.Rating,
+                comment = r.Comment,
+                createdAt = r.CreatedAt
+            }).ToList();
 
-                if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
-                {
-                    return Unauthorized(new { success = false, message = "Invalid user token" });
-                }
+            var avgRating = await _reviewService.GetPackageAverageRatingAsync(packageId);
 
-                var review = await _context.Reviews
-                    .FirstOrDefaultAsync(r => r.UserId == userId && r.ReviewType == ReviewType.Site);
-
-                if (review == null)
-                {
-                    return NotFound(new { success = false, message = "Review not found" });
-                }
-
-                _context.Reviews.Remove(review);
-                await _context.SaveChangesAsync();
-
-                return Ok(new { success = true, message = "Review deleted" });
-            }
-            catch (Exception ex)
+            return Ok(new
             {
-                return StatusCode(500, new { success = false, message = "Failed to delete review", error = ex.Message });
-            }
-        }
-
-        #endregion
-
-        #region Admin Endpoints
-
-        /// <summary>
-        /// Admin: Get all reviews
-        /// GET /api/review/admin
-        /// </summary>
-        [HttpGet("admin")]
-        [Authorize]
-        public async Task<IActionResult> GetAllReviewsAdmin([FromQuery] string? type = null)
-        {
-            try
-            {
-                var roleClaim = User.FindFirst(ClaimTypes.Role)?.Value
-                    ?? User.FindFirst("Role")?.Value;
-
-                if (roleClaim != "0" && roleClaim?.ToLower() != "admin")
-                {
-                    return Forbid();
-                }
-
-                var query = _context.Reviews.AsQueryable();
-
-                if (type == "site")
-                {
-                    query = query.Where(r => r.ReviewType == ReviewType.Site);
-                }
-                else if (type == "package")
-                {
-                    query = query.Where(r => r.ReviewType == ReviewType.Package);
-                }
-
-                var reviews = await query
-                    .OrderByDescending(r => r.CreatedAt)
-                    .Include(r => r.User)
-                    .Include(r => r.TravelPackage)
-                    .Select(r => new
-                    {
-                        r.ReviewId,
-                        r.UserId,
-                        r.PackageId,
-                        r.Rating,
-                        r.Comment,
-                        r.ReviewType,
-                        r.IsApproved,
-                        r.CreatedAt,
-                        UserName = r.User != null ? r.User.FirstName + " " + r.User.LastName : "Unknown",
-                        UserEmail = r.User != null ? r.User.Email : null,
-                        PackageName = r.TravelPackage != null ? r.TravelPackage.Destination : null
-                    })
-                    .ToListAsync();
-
-                return Ok(new { success = true, data = reviews });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { success = false, message = "Failed to load reviews", error = ex.Message });
-            }
+                success = true,
+                data = result,
+                count = result.Count,
+                averageRating = System.Math.Round(avgRating, 1)
+            });
         }
 
         /// <summary>
-        /// Admin: Toggle review approval
-        /// PUT /api/review/{id}/approve
+        /// Get site reviews (for homepage)
         /// </summary>
-        [HttpPut("{id}/approve")]
-        [Authorize]
-        public async Task<IActionResult> ToggleApproval(int id, [FromBody] ToggleApprovalDto dto)
+        [HttpGet("site")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetSiteReviews()
         {
-            try
+            var reviews = await _reviewService.GetSiteReviewsAsync(true);
+
+            var result = reviews.Select(r => new
             {
-                var roleClaim = User.FindFirst(ClaimTypes.Role)?.Value
-                    ?? User.FindFirst("Role")?.Value;
+                reviewId = r.ReviewId,
+                userName = $"{r.User?.FirstName} {r.User?.LastName?.Substring(0, 1)}.",
+                rating = r.Rating,
+                comment = r.Comment,
+                createdAt = r.CreatedAt
+            }).ToList();
 
-                if (roleClaim != "0" && roleClaim?.ToLower() != "admin")
-                {
-                    return Forbid();
-                }
+            var avgRating = await _reviewService.GetSiteAverageRatingAsync();
 
-                var review = await _context.Reviews.FindAsync(id);
-                if (review == null)
-                {
-                    return NotFound(new { success = false, message = "Review not found" });
-                }
-
-                review.IsApproved = dto.IsApproved;
-                await _context.SaveChangesAsync();
-
-                return Ok(new { success = true, message = "Review updated" });
-            }
-            catch (Exception ex)
+            return Ok(new
             {
-                return StatusCode(500, new { success = false, message = "Failed to update review", error = ex.Message });
-            }
+                success = true,
+                data = result,
+                count = result.Count,
+                averageRating = System.Math.Round(avgRating, 1)
+            });
         }
 
         /// <summary>
-        /// Admin: Delete any review
-        /// DELETE /api/review/{id}
+        /// Get user's reviews
         /// </summary>
-        [HttpDelete("{id}")]
+        [HttpGet("my-reviews")]
         [Authorize]
-        public async Task<IActionResult> DeleteReview(int id)
+        public async Task<IActionResult> GetMyReviews()
         {
-            try
+            var userIdClaim = User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+                return Unauthorized(new { success = false, message = "User not authenticated" });
+
+            var reviews = await _reviewService.GetUserReviewsAsync(userId);
+
+            var result = reviews.Select(r => new
             {
-                var roleClaim = User.FindFirst(ClaimTypes.Role)?.Value
-                    ?? User.FindFirst("Role")?.Value;
+                reviewId = r.ReviewId,
+                packageId = r.PackageId,
+                packageName = r.TravelPackage?.Destination,
+                rating = r.Rating,
+                comment = r.Comment,
+                reviewType = r.ReviewType,
+                isApproved = r.IsApproved,
+                createdAt = r.CreatedAt
+            }).ToList();
 
-                if (roleClaim != "0" && roleClaim?.ToLower() != "admin")
-                {
-                    return Forbid();
-                }
-
-                var review = await _context.Reviews.FindAsync(id);
-                if (review == null)
-                {
-                    return NotFound(new { success = false, message = "Review not found" });
-                }
-
-                _context.Reviews.Remove(review);
-                await _context.SaveChangesAsync();
-
-                return Ok(new { success = true, message = "Review deleted" });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { success = false, message = "Failed to delete review", error = ex.Message });
-            }
+            return Ok(new { success = true, data = result, count = result.Count });
         }
 
-        #endregion
+        /// <summary>
+        /// Check if user can review a package
+        /// </summary>
+        [HttpGet("can-review/{packageId}")]
+        [Authorize]
+        public async Task<IActionResult> CanReviewPackage(int packageId)
+        {
+            var userIdClaim = User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+                return Unauthorized(new { success = false, message = "User not authenticated" });
+
+            var canReview = await _reviewService.CanUserReviewPackageAsync(userId, packageId);
+
+            return Ok(new { success = true, canReview = canReview });
+        }
+
+        // ===== ADMIN ENDPOINTS =====
+
+        /// <summary>
+        /// Get pending reviews (Admin only)
+        /// </summary>
+        [HttpGet("pending")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetPendingReviews()
+        {
+            var reviews = await _reviewService.GetPendingReviewsAsync();
+
+            var result = reviews.Select(r => new
+            {
+                reviewId = r.ReviewId,
+                userId = r.UserId,
+                userName = $"{r.User?.FirstName} {r.User?.LastName}",
+                userEmail = r.User?.Email,
+                packageId = r.PackageId,
+                packageName = r.TravelPackage?.Destination,
+                rating = r.Rating,
+                comment = r.Comment,
+                reviewType = r.ReviewType,
+                createdAt = r.CreatedAt
+            }).ToList();
+
+            return Ok(new { success = true, data = result, count = result.Count });
+        }
+
+        /// <summary>
+        /// Approve a review (Admin only)
+        /// </summary>
+        [HttpPost("{reviewId}/approve")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ApproveReview(int reviewId)
+        {
+            var result = await _reviewService.ApproveReviewAsync(reviewId);
+
+            if (!result)
+                return NotFound(new { success = false, message = "Review not found" });
+
+            _logger.LogInformation($"Review {reviewId} approved");
+
+            return Ok(new { success = true, message = "Review approved successfully" });
+        }
+
+        /// <summary>
+        /// Delete a review (Admin only)
+        /// </summary>
+        [HttpDelete("{reviewId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteReview(int reviewId)
+        {
+            var result = await _reviewService.DeleteReviewAsync(reviewId);
+
+            if (!result)
+                return NotFound(new { success = false, message = "Review not found" });
+
+            _logger.LogInformation($"Review {reviewId} deleted");
+
+            return Ok(new { success = true, message = "Review deleted successfully" });
+        }
+
+        /// <summary>
+        /// Get review statistics (Admin only)
+        /// </summary>
+        [HttpGet("stats")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetReviewStats([FromQuery] int? packageId = null)
+        {
+            var stats = await _reviewService.GetReviewStatsAsync(packageId);
+
+            return Ok(new { success = true, data = stats });
+        }
     }
 
-    // DTOs
-    public class CreatePackageReviewDto
+    public class CreateReviewRequest
     {
         public int PackageId { get; set; }
         public int Rating { get; set; }
-        public string Comment { get; set; } = string.Empty;
+        public string Comment { get; set; }
     }
 
-    public class CreateSiteReviewDto
+    public class CreateSiteReviewRequest
     {
         public int Rating { get; set; }
-        public string Comment { get; set; } = string.Empty;
-    }
-
-    public class ToggleApprovalDto
-    {
-        public bool IsApproved { get; set; }
+        public string Comment { get; set; }
     }
 }

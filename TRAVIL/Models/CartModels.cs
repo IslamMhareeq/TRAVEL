@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 
 namespace TRAVEL.Models
 {
@@ -10,7 +9,7 @@ namespace TRAVEL.Models
     /// Shopping cart for a user
     /// </summary>
     [Table("Carts")]
-    public class Cart
+    public class CartModels
     {
         [Key]
         public int CartId { get; set; }
@@ -71,7 +70,7 @@ namespace TRAVEL.Models
         public DateTime? UpdatedAt { get; set; }
 
         // Navigation properties
-        public virtual Cart? Cart { get; set; }
+        public virtual CartModels? Cart { get; set; }
         public virtual TravelPackage? TravelPackage { get; set; }
 
         // Computed property

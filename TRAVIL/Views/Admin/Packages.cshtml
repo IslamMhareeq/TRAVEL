@@ -1,82 +1,150 @@
 ﻿@{
-    ViewData["Title"] = "Manage Packages - TRAVIL Admin";
+    ViewData["Title"] = "Manage Packages";
     Layout = null;
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link rel="stylesheet" href="/css/site.css" />
+    <title>Packages - TRAVIL Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
-        .dashboard-layout {
+        :root {
+            --color-midnight: #0d1117;
+            --color-navy: #161b22;
+            --color-slate: #21262d;
+            --color-steel: #484f58;
+            --color-silver: #8b949e;
+            --color-white: #ffffff;
+            --color-gold: #d4a853;
+            --color-gold-dark: #b8943f;
+            --color-gold-muted: rgba(212, 168, 83, 0.15);
+            --color-success: #3fb950;
+            --color-error: #f85149;
+            --color-warning: #d29922;
+            --sidebar-width: 260px;
+            --space-1: 4px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-5: 24px;
+            --space-6: 32px;
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--color-midnight);
+            color: var(--color-white);
+            min-height: 100vh;
+        }
+
+        .page-transition {
+            position: fixed;
+            inset: 0;
+            background: var(--color-midnight);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+            .page-transition.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+        .loader {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--color-slate);
+            border-top-color: var(--color-gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @@keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .admin-layout {
             display: flex;
             min-height: 100vh;
         }
 
         .sidebar {
-            width: 260px;
+            width: var(--sidebar-width);
             background: var(--color-navy);
-            border-right: 1px solid var(--color-border);
+            border-right: 1px solid var(--color-slate);
             position: fixed;
             top: 0;
             left: 0;
-            bottom: 0;
-            display: flex;
-            flex-direction: column;
+            height: 100vh;
             z-index: 100;
         }
 
         .sidebar-header {
             padding: var(--space-5);
-            border-bottom: 1px solid var(--color-border);
-        }
-
-        .sidebar-logo {
+            border-bottom: 1px solid var(--color-slate);
             display: flex;
             align-items: center;
             gap: var(--space-3);
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .sidebar-header h1 {
             font-size: 1.25rem;
             font-weight: 700;
-            color: var(--color-white);
+            color: var(--color-gold);
         }
 
-            .sidebar-logo i {
-                color: var(--color-gold);
-            }
-
-        .admin-badge {
-            background: var(--color-gold);
-            color: var(--color-bg);
-            font-size: 0.625rem;
-            padding: 2px 6px;
-            border-radius: var(--radius-sm);
-            font-weight: 600;
-            margin-left: var(--space-2);
-        }
-
-        .sidebar-nav {
-            flex: 1;
-            padding: var(--space-4);
-            overflow-y: auto;
+        .sidebar-header span {
+            font-size: 0.75rem;
+            color: var(--color-silver);
         }
 
         .nav-section {
-            margin-bottom: var(--space-6);
+            padding: var(--space-4);
         }
 
         .nav-section-title {
-            font-size: 0.75rem;
-            font-weight: 600;
+            font-size: 0.7rem;
             text-transform: uppercase;
-            color: var(--color-muted);
+            letter-spacing: 1px;
+            color: var(--color-silver);
             margin-bottom: var(--space-3);
-            padding: 0 var(--space-3);
+            padding-left: var(--space-3);
         }
 
         .nav-item {
@@ -86,6 +154,7 @@
             padding: var(--space-3) var(--space-4);
             border-radius: var(--radius-md);
             color: var(--color-silver);
+            text-decoration: none;
             transition: all var(--transition-fast);
             margin-bottom: var(--space-1);
         }
@@ -96,7 +165,7 @@
             }
 
             .nav-item.active {
-                background: rgba(212, 168, 83, 0.1);
+                background: var(--color-gold-muted);
                 color: var(--color-gold);
             }
 
@@ -107,169 +176,290 @@
 
         .main-content {
             flex: 1;
-            margin-left: 260px;
+            margin-left: var(--sidebar-width);
             padding: var(--space-6);
         }
 
-        .page-header {
+        .header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            margin-bottom: var(--space-6);
+            align-items: center;
+            margin-bottom: var(--space-5);
         }
 
-            .page-header h1 {
-                font-size: 1.75rem;
+            .header h2 {
+                font-size: 1.5rem;
                 font-weight: 600;
-                color: var(--color-white);
+                display: flex;
+                align-items: center;
+                gap: var(--space-3);
             }
 
-        .filters-bar {
+        .subtitle {
+            color: var(--color-silver);
+            font-size: 0.875rem;
+            margin-top: var(--space-1);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--color-gold);
+            color: var(--color-midnight);
+        }
+
+            .btn-primary:hover {
+                background: var(--color-gold-dark);
+            }
+
+        .btn-secondary {
+            background: var(--color-slate);
+            color: var(--color-white);
+        }
+
+            .btn-secondary:hover {
+                background: var(--color-steel);
+            }
+
+        .btn-icon {
+            padding: var(--space-2);
+            width: 36px;
+            height: 36px;
+            justify-content: center;
+        }
+
+        .btn-danger {
+            background: rgba(248, 81, 73, 0.15);
+            color: var(--color-error);
+        }
+
+            .btn-danger:hover {
+                background: rgba(248, 81, 73, 0.25);
+            }
+
+        .toolbar {
             display: flex;
             gap: var(--space-4);
-            margin-bottom: var(--space-6);
+            margin-bottom: var(--space-5);
             flex-wrap: wrap;
         }
 
         .search-box {
             flex: 1;
-            min-width: 250px;
+            min-width: 200px;
             position: relative;
         }
 
             .search-box input {
                 width: 100%;
-                padding: var(--space-3) var(--space-4) var(--space-3) 44px;
-                background: var(--color-charcoal);
-                border: 1px solid var(--color-border);
+                padding: var(--space-3) var(--space-4);
+                padding-left: 40px;
+                background: var(--color-navy);
+                border: 1px solid var(--color-slate);
                 border-radius: var(--radius-md);
-                color: var(--color-pearl);
+                color: var(--color-white);
+                font-size: 0.875rem;
             }
+
+                .search-box input:focus {
+                    outline: none;
+                    border-color: var(--color-gold);
+                }
 
             .search-box i {
                 position: absolute;
-                left: var(--space-4);
+                left: 14px;
                 top: 50%;
                 transform: translateY(-50%);
-                color: var(--color-muted);
+                color: var(--color-silver);
             }
 
         .filter-select {
             padding: var(--space-3) var(--space-4);
-            background: var(--color-charcoal);
-            border: 1px solid var(--color-border);
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
             border-radius: var(--radius-md);
-            color: var(--color-pearl);
+            color: var(--color-white);
+            font-size: 0.875rem;
             min-width: 150px;
         }
 
-        .packages-table {
+            .filter-select:focus {
+                outline: none;
+                border-color: var(--color-gold);
+            }
+
+        .card {
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .data-table {
             width: 100%;
             border-collapse: collapse;
         }
 
-            .packages-table th, .packages-table td {
+            .data-table th, .data-table td {
                 padding: var(--space-4);
                 text-align: left;
-                border-bottom: 1px solid var(--color-border);
+                border-bottom: 1px solid var(--color-slate);
             }
 
-            .packages-table th {
-                background: var(--color-charcoal);
-                color: var(--color-silver);
-                font-weight: 600;
-                font-size: 0.8125rem;
+            .data-table th {
+                font-size: 0.75rem;
                 text-transform: uppercase;
-            }
-
-            .packages-table tr:hover {
+                letter-spacing: 0.5px;
+                color: var(--color-silver);
+                font-weight: 500;
                 background: var(--color-slate);
             }
 
-        .package-cell {
+            .data-table td {
+                font-size: 0.875rem;
+            }
+
+            .data-table tr:hover td {
+                background: rgba(255,255,255,0.02);
+            }
+
+        .package-info {
             display: flex;
             align-items: center;
             gap: var(--space-3);
         }
 
-        .package-thumb {
-            width: 60px;
-            height: 40px;
+        .package-img {
+            width: 48px;
+            height: 48px;
             border-radius: var(--radius-sm);
             object-fit: cover;
+            background: var(--color-slate);
         }
 
         .package-name {
             font-weight: 500;
-            color: var(--color-white);
         }
 
-        .package-location {
-            font-size: 0.8125rem;
-            color: var(--color-muted);
+        .package-country {
+            font-size: 0.75rem;
+            color: var(--color-silver);
         }
-
-        .price-cell {
-            font-weight: 600;
-            color: var(--color-gold);
-        }
-
-            .price-cell .original {
-                font-size: 0.8125rem;
-                color: var(--color-muted);
-                text-decoration: line-through;
-                display: block;
-            }
 
         .status-badge {
-            padding: var(--space-1) var(--space-2);
-            border-radius: var(--radius-sm);
+            display: inline-flex;
+            align-items: center;
+            padding: var(--space-1) var(--space-3);
+            border-radius: 20px;
             font-size: 0.75rem;
-            font-weight: 600;
+            font-weight: 500;
         }
 
             .status-badge.active {
-                background: rgba(16, 185, 129, 0.15);
+                background: rgba(63, 185, 80, 0.15);
                 color: var(--color-success);
             }
 
-            .status-badge.sold-out {
-                background: rgba(239, 68, 68, 0.15);
+            .status-badge.inactive {
+                background: rgba(248, 81, 73, 0.15);
                 color: var(--color-error);
             }
 
-        .actions-cell {
+        .actions {
             display: flex;
             gap: var(--space-2);
         }
 
-        .action-btn {
-            padding: var(--space-2);
-            background: var(--color-slate);
-            border: none;
-            border-radius: var(--radius-sm);
-            color: var(--color-silver);
-            cursor: pointer;
-            transition: all var(--transition-fast);
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-4);
+            border-top: 1px solid var(--color-slate);
         }
 
-            .action-btn:hover {
-                color: var(--color-gold);
+        .pagination-info {
+            font-size: 0.875rem;
+            color: var(--color-silver);
+        }
+
+        .pagination-btns {
+            display: flex;
+            gap: var(--space-2);
+        }
+
+            .pagination-btns button:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
             }
 
-            .action-btn.delete:hover {
+        .empty-state {
+            text-align: center;
+            padding: var(--space-6);
+        }
+
+            .empty-state i {
+                font-size: 3rem;
+                color: var(--color-silver);
+                margin-bottom: var(--space-4);
+                opacity: 0.5;
+            }
+
+            .empty-state p {
+                color: var(--color-silver);
+                margin-bottom: var(--space-4);
+            }
+
+        .toast {
+            position: fixed;
+            bottom: var(--space-5);
+            right: var(--space-5);
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+            .toast.show {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            .toast.success i {
+                color: var(--color-success);
+            }
+
+            .toast.error i {
                 color: var(--color-error);
             }
 
-        .card {
-            background: var(--color-charcoal);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-        }
-
         .mobile-menu-btn {
             display: none;
+            background: none;
+            border: none;
+            color: var(--color-white);
+            font-size: 1.5rem;
+            cursor: pointer;
         }
 
         .sidebar-overlay {
@@ -280,192 +470,352 @@
             z-index: 99;
         }
 
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all var(--transition-normal);
-            padding: var(--space-6);
-        }
-
-            .modal-overlay.active {
-                opacity: 1;
-                visibility: visible;
-            }
-
-        .modal {
-            background: var(--color-charcoal);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-lg);
-            width: 100%;
-            max-width: 700px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            padding: var(--space-5);
-            border-bottom: 1px solid var(--color-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            background: var(--color-charcoal);
-            z-index: 1;
-        }
-
-            .modal-header h3 {
-                font-size: 1.25rem;
-                font-weight: 600;
-                color: var(--color-white);
-            }
-
-        .modal-close {
-            background: none;
-            border: none;
-            color: var(--color-silver);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            padding: var(--space-5);
-        }
-
-        .modal-footer {
-            padding: var(--space-5);
-            border-top: 1px solid var(--color-border);
-            display: flex;
-            justify-content: flex-end;
-            gap: var(--space-3);
-            position: sticky;
-            bottom: 0;
-            background: var(--color-charcoal);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--space-4);
-        }
-
         @@media (max-width: 1024px) {
             .sidebar {
                 transform: translateX(-100%);
-                transition: transform var(--transition-normal);
+                transition: transform 0.3s ease;
             }
 
                 .sidebar.open {
                     transform: translateX(0);
                 }
 
-            .sidebar-overlay.active {
-                display: block;
-            }
-
             .main-content {
                 margin-left: 0;
             }
 
             .mobile-menu-btn {
-                display: flex;
-            }
-
-            .packages-table {
                 display: block;
-                overflow-x: auto;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .toolbar {
+                flex-direction: column;
             }
 
-            .form-row {
-                grid-template-columns: 1fr;
+            .search-box {
+                width: 100%;
+            }
+
+            .data-table {
+                font-size: 0.8125rem;
+            }
+
+            .hide-mobile {
+                display: none;
             }
         }
     </style>
 </head>
 <body>
-    <div class="dashboard-layout">
-        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="page-transition" id="pageTransition"><div class="loader"></div></div>
+
+    <div class="admin-layout">
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header"><a href="/" class="sidebar-logo"><i class="fas fa-compass"></i> TRAVIL <span class="admin-badge">ADMIN</span></a></div>
-            <nav class="sidebar-nav">
-                <div class="nav-section"><div class="nav-section-title">Overview</div><a href="/admin/dashboard" class="nav-item"><i class="fas fa-th-large"></i> Dashboard</a></div>
-                <div class="nav-section"><div class="nav-section-title">Management</div><a href="/admin/packages" class="nav-item active"><i class="fas fa-suitcase"></i> Packages</a><a href="/admin/bookings" class="nav-item"><i class="fas fa-calendar-check"></i> Bookings</a><a href="/admin/users" class="nav-item"><i class="fas fa-users"></i> Users</a><a href="/admin/reviews" class="nav-item"><i class="fas fa-star"></i> Reviews</a></div>
-                <div class="nav-section"><div class="nav-section-title">Settings</div><a href="/" class="nav-item"><i class="fas fa-globe"></i> View Site</a><a href="#" onclick="logout(event)" class="nav-item"><i class="fas fa-sign-out-alt"></i> Logout</a></div>
+            <div class="sidebar-header">
+                <div class="logo"><i class="fas fa-compass"></i></div>
+                <div>
+                    <h1>TRAVIL</h1>
+                    <span>Admin Panel</span>
+                </div>
+            </div>
+
+            <nav class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <a href="/admin/dashboard" class="nav-item"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                <a href="/admin/packages" class="nav-item active"><i class="fas fa-suitcase"></i><span>Packages</span></a>
+                <a href="/admin/bookings" class="nav-item"><i class="fas fa-calendar-check"></i><span>Bookings</span></a>
+            </nav>
+
+            <nav class="nav-section">
+                <div class="nav-section-title">Management</div>
+                <a href="/admin/users" class="nav-item"><i class="fas fa-users"></i><span>Users</span></a>
+                <a href="/admin/reviews" class="nav-item"><i class="fas fa-star"></i><span>Reviews</span></a>
+                <a href="/admin/prices" class="nav-item"><i class="fas fa-tags"></i><span>Discounts</span></a>
+            </nav>
+
+            <nav class="nav-section">
+                <div class="nav-section-title">Settings</div>
+                <a href="/admin/profile" class="nav-item"><i class="fas fa-user-cog"></i><span>Profile</span></a>
+                <a href="/" class="nav-item"><i class="fas fa-globe"></i><span>View Site</span></a>
+                <a href="#" class="nav-item" onclick="logout(event)"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
             </nav>
         </aside>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
         <main class="main-content">
-            <div class="page-header">
-                <div style="display: flex; align-items: center;"><button class="mobile-menu-btn" onclick="toggleSidebar()" style="margin-right: var(--space-4);"><i class="fas fa-bars"></i></button><h1>Manage Packages</h1></div>
-                <button class="btn btn-primary" onclick="openCreateModal()"><i class="fas fa-plus"></i> Add Package</button>
+            <div class="header">
+                <div>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+                    <h2><i class="fas fa-suitcase" style="color: var(--color-gold);"></i>Manage Packages</h2>
+                    <p class="subtitle">Create, edit and manage travel packages</p>
+                </div>
+                <a href="/admin/packages/create" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add Package
+                </a>
             </div>
-            <div class="filters-bar">
-                <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search packages..." oninput="filterPackages()" /></div>
-                <select class="filter-select" id="categoryFilter" onchange="filterPackages()"><option value="">All Categories</option><option value="0">Family</option><option value="1">Honeymoon</option><option value="2">Adventure</option><option value="3">Cruise</option><option value="4">Luxury</option><option value="5">Budget</option><option value="6">Cultural</option><option value="7">Beach</option></select>
+
+            <div class="toolbar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search packages..." oninput="filterPackages()" />
+                </div>
+                <select class="filter-select" id="statusFilter" onchange="filterPackages()">
+                    <option value="">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+                <select class="filter-select" id="typeFilter" onchange="filterPackages()">
+                    <option value="">All Types</option>
+                    <option value="0">Adventure</option>
+                    <option value="1">Beach</option>
+                    <option value="2">Cultural</option>
+                    <option value="3">Cruise</option>
+                    <option value="4">Safari</option>
+                    <option value="5">Ski</option>
+                    <option value="6">City Break</option>
+                    <option value="7">Honeymoon</option>
+                    <option value="8">Family</option>
+                    <option value="9">Luxury</option>
+                </select>
             </div>
+
             <div class="card">
-                <table class="packages-table">
-                    <thead><tr><th>Package</th><th>Category</th><th>Price</th><th>Rooms</th><th>Dates</th><th>Status</th><th>Actions</th></tr></thead>
-                    <tbody id="packagesTable"><tr><td colspan="7" style="text-align: center; padding: var(--space-8);"><div class="loading"><div class="spinner"></div></div></td></tr></tbody>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Package</th>
+                            <th class="hide-mobile">Type</th>
+                            <th>Price</th>
+                            <th class="hide-mobile">Rooms</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="packagesTableBody">
+                        <tr>
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    <p>Loading packages...</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
+                <div class="pagination" id="pagination" style="display: none;">
+                    <span class="pagination-info" id="paginationInfo">Showing 1-10 of 50 packages</span>
+                    <div class="pagination-btns">
+                        <button class="btn btn-secondary btn-icon" id="prevBtn" onclick="prevPage()"><i class="fas fa-chevron-left"></i></button>
+                        <button class="btn btn-secondary btn-icon" id="nextBtn" onclick="nextPage()"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
-    <div class="modal-overlay" id="packageModal">
-        <div class="modal">
-            <div class="modal-header"><h3 id="modalTitle">Add New Package</h3><button class="modal-close" onclick="closeModal()">&times;</button></div>
-            <div class="modal-body">
-                <form id="packageForm">
-                    <input type="hidden" id="packageId" />
-                    <div class="form-row"><div class="form-group"><label class="form-label">Destination *</label><input type="text" class="form-control" id="destination" required /></div><div class="form-group"><label class="form-label">Country *</label><input type="text" class="form-control" id="country" required /></div></div>
-                    <div class="form-group"><label class="form-label">Description</label><textarea class="form-control" id="description" rows="3"></textarea></div>
-                    <div class="form-row"><div class="form-group"><label class="form-label">Price ($) *</label><input type="number" class="form-control" id="price" required min="0" step="0.01" /></div><div class="form-group"><label class="form-label">Discounted Price ($)</label><input type="number" class="form-control" id="discountedPrice" min="0" step="0.01" /></div></div>
-                    <div class="form-row"><div class="form-group"><label class="form-label">Start Date *</label><input type="date" class="form-control" id="startDate" required /></div><div class="form-group"><label class="form-label">End Date *</label><input type="date" class="form-control" id="endDate" required /></div></div>
-                    <div class="form-row"><div class="form-group"><label class="form-label">Available Rooms *</label><input type="number" class="form-control" id="availableRooms" required min="0" /></div><div class="form-group"><label class="form-label">Age Restriction</label><input type="number" class="form-control" id="ageRestriction" min="0" /></div></div>
-                    <div class="form-group"><label class="form-label">Category *</label><select class="form-control" id="packageType" required><option value="0">Family</option><option value="1">Honeymoon</option><option value="2">Adventure</option><option value="3">Cruise</option><option value="4">Luxury</option><option value="5">Budget</option><option value="6">Cultural</option><option value="7">Beach</option></select></div>
-                    <div class="form-group"><label class="form-label">Image URLs (comma separated)</label><input type="text" class="form-control" id="images" /></div>
-                </form>
-            </div>
-            <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="savePackage()"><i class="fas fa-save"></i> Save</button></div>
-        </div>
+
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Success!</span>
     </div>
-    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">Success!</span></div>
+
     <script>
-        var token = localStorage.getItem('token'), user = localStorage.getItem('user');
-        if (!token || !user) window.location.href = '/account/login';
-        var userData = null; try { userData = JSON.parse(user); } catch (e) { window.location.href = '/account/login'; }
-        if (userData.role !== 0 && userData.role !== '0' && userData.role !== 'Admin') window.location.href = '/account/dashboard';
-        var allPackages = [], categoryNames = ['Family', 'Honeymoon', 'Adventure', 'Cruise', 'Luxury', 'Budget', 'Cultural', 'Beach'];
-        function showToast(msg, type) { type = type || 'success'; var t = document.getElementById('toast'); document.getElementById('toastMessage').textContent = msg; t.className = 'toast ' + type; t.classList.add('show'); setTimeout(function() { t.classList.remove('show'); }, 3000); }
-        function formatDate(d) { if (!d) return ''; return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
-        function logout(e) { e.preventDefault(); localStorage.removeItem('token'); localStorage.removeItem('user'); window.location.href = '/'; }
-        async function loadPackages() { try { var res = await fetch('/api/packages'); allPackages = await res.json(); if (allPackages.data) allPackages = allPackages.data; renderPackages(allPackages); } catch (e) { console.error(e); } }
-        function renderPackages(packages) {
-            var tbody = document.getElementById('packagesTable');
-            if (packages.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:var(--space-8);"><p>No packages found</p></td></tr>'; return; }
-            var html = '';
-            packages.forEach(function(pkg) {
-                var hasDis = pkg.discountedPrice && pkg.discountedPrice < pkg.price;
-                var img = pkg.images && pkg.images.length > 0 ? (pkg.images[0].startsWith('http') ? pkg.images[0] : '/images/travel-packages/' + pkg.images[0]) : 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=100&q=80';
-                var status = pkg.availableRooms > 0 ? 'active' : 'sold-out', statusText = pkg.availableRooms > 0 ? 'Available' : 'Sold Out';
-                html += '<tr><td><div class="package-cell"><img src="' + img + '" class="package-thumb" /><div><div class="package-name">' + (pkg.destination || '') + '</div><div class="package-location">' + (pkg.country || '') + '</div></div></div></td><td>' + categoryNames[pkg.packageType] + '</td><td class="price-cell">' + (hasDis ? '<span class="original">$' + Math.round(pkg.price) + '</span>' : '') + '$' + Math.round(hasDis ? pkg.discountedPrice : pkg.price) + '</td><td>' + (pkg.availableRooms || 0) + '</td><td>' + formatDate(pkg.startDate) + ' - ' + formatDate(pkg.endDate) + '</td><td><span class="status-badge ' + status + '">' + statusText + '</span></td><td class="actions-cell"><button class="action-btn" onclick="editPackage(' + pkg.packageId + ')"><i class="fas fa-edit"></i></button><button class="action-btn delete" onclick="deletePackage(' + pkg.packageId + ')"><i class="fas fa-trash"></i></button></td></tr>';
-            });
-            tbody.innerHTML = html;
+        var allPackages = [];
+        var filteredPackages = [];
+        var currentPage = 1;
+        var itemsPerPage = 10;
+
+        var packageTypes = ['Adventure', 'Beach', 'Cultural', 'Cruise', 'Safari', 'Ski', 'City Break', 'Honeymoon', 'Family', 'Luxury'];
+
+        function navigateTo(url, event) {
+            if (event) event.preventDefault();
+            document.getElementById('pageTransition').classList.add('active');
+            setTimeout(function() { window.location.href = url; }, 300);
         }
-        function filterPackages() { var search = document.getElementById('searchInput').value.toLowerCase(), category = document.getElementById('categoryFilter').value; var filtered = allPackages.filter(function(pkg) { var matchSearch = !search || (pkg.destination || '').toLowerCase().includes(search) || (pkg.country || '').toLowerCase().includes(search); var matchCategory = !category || pkg.packageType == category; return matchSearch && matchCategory; }); renderPackages(filtered); }
-        function openCreateModal() { document.getElementById('modalTitle').textContent = 'Add New Package'; document.getElementById('packageForm').reset(); document.getElementById('packageId').value = ''; document.getElementById('packageModal').classList.add('active'); }
-        function closeModal() { document.getElementById('packageModal').classList.remove('active'); }
-        function editPackage(id) { var pkg = allPackages.find(function(p) { return p.packageId === id; }); if (!pkg) return; document.getElementById('modalTitle').textContent = 'Edit Package'; document.getElementById('packageId').value = pkg.packageId; document.getElementById('destination').value = pkg.destination || ''; document.getElementById('country').value = pkg.country || ''; document.getElementById('description').value = pkg.description || ''; document.getElementById('price').value = pkg.price || ''; document.getElementById('discountedPrice').value = pkg.discountedPrice || ''; document.getElementById('startDate').value = pkg.startDate ? pkg.startDate.split('T')[0] : ''; document.getElementById('endDate').value = pkg.endDate ? pkg.endDate.split('T')[0] : ''; document.getElementById('availableRooms').value = pkg.availableRooms || 0; document.getElementById('ageRestriction').value = pkg.ageRestriction || ''; document.getElementById('packageType').value = pkg.packageType || 0; document.getElementById('images').value = (pkg.images || []).join(', '); document.getElementById('packageModal').classList.add('active'); }
-        async function savePackage() { var id = document.getElementById('packageId').value; var data = { destination: document.getElementById('destination').value, country: document.getElementById('country').value, description: document.getElementById('description').value, price: parseFloat(document.getElementById('price').value), discountedPrice: document.getElementById('discountedPrice').value ? parseFloat(document.getElementById('discountedPrice').value) : null, startDate: document.getElementById('startDate').value, endDate: document.getElementById('endDate').value, availableRooms: parseInt(document.getElementById('availableRooms').value), ageRestriction: document.getElementById('ageRestriction').value ? parseInt(document.getElementById('ageRestriction').value) : null, packageType: parseInt(document.getElementById('packageType').value), images: document.getElementById('images').value.split(',').map(function(s) { return s.trim(); }).filter(function(s) { return s; }) }; try { var url = id ? '/api/packages/' + id : '/api/packages', method = id ? 'PUT' : 'POST'; var res = await fetch(url, { method: method, headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); if (res.ok) { showToast(id ? 'Package updated!' : 'Package created!'); closeModal(); loadPackages(); } else { showToast('Failed to save', 'error'); } } catch (e) { showToast('Error', 'error'); } }
-        async function deletePackage(id) { if (!confirm('Delete this package?')) return; try { var res = await fetch('/api/packages/' + id, { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } }); if (res.ok) { showToast('Deleted'); loadPackages(); } else { showToast('Failed', 'error'); } } catch (e) { showToast('Error', 'error'); } }
-        document.addEventListener('DOMContentLoaded', loadPackages);
+
+        function logout(event) {
+            if (event) event.preventDefault();
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            navigateTo('/account/login');
+        }
+
+        function showToast(message, type) {
+            type = type || 'success';
+            var toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.className = 'toast ' + type;
+            toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+            toast.classList.add('show');
+            setTimeout(function() { toast.classList.remove('show'); }, 3000);
+        }
+
+        // Mobile menu
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        });
+
+        document.getElementById('sidebarOverlay').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('open');
+            this.classList.remove('active');
+        });
+
+        // Load packages
+        async function loadPackages() {
+            var token = localStorage.getItem('token');
+
+            try {
+                var response = await fetch('/api/packages/all', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+
+                if (response.status === 401) {
+                    showToast('Session expired. Please login again.', 'error');
+                    setTimeout(function() { navigateTo('/account/login'); }, 2000);
+                    return;
+                }
+
+                if (response.ok) {
+                    var result = await response.json();
+                    allPackages = result.data || [];
+                    filteredPackages = allPackages.slice();
+                    renderPackages();
+                } else {
+                    showToast('Failed to load packages', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('Error loading packages', 'error');
+            }
+        }
+
+        function renderPackages() {
+            var tbody = document.getElementById('packagesTableBody');
+            var startIndex = (currentPage - 1) * itemsPerPage;
+            var endIndex = startIndex + itemsPerPage;
+            var pagePackages = filteredPackages.slice(startIndex, endIndex);
+
+            if (filteredPackages.length === 0) {
+                showEmptyState('No packages found');
+                return;
+            }
+
+            tbody.innerHTML = pagePackages.map(function(pkg) {
+                var typeName = packageTypes[pkg.packageType] || 'Unknown';
+                var statusClass = pkg.isActive ? 'active' : 'inactive';
+                var statusText = pkg.isActive ? 'Active' : 'Inactive';
+                var imgSrc = pkg.imageUrl || 'https://via.placeholder.com/48?text=No+Image';
+
+                return '<tr>' +
+                    '<td><div class="package-info">' +
+                        '<img src="' + imgSrc + '" alt="' + pkg.destination + '" class="package-img" onerror="this.src=\'https://via.placeholder.com/48?text=No+Image\'" />' +
+                        '<div><div class="package-name">' + pkg.destination + '</div><div class="package-country">' + pkg.country + '</div></div>' +
+                    '</div></td>' +
+                    '<td class="hide-mobile">' + typeName + '</td>' +
+                    '<td>$' + (pkg.price || 0).toLocaleString() + '</td>' +
+                    '<td class="hide-mobile">' + (pkg.availableRooms || 0) + '</td>' +
+                    '<td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td>' +
+                    '<td><div class="actions">' +
+                        '<a href="/admin/packages/edit/' + pkg.packageId + '" class="btn btn-secondary btn-icon" title="Edit"><i class="fas fa-edit"></i></a>' +
+                        '<button class="btn btn-danger btn-icon" onclick="deletePackage(' + pkg.packageId + ')" title="Delete"><i class="fas fa-trash"></i></button>' +
+                    '</div></td>' +
+                    '</tr>';
+            }).join('');
+
+            var totalPages = Math.ceil(filteredPackages.length / itemsPerPage);
+            document.getElementById('pagination').style.display = 'flex';
+            document.getElementById('paginationInfo').textContent = 'Showing ' + (startIndex + 1) + '-' + Math.min(endIndex, filteredPackages.length) + ' of ' + filteredPackages.length + ' packages';
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage >= totalPages;
+        }
+
+        function showEmptyState(message) {
+            var tbody = document.getElementById('packagesTableBody');
+            tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><i class="fas fa-suitcase"></i><p>' + message + '</p><a href="/admin/packages/create" class="btn btn-primary"><i class="fas fa-plus"></i> Add Package</a></div></td></tr>';
+            document.getElementById('pagination').style.display = 'none';
+        }
+
+        function filterPackages() {
+            var searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            var statusFilter = document.getElementById('statusFilter').value;
+            var typeFilter = document.getElementById('typeFilter').value;
+
+            filteredPackages = allPackages.filter(function(pkg) {
+                var matchesSearch = pkg.destination.toLowerCase().includes(searchTerm) || pkg.country.toLowerCase().includes(searchTerm);
+                var matchesStatus = !statusFilter || (statusFilter === 'active' && pkg.isActive) || (statusFilter === 'inactive' && !pkg.isActive);
+                var matchesType = !typeFilter || pkg.packageType.toString() === typeFilter;
+                return matchesSearch && matchesStatus && matchesType;
+            });
+
+            currentPage = 1;
+            renderPackages();
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderPackages();
+            }
+        }
+
+        function nextPage() {
+            var totalPages = Math.ceil(filteredPackages.length / itemsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderPackages();
+            }
+        }
+
+        async function deletePackage(id) {
+            if (!confirm('Are you sure you want to delete this package?')) return;
+
+            var token = localStorage.getItem('token');
+
+            try {
+                var response = await fetch('/api/packages/' + id, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+
+                if (response.ok) {
+                    showToast('Package deleted successfully');
+                    loadPackages();
+                } else {
+                    var result = await response.json();
+                    showToast(result.message || 'Failed to delete package', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('Error deleting package', 'error');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            var token = localStorage.getItem('token');
+            var user = localStorage.getItem('user');
+
+            if (!token || !user) {
+                navigateTo('/account/login');
+                return;
+            }
+
+            try {
+                var userData = JSON.parse(user);
+                if (userData.role !== 0 && userData.role !== 'Admin') {
+                    showToast('Access denied. Admin only.', 'error');
+                    setTimeout(function() { navigateTo('/'); }, 2000);
+                    return;
+                }
+            } catch (e) {
+                console.error('Error:', e);
+            }
+
+            loadPackages();
+        });
     </script>
 </body>
 </html>
