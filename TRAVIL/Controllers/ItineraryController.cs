@@ -64,7 +64,7 @@ namespace TRAVEL.Controllers
 
                 var pdfBytes = GenerateItineraryPdf(booking);
 
-                var fileName = $"TRAVIL_Itinerary_{booking.BookingReference}_{booking.TravelPackage.Destination.Replace(" ", "_")}.pdf";
+                var fileName = $"TRAVEL_Itinerary_{booking.BookingReference}_{booking.TravelPackage.Destination.Replace(" ", "_")}.pdf";
 
                 _logger.LogInformation($"Itinerary PDF generated for booking {bookingId}");
 
@@ -103,7 +103,7 @@ namespace TRAVEL.Controllers
                         {
                             row.RelativeItem().Column(c =>
                             {
-                                c.Item().Text("TRAVIL")
+                                c.Item().Text("TRAVEL")
                                     .FontSize(28)
                                     .Bold()
                                     .FontColor(Colors.Amber.Darken2);
@@ -332,8 +332,8 @@ namespace TRAVEL.Controllers
 
                             emergency.Item().PaddingTop(5).Row(row =>
                             {
-                                row.RelativeItem().Text("TRAVIL Support: +1 (234) 567-890").FontSize(9);
-                                row.RelativeItem().Text("Email: support@travil.com").FontSize(9);
+                                row.RelativeItem().Text("TRAVEL Support: +1 (234) 567-890").FontSize(9);
+                                row.RelativeItem().Text("Email: support@TRAVEL.com").FontSize(9);
                             });
                         });
                     });
@@ -345,7 +345,7 @@ namespace TRAVEL.Controllers
 
                         col.Item().PaddingTop(10).Row(row =>
                         {
-                            row.RelativeItem().Text("TRAVIL - Your Journey, Our Passion")
+                            row.RelativeItem().Text("TRAVEL - Your Journey, Our Passion")
                                 .FontSize(9)
                                 .FontColor(Colors.Grey.Medium);
 
@@ -358,7 +358,7 @@ namespace TRAVEL.Controllers
                             });
                         });
 
-                        col.Item().PaddingTop(5).AlignCenter().Text("www.travil.com | hello@travil.com | +1 (234) 567-890")
+                        col.Item().PaddingTop(5).AlignCenter().Text("www.TRAVEL.com | hello@TRAVEL.com | +1 (234) 567-890")
                             .FontSize(8)
                             .FontColor(Colors.Grey.Medium);
                     });

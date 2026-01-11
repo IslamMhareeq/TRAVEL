@@ -1,4 +1,4 @@
-﻿// Login Form JavaScript - TRAVIL
+﻿// Login Form JavaScript - TRAVEL
 const loginApp = {
     togglePassword: function () {
         const field = document.getElementById('password');

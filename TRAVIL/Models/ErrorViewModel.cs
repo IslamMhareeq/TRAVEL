@@ -1,4 +1,4 @@
-namespace TRAVIL.Models
+namespace TRAVEL.Models
 {
     public class ErrorViewModel
     {

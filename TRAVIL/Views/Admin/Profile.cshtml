@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Profile - TRAVIL Admin</title>
+    <title>Profile - TRAVEL Admin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -556,7 +556,7 @@
             <div class="sidebar-header">
                 <a href="/admin/dashboard" class="sidebar-logo">
                     <div class="logo-icon"><i class="fas fa-paper-plane"></i></div>
-                    <div class="logo-text"><span>TRAVIL</span><span>Admin Panel</span></div>
+                    <div class="logo-text"><span>TRAVEL</span><span>Admin Panel</span></div>
                 </a>
             </div>
             <nav class="sidebar-nav">
@@ -594,7 +594,7 @@
                 <div class="profile-info">
                     <h2 id="profileName">Admin User</h2>
                     <div class="profile-role"><i class="fas fa-shield-alt"></i> Super Admin</div>
-                    <p class="profile-email" id="profileEmail">admin@travil.com</p>
+                    <p class="profile-email" id="profileEmail">admin@TRAVEL.com</p>
                 </div>
             </div>
 
@@ -608,7 +608,7 @@
                                     <div class="form-group"><label for="firstName">First Name</label><input type="text" id="firstName" class="form-control" placeholder="Admin"></div>
                                     <div class="form-group"><label for="lastName">Last Name</label><input type="text" id="lastName" class="form-control" placeholder="User"></div>
                                 </div>
-                                <div class="form-group"><label for="email">Email Address</label><input type="email" id="email" class="form-control" placeholder="admin@travil.com"></div>
+                                <div class="form-group"><label for="email">Email Address</label><input type="email" id="email" class="form-control" placeholder="admin@TRAVEL.com"></div>
                                 <div class="form-group"><label for="phone">Phone Number</label><input type="tel" id="phone" class="form-control" placeholder="+1 (555) 123-4567"></div>
                                 <div class="form-actions">
                                     <button type="button" class="btn btn-secondary">Cancel</button>
@@ -675,10 +675,10 @@
                 var firstName = userData.firstName || 'Admin', lastName = userData.lastName || 'User';
                 document.getElementById('firstName').value = firstName;
                 document.getElementById('lastName').value = lastName;
-                document.getElementById('email').value = userData.email || 'admin@travil.com';
+                document.getElementById('email').value = userData.email || 'admin@TRAVEL.com';
                 document.getElementById('phone').value = userData.phone || userData.phoneNumber || '';
                 document.getElementById('profileName').textContent = firstName + ' ' + lastName;
-                document.getElementById('profileEmail').textContent = userData.email || 'admin@travil.com';
+                document.getElementById('profileEmail').textContent = userData.email || 'admin@TRAVEL.com';
                 document.getElementById('profileAvatar').textContent = firstName.charAt(0).toUpperCase();
             } catch (error) { window.location.href = '/account/login'; }
         });

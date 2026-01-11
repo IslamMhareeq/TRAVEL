@@ -1,4 +1,4 @@
-﻿// Register Form JavaScript - TRAVIL
+﻿// Register Form JavaScript - TRAVEL
 const registerApp = {
     togglePassword: function (fieldId) {
         const field = document.getElementById(fieldId);

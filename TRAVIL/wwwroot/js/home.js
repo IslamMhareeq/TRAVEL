@@ -1,4 +1,4 @@
-﻿// Home Page JavaScript - TRAVIL
+﻿// Home Page JavaScript - TRAVEL
 
 // Package type names and badge classes
 const packageTypes = {

@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Bookings - TRAVIL</title>
+    <title>My Bookings - TRAVEL</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -615,7 +615,7 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <a href="/" class="sidebar-logo" onclick="navigateTo('/', event)">
-                    <i class="fas fa-paper-plane"></i> TRAVIL
+                    <i class="fas fa-paper-plane"></i> TRAVEL
                 </a>
             </div>
             <nav class="sidebar-nav">
@@ -968,7 +968,7 @@
                     var url = window.URL.createObjectURL(blob);
                     var a = document.createElement('a');
                     a.href = url;
-                    a.download = 'TRAVIL_Itinerary_' + bookingId + '.pdf';
+                    a.download = 'TRAVEL_Itinerary_' + bookingId + '.pdf';
                     document.body.appendChild(a);
                     a.click();
                     window.URL.revokeObjectURL(url);

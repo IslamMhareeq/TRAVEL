@@ -18,7 +18,7 @@ builder.Services.AddControllersWithViews()
     });
 
 // Add Entity Framework Core with PostgreSQL
-// FIXED: Removed MigrationsAssembly("TRAVIL") - was causing assembly not found error
+// FIXED: Removed MigrationsAssembly("TRAVEL") - was causing assembly not found error
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<TravelDbContext>(options =>
     options.UseNpgsql(connectionString, npgsqlOptions =>

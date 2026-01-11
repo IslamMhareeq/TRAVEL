@@ -1,5 +1,5 @@
 /**
- * TRAVIL - Site JavaScript
+ * TRAVEL - Site JavaScript
  * Handles common interactions and functionality
  */
 

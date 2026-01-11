@@ -662,7 +662,7 @@ namespace TRAVEL.Controllers
 
         private async Task SendVerificationCodeEmailAsync(string toEmail, string userName, string code)
         {
-            var subject = "Your TRAVIL Password Reset Code";
+            var subject = "Your TRAVEL Password Reset Code";
             var body = $@"
 <!DOCTYPE html>
 <html>
@@ -683,7 +683,7 @@ namespace TRAVEL.Controllers
 <body>
     <div class='container'>
         <div class='header'>
-            <h1>✈ TRAVIL</h1>
+            <h1>✈ TRAVEL</h1>
         </div>
         <div class='content'>
             <h2>Password Reset Code</h2>
@@ -697,7 +697,7 @@ namespace TRAVEL.Controllers
             </div>
         </div>
         <div class='footer'>
-            <p>© 2024 TRAVIL. All rights reserved.</p>
+            <p>© 2024 TRAVEL. All rights reserved.</p>
             <p>This is an automated message, please do not reply.</p>
         </div>
     </div>
