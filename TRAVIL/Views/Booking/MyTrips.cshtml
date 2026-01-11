@@ -1,0 +1,878 @@
+﻿@{
+    ViewData["Title"] = "My Trips";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Trips - TRAVIL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-bg: #0a0e14;
+            --color-card: #111820;
+            --color-border: #1e2833;
+            --color-slate: #2d3a47;
+            --color-steel: #4a5568;
+            --color-silver: #8b949e;
+            --color-white: #f0f6fc;
+            --color-gold: #d4a853;
+            --color-gold-dark: #b8943f;
+            --color-success: #3fb950;
+            --color-warning: #d29922;
+            --color-error: #f85149;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-full: 9999px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-bg);
+            color: var(--color-white);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 16px 24px;
+            background: rgba(10, 14, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.125rem;
+            color: var(--color-bg);
+        }
+
+        .logo-text {
+            font-family: var(--font-display);
+            font-size: 1.375rem;
+            font-weight: 500;
+            color: var(--color-white);
+            letter-spacing: 0.1em;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+            .nav a {
+                color: var(--color-silver);
+                text-decoration: none;
+                font-size: 0.9375rem;
+                font-weight: 500;
+                transition: color 0.2s;
+            }
+
+                .nav a:hover, .nav a.active {
+                    color: var(--color-gold);
+                }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 20px;
+            font-family: var(--font-body);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--color-silver);
+        }
+
+            .btn-ghost:hover {
+                color: var(--color-gold);
+            }
+
+        .btn-primary {
+            background: var(--color-gold);
+            color: var(--color-bg);
+        }
+
+            .btn-primary:hover {
+                background: var(--color-gold-dark);
+            }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--color-border);
+            color: var(--color-white);
+        }
+
+            .btn-outline:hover {
+                border-color: var(--color-gold);
+                color: var(--color-gold);
+            }
+
+        /* Main Content */
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 24px 60px;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 40px;
+        }
+
+            .page-header h1 {
+                font-family: var(--font-display);
+                font-size: 2.25rem;
+                font-weight: 500;
+                margin-bottom: 8px;
+            }
+
+            .page-header p {
+                color: var(--color-silver);
+                font-size: 1rem;
+            }
+
+        /* Trips List */
+        .trips-list {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Trip Card - Horizontal Layout */
+        .trip-card {
+            display: flex;
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+            .trip-card:hover {
+                border-color: var(--color-slate);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            }
+
+        /* Trip Image */
+        .trip-image {
+            position: relative;
+            width: 280px;
+            min-height: 220px;
+            flex-shrink: 0;
+        }
+
+            .trip-image img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        /* Status Badge */
+        .status-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            padding: 6px 12px;
+            border-radius: var(--radius-md);
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .status-confirmed {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .status-pending {
+            background: var(--color-warning);
+            color: var(--color-bg);
+        }
+
+        .status-completed {
+            background: #58a6ff;
+            color: white;
+        }
+
+        .status-cancelled {
+            background: var(--color-error);
+            color: white;
+        }
+
+        /* Countdown Badge */
+        .countdown-badge {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            text-align: center;
+            min-width: 70px;
+        }
+
+        .countdown-number {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--color-gold);
+            line-height: 1;
+        }
+
+        .countdown-label {
+            font-size: 0.625rem;
+            color: var(--color-silver);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 4px;
+        }
+
+        .countdown-badge.soon .countdown-number {
+            color: var(--color-success);
+        }
+
+        .countdown-badge.past .countdown-number {
+            color: var(--color-silver);
+        }
+
+        /* Trip Content */
+        .trip-content {
+            flex: 1;
+            padding: 24px 32px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .trip-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .trip-destination {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+
+        .trip-reference {
+            background: var(--color-slate);
+            padding: 6px 12px;
+            border-radius: var(--radius-md);
+            font-size: 0.75rem;
+            font-family: monospace;
+            color: var(--color-silver);
+        }
+
+        .trip-country {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--color-gold);
+            font-size: 0.875rem;
+            margin-bottom: 24px;
+        }
+
+        /* Trip Details Grid */
+        .trip-details {
+            display: flex;
+            gap: 48px;
+            margin-bottom: 24px;
+        }
+
+        .trip-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .trip-detail-label {
+            font-size: 0.6875rem;
+            color: var(--color-steel);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .trip-detail-value {
+            font-size: 0.9375rem;
+            font-weight: 500;
+            color: var(--color-white);
+        }
+
+            .trip-detail-value.price {
+                color: var(--color-gold);
+                font-size: 1.125rem;
+            }
+
+        /* Trip Actions */
+        .trip-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+        }
+
+        .btn-view {
+            background: transparent;
+            border: 1px solid var(--color-border);
+            color: var(--color-white);
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .btn-view:hover {
+                border-color: var(--color-gold);
+                color: var(--color-gold);
+            }
+
+        .btn-download {
+            background: var(--color-gold);
+            color: var(--color-bg);
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .btn-download:hover {
+                background: var(--color-gold-dark);
+            }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 24px;
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+        }
+
+        .empty-icon {
+            width: 100px;
+            height: 100px;
+            background: var(--color-slate);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+            .empty-icon i {
+                font-size: 2.5rem;
+                color: var(--color-steel);
+            }
+
+        .empty-state h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: var(--color-silver);
+            margin-bottom: 24px;
+        }
+
+        /* Login Required */
+        .login-required {
+            text-align: center;
+            padding: 100px 24px;
+        }
+
+        .login-icon {
+            width: 100px;
+            height: 100px;
+            background: rgba(212, 168, 83, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+            .login-icon i {
+                font-size: 2.5rem;
+                color: var(--color-gold);
+            }
+
+        .login-required h2 {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            margin-bottom: 12px;
+        }
+
+        .login-required p {
+            color: var(--color-silver);
+            margin-bottom: 24px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .login-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 80px 24px;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--color-border);
+            border-top-color: var(--color-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @@keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 2000;
+        }
+
+            .toast.show {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            .toast.success i {
+                color: var(--color-success);
+            }
+
+            .toast.error i {
+                color: var(--color-error);
+            }
+
+        /* Footer */
+        .footer {
+            background: var(--color-card);
+            border-top: 1px solid var(--color-border);
+            padding: 24px;
+            text-align: center;
+            color: var(--color-steel);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @@media (max-width: 900px) {
+            .trip-card {
+                flex-direction: column;
+            }
+
+            .trip-image {
+                width: 100%;
+                height: 200px;
+            }
+
+            .trip-details {
+                flex-wrap: wrap;
+                gap: 24px;
+            }
+
+            .nav {
+                display: none;
+            }
+        }
+
+        @@media (max-width: 600px) {
+            .trip-header {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .trip-actions {
+                flex-direction: column;
+            }
+
+            .btn-view, .btn-download {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">
+                <div class="logo-icon"><i class="fas fa-compass"></i></div>
+                <span class="logo-text">TRAVIL</span>
+            </a>
+            <nav class="nav">
+                <a href="/">Home</a>
+                <a href="/packages">Packages</a>
+                <a href="/destinations">Destinations</a>
+                <a href="/my-trips" class="active">My Trips</a>
+            </nav>
+            <div class="nav-actions" id="navAuth">
+                <a href="/account/login" class="btn btn-ghost">Sign In</a>
+                <a href="/account/register" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main" id="mainContent">
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Loading your trips...</p>
+        </div>
+    </main>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Message</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 TRAVIL. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function showToast(message, type) {
+            var toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.querySelector('i').className = type === 'error' ? 'fas fa-exclamation-circle' : 'fas fa-check-circle';
+            toast.className = 'toast ' + (type || 'success') + ' show';
+            setTimeout(function() { toast.classList.remove('show'); }, 3000);
+        }
+
+        function updateNav() {
+            var token = localStorage.getItem('token');
+            var user = localStorage.getItem('user');
+            var navAuth = document.getElementById('navAuth');
+
+            if (token && user) {
+                try {
+                    var userData = JSON.parse(user);
+                    var isAdmin = userData.role === 0 || userData.role === '0' || userData.role === 'Admin';
+                    navAuth.innerHTML = '<a href="' + (isAdmin ? '/admin/dashboard' : '/account/dashboard') + '" class="btn btn-ghost"><i class="fas fa-user"></i> Dashboard</a>' +
+                        '<a href="#" class="btn btn-outline" onclick="logout(event)">Logout</a>';
+                } catch(e) {}
+            }
+        }
+
+        function logout(event) {
+            if (event) event.preventDefault();
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/';
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return 'N/A';
+            return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        function calculateDaysLeft(startDate) {
+            if (!startDate) return 0;
+            var start = new Date(startDate);
+            var now = new Date();
+            now.setHours(0, 0, 0, 0);
+            start.setHours(0, 0, 0, 0);
+            return Math.ceil((start - now) / (1000 * 60 * 60 * 24));
+        }
+
+        function getDefaultImage(index) {
+            var images = [
+                'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80',
+                'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800&q=80',
+                'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&q=80',
+                'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&q=80'
+            ];
+            return images[index % images.length];
+        }
+
+        function showLoginRequired() {
+            document.getElementById('mainContent').innerHTML = `
+                <div class="login-required">
+                    <div class="login-icon"><i class="fas fa-plane"></i></div>
+                    <h2>Sign In to View Your Trips</h2>
+                    <p>Access your booked destinations, view countdown timers, and download your itineraries.</p>
+                    <div class="login-actions">
+                        <a href="/account/login" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+                        <a href="/packages" class="btn btn-outline"><i class="fas fa-compass"></i> Browse Packages</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function loadTrips() {
+            var token = localStorage.getItem('token');
+            if (!token) { showLoginRequired(); return; }
+
+            try {
+                var response = await fetch('/api/booking/my-bookings', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+
+                if (response.status === 401) { showLoginRequired(); return; }
+                if (!response.ok) throw new Error('Failed to load');
+
+                var result = await response.json();
+                var bookings = result.data || [];
+
+                // Filter to show only paid/confirmed bookings (not cancelled)
+                var paidBookings = bookings.filter(function(b) {
+                    return b.status === 'Confirmed' || b.status === 'Completed' || b.status === 'Pending';
+                });
+
+                renderTrips(paidBookings);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('mainContent').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <h3>Error Loading Trips</h3>
+                        <p>Something went wrong. Please try again.</p>
+                        <a href="/" class="btn btn-primary">Back to Home</a>
+                    </div>
+                `;
+            }
+        }
+
+        function renderTrips(bookings) {
+            var main = document.getElementById('mainContent');
+
+            if (bookings.length === 0) {
+                main.innerHTML = `
+                    <div class="page-header">
+                        <h1>My Trips</h1>
+                        <p>Your booked travel destinations</p>
+                    </div>
+                    <div class="empty-state">
+                        <div class="empty-icon"><i class="fas fa-suitcase"></i></div>
+                        <h3>No Trips Yet</h3>
+                        <p>You haven't booked any trips yet. Start exploring our amazing destinations!</p>
+                        <a href="/packages" class="btn btn-primary"><i class="fas fa-compass"></i> Explore Packages</a>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort by start date (upcoming first)
+            bookings.sort(function(a, b) {
+                var dateA = a.travelPackage?.startDate || a.startDate;
+                var dateB = b.travelPackage?.startDate || b.startDate;
+                return new Date(dateA) - new Date(dateB);
+            });
+
+            var html = `
+                <div class="page-header">
+                    <h1>My Trips</h1>
+                    <p>You have ${bookings.length} booked trip${bookings.length > 1 ? 's' : ''}</p>
+                </div>
+                <div class="trips-list">
+            `;
+
+            bookings.forEach(function(booking, index) {
+                var pkg = booking.travelPackage || {};
+                var startDate = pkg.startDate || booking.startDate;
+                var endDate = pkg.endDate || booking.endDate;
+                var daysLeft = calculateDaysLeft(startDate);
+                var isPast = daysLeft < 0;
+                var imageUrl = pkg.imageUrl || getDefaultImage(index);
+
+                // Status
+                var statusClass = 'status-' + (booking.status || 'pending').toLowerCase();
+                var statusIcon = booking.status === 'Confirmed' ? 'check' :
+                                (booking.status === 'Pending' ? 'clock' :
+                                (booking.status === 'Completed' ? 'flag-checkered' : 'times'));
+
+                // Countdown class
+                var countdownClass = isPast ? 'past' : (daysLeft <= 7 ? 'soon' : '');
+
+                html += `
+                    <div class="trip-card">
+                        <div class="trip-image">
+                            <img src="${imageUrl}" alt="${pkg.destination || 'Destination'}" onerror="this.src='${getDefaultImage(index)}'">
+                            <div class="status-badge ${statusClass}">
+                                <i class="fas fa-${statusIcon}"></i> ${booking.status || 'Pending'}
+                            </div>
+                            <div class="countdown-badge ${countdownClass}">
+                                <div class="countdown-number">${Math.abs(daysLeft)}</div>
+                                <div class="countdown-label">${isPast ? 'Days Ago' : 'Days to Go'}</div>
+                            </div>
+                        </div>
+                        <div class="trip-content">
+                            <div class="trip-header">
+                                <h2 class="trip-destination">${pkg.destination || 'Unknown Destination'}</h2>
+                                <span class="trip-reference">${booking.bookingReference || 'N/A'}</span>
+                            </div>
+                            <div class="trip-country">
+                                <i class="fas fa-map-marker-alt"></i> ${pkg.country || 'N/A'}
+                            </div>
+                            <div class="trip-details">
+                                <div class="trip-detail">
+                                    <span class="trip-detail-label">Travel Dates</span>
+                                    <span class="trip-detail-value">${formatDate(startDate)} - ${formatDate(endDate)}</span>
+                                </div>
+                                <div class="trip-detail">
+                                    <span class="trip-detail-label">Guests</span>
+                                    <span class="trip-detail-value">${booking.numberOfGuests || 1} Guest(s), ${booking.numberOfRooms || 1} Room(s)</span>
+                                </div>
+                                <div class="trip-detail">
+                                    <span class="trip-detail-label">Total Price</span>
+                                    <span class="trip-detail-value price">$${(booking.totalPrice || 0).toLocaleString()}</span>
+                                </div>
+                            </div>
+                            <div class="trip-actions">
+                                <a href="/packages/${pkg.packageId || booking.packageId || ''}" class="btn-view">
+                                    <i class="fas fa-eye"></i> View Details
+                                </a>
+                                ${booking.status === 'Confirmed' ? `
+                                    <button class="btn-download" onclick="downloadItinerary(${booking.bookingId})">
+                                        <i class="fas fa-file-pdf"></i> Download Itinerary
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            main.innerHTML = html;
+        }
+
+        async function downloadItinerary(bookingId) {
+            var token = localStorage.getItem('token');
+            if (!token) { showToast('Please login', 'error'); return; }
+
+            showToast('Generating PDF...', 'success');
+            try {
+                var response = await fetch('/api/itinerary/download/' + bookingId, {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                if (response.ok) {
+                    var blob = await response.blob();
+                    var url = window.URL.createObjectURL(blob);
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'TRAVIL_Itinerary_' + bookingId + '.pdf';
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    showToast('Downloaded!', 'success');
+                } else {
+                    var err = await response.json().catch(function() { return {}; });
+                    showToast(err.message || 'Download failed', 'error');
+                }
+            } catch (e) {
+                console.error(e);
+                showToast('Error downloading', 'error');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNav();
+            loadTrips();
+        });
+    </script>
+</body>
+</html>

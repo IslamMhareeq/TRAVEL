@@ -75,5 +75,17 @@ namespace TRAVEL.Controllers
         {
             return View("~/Views/Account/MyBookings.cshtml");
         }
+
+
+        /// <summary>
+        /// My Trips page - /my-trips
+        /// Shows user's booked destinations with countdown timers
+        /// </summary>
+        [HttpGet]
+        [Route("my-trips")]
+        public IActionResult MyTrips()
+        {
+            return View("~/Views/Booking/MyTrips.cshtml");
+        }
     }
 }

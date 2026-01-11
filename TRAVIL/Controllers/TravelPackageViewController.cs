@@ -29,7 +29,16 @@ namespace TRAVEL.Controllers
             ViewData["PackageId"] = id;
             return View("~/Views/TravelPackage/Details.cshtml");
         }
-
+        /// <summary>
+        /// Destinations page - same as packages
+        /// Route: /destinations
+        /// </summary>
+        [HttpGet]
+        [Route("destinations")]
+        public IActionResult Destinations()
+        {
+            return View("~/Views/TravelPackage/Destinations.cshtml");
+        }
         /// <summary>
         /// Search Packages
         /// </summary>
