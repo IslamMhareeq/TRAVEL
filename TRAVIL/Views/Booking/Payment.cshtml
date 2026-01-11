@@ -6,55 +6,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Secure Payment - TRAVEL</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Payment - TRAVIL</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet">
     <style>
         :root {
-            --color-midnight: #0d1117;
-            --color-navy: #161b22;
-            --color-slate: #21262d;
-            --color-charcoal: #30363d;
-            --color-steel: #484f58;
-            --color-silver: #8b949e;
-            --color-mist: #c9d1d9;
-            --color-white: #ffffff;
+            --color-bg: #0d1117;
+            --color-card: #161b22;
+            --color-border: #30363d;
             --color-gold: #d4a853;
             --color-gold-dark: #b8943f;
-            --color-gold-light: #e8c076;
-            --color-gold-muted: rgba(212, 168, 83, 0.15);
+            --color-white: #f0f6fc;
+            --color-silver: #8b949e;
             --color-success: #3fb950;
-            --color-success-muted: rgba(63, 185, 80, 0.15);
-            --color-warning: #d29922;
             --color-error: #f85149;
-            --color-error-muted: rgba(248, 81, 73, 0.15);
             --color-paypal: #003087;
             --color-paypal-light: #009cde;
-            --space-1: 4px;
-            --space-2: 8px;
-            --space-3: 12px;
-            --space-4: 16px;
-            --space-5: 24px;
-            --space-6: 32px;
-            --space-7: 48px;
-            --radius-sm: 6px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --radius-xl: 24px;
-            --transition-fast: 0.15s ease;
-            --transition-normal: 0.3s ease;
-            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
-            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
-            --shadow-gold: 0 4px 20px rgba(212, 168, 83, 0.3);
-            --font-display: 'Cormorant Garamond', serif;
-            --font-body: 'Outfit', sans-serif;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
         }
 
         * {
@@ -65,144 +36,104 @@
 
         body {
             font-family: var(--font-body);
-            background: var(--color-midnight);
+            background: var(--color-bg);
             color: var(--color-white);
-            line-height: 1.6;
             min-height: 100vh;
         }
 
-        /* SSL Security Banner */
         .ssl-banner {
             background: linear-gradient(90deg, var(--color-success) 0%, #2ea043 100%);
-            color: var(--color-white);
-            padding: var(--space-3) var(--space-5);
+            color: white;
+            padding: 12px 20px;
             text-align: center;
-            font-size: 0.875rem;
+            font-size: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: var(--space-4);
-            flex-wrap: wrap;
+            gap: 12px;
         }
 
-            .ssl-banner i {
-                font-size: 1.125rem;
-            }
-
             .ssl-banner .lock-icon {
-                background: rgba(255, 255, 255, 0.2);
-                padding: var(--space-2) var(--space-3);
-                border-radius: var(--radius-sm);
+                background: rgba(255,255,255,0.2);
+                padding: 6px 10px;
+                border-radius: 6px;
                 display: flex;
                 align-items: center;
-                gap: var(--space-2);
+                gap: 8px;
             }
 
-            .ssl-banner strong {
-                font-weight: 600;
-            }
+        .payment-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
 
-        /* Navbar */
-        .navbar {
-            background: rgba(22, 27, 34, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--color-slate);
-            padding: var(--space-4) var(--space-6);
+        .payment-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            margin-bottom: 40px;
         }
 
-        .navbar-brand {
+        .logo {
             display: flex;
             align-items: center;
-            gap: var(--space-3);
+            gap: 12px;
             text-decoration: none;
         }
 
-            .navbar-brand .logo {
-                width: 44px;
-                height: 44px;
-                background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
-                border-radius: var(--radius-md);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.25rem;
-                color: var(--color-midnight);
-            }
-
-            .navbar-brand span {
-                font-family: var(--font-display);
-                font-size: 1.5rem;
-                font-weight: 500;
-                color: var(--color-white);
-                letter-spacing: 0.1em;
-            }
-
-        .secure-badges {
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+            border-radius: 12px;
             display: flex;
             align-items: center;
-            gap: var(--space-4);
+            justify-content: center;
+            color: var(--color-bg);
+            font-size: 22px;
         }
 
-        .badge-item {
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
-            padding: var(--space-2) var(--space-4);
-            background: var(--color-navy);
-            border: 1px solid var(--color-slate);
-            border-radius: var(--radius-sm);
-            font-size: 0.8125rem;
-            color: var(--color-silver);
+        .logo-text {
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--color-white);
         }
 
-            .badge-item i {
-                color: var(--color-success);
-            }
-
-        /* Main Container */
-        .payment-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: var(--space-6) var(--space-5);
-        }
-
-        .page-header {
+        .page-title {
             text-align: center;
-            margin-bottom: var(--space-6);
+            margin-bottom: 40px;
         }
 
-            .page-header h1 {
+            .page-title h1 {
                 font-family: var(--font-display);
-                font-size: 2.5rem;
-                font-weight: 500;
-                margin-bottom: var(--space-2);
+                font-size: 36px;
+                color: var(--color-white);
+                margin-bottom: 8px;
             }
 
-            .page-header p {
+            .page-title p {
                 color: var(--color-silver);
             }
 
-        /* Alerts */
         .alert {
-            padding: var(--space-4) var(--space-5);
-            border-radius: var(--radius-md);
-            margin-bottom: var(--space-5);
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
             display: flex;
             align-items: center;
-            gap: var(--space-3);
+            gap: 12px;
         }
 
         .alert-danger {
-            background: var(--color-error-muted);
+            background: rgba(248, 81, 73, 0.15);
             color: var(--color-error);
             border: 1px solid rgba(248, 81, 73, 0.3);
         }
 
         .alert-success {
-            background: var(--color-success-muted);
+            background: rgba(63, 185, 80, 0.15);
             color: var(--color-success);
             border: 1px solid rgba(63, 185, 80, 0.3);
         }
@@ -211,68 +142,64 @@
             display: none !important;
         }
 
-        /* Payment Grid */
         .payment-grid {
             display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: var(--space-6);
+            grid-template-columns: 1fr 380px;
+            gap: 32px;
         }
 
-        /* Card Styles */
         .card {
-            background: var(--color-navy);
-            border: 1px solid var(--color-slate);
-            border-radius: var(--radius-lg);
-            padding: var(--space-6);
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 32px;
         }
 
         .card-title {
             font-family: var(--font-display);
-            font-size: 1.375rem;
-            font-weight: 500;
+            font-size: 22px;
+            font-weight: 600;
             color: var(--color-white);
-            margin-bottom: var(--space-5);
+            margin-bottom: 24px;
             display: flex;
             align-items: center;
-            gap: var(--space-3);
+            gap: 12px;
         }
 
             .card-title i {
                 color: var(--color-gold);
             }
 
-        /* Payment Methods */
         .payment-methods {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: var(--space-4);
-            margin-bottom: var(--space-6);
+            gap: 12px;
+            margin-bottom: 32px;
         }
 
         .payment-method {
-            padding: var(--space-5);
-            background: var(--color-slate);
-            border: 2px solid transparent;
-            border-radius: var(--radius-md);
+            padding: 20px 16px;
+            background: var(--color-bg);
+            border: 2px solid var(--color-border);
+            border-radius: 12px;
             cursor: pointer;
             text-align: center;
-            transition: all var(--transition-normal);
+            transition: all 0.3s ease;
         }
 
             .payment-method:hover {
-                border-color: var(--color-charcoal);
-                background: var(--color-charcoal);
+                border-color: var(--color-silver);
             }
 
             .payment-method.active {
                 border-color: var(--color-gold);
-                background: var(--color-gold-muted);
+                background: rgba(212, 168, 83, 0.1);
             }
 
             .payment-method i {
-                font-size: 2rem;
-                margin-bottom: var(--space-2);
-                display: block;
+                font-size: 28px;
+                margin-bottom: 8px;
+                color: var(--color-silver);
             }
 
             .payment-method.active i {
@@ -280,309 +207,241 @@
             }
 
             .payment-method span {
-                font-size: 0.875rem;
-                color: var(--color-mist);
+                display: block;
+                font-size: 14px;
+                color: var(--color-silver);
             }
 
-        /* Form Styles */
+            .payment-method.active span {
+                color: var(--color-white);
+            }
+
         .form-group {
-            margin-bottom: var(--space-5);
+            margin-bottom: 20px;
         }
 
         .form-label {
             display: block;
-            font-size: 0.875rem;
+            font-size: 13px;
             font-weight: 500;
-            color: var(--color-mist);
-            margin-bottom: var(--space-2);
+            color: var(--color-silver);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .form-input {
+        .form-control {
             width: 100%;
-            padding: var(--space-4);
-            background: var(--color-slate);
-            border: 1px solid var(--color-charcoal);
-            border-radius: var(--radius-md);
-            font-family: var(--font-body);
-            font-size: 1rem;
+            padding: 14px 16px;
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 10px;
+            font-size: 16px;
             color: var(--color-white);
-            transition: all var(--transition-fast);
+            transition: all 0.3s ease;
         }
 
-            .form-input:focus {
+            .form-control:focus {
                 outline: none;
                 border-color: var(--color-gold);
-                box-shadow: 0 0 0 3px var(--color-gold-muted);
+                box-shadow: 0 0 0 3px rgba(212, 168, 83, 0.2);
             }
 
-            .form-input::placeholder {
-                color: var(--color-steel);
-            }
-
-        .input-group {
-            position: relative;
-        }
-
-            .input-group .card-icon {
-                position: absolute;
-                right: var(--space-4);
-                top: 50%;
-                transform: translateY(-50%);
-                font-size: 1.5rem;
+            .form-control::placeholder {
                 color: var(--color-silver);
-            }
-
-            .input-group .form-input {
-                padding-right: 60px;
             }
 
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: var(--space-4);
+            gap: 16px;
         }
 
-        /* Card Preview */
-        .card-preview {
-            background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
-            border-radius: var(--radius-lg);
-            padding: var(--space-5);
-            margin-bottom: var(--space-5);
+        .input-icon-wrapper {
             position: relative;
-            overflow: hidden;
-            min-height: 180px;
         }
 
-            .card-preview::before {
-                content: '';
-                position: absolute;
-                top: -50%;
-                right: -50%;
-                width: 100%;
-                height: 100%;
-                background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
+            .input-icon-wrapper .form-control {
+                padding-right: 50px;
             }
 
-            .card-preview .chip {
-                width: 45px;
-                height: 35px;
-                background: linear-gradient(135deg, #f0c57a 0%, #c99d45 100%);
-                border-radius: 6px;
-                margin-bottom: var(--space-4);
-            }
-
-            .card-preview .card-number {
-                font-family: 'Courier New', monospace;
-                font-size: 1.25rem;
-                letter-spacing: 3px;
-                color: var(--color-midnight);
-                margin-bottom: var(--space-4);
-            }
-
-            .card-preview .card-info {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-end;
-            }
-
-            .card-preview .card-holder,
-            .card-preview .card-expiry {
-                color: var(--color-midnight);
-            }
-
-                .card-preview .card-holder span,
-                .card-preview .card-expiry span {
-                    display: block;
-                    font-size: 0.625rem;
-                    text-transform: uppercase;
-                    opacity: 0.7;
-                    margin-bottom: 2px;
-                }
-
-                .card-preview .card-holder p,
-                .card-preview .card-expiry p {
-                    font-size: 0.875rem;
-                    font-weight: 500;
-                }
-
-        /* PayPal Section */
-        .paypal-section {
-            text-align: center;
-            padding: var(--space-6);
-        }
-
-        .paypal-logo {
-            font-size: 3rem;
-            color: var(--color-paypal-light);
-            margin-bottom: var(--space-4);
-        }
-
-        .paypal-section p {
+        .card-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
             color: var(--color-silver);
-            margin-bottom: var(--space-5);
         }
 
-        /* Buttons */
-        .btn {
-            display: inline-flex;
+        .btn-pay {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
             align-items: center;
             justify-content: center;
-            gap: var(--space-2);
-            padding: var(--space-4) var(--space-6);
-            font-family: var(--font-body);
-            font-size: 1rem;
-            font-weight: 500;
-            border: none;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: all var(--transition-normal);
-            text-decoration: none;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-pay-card {
+            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+            color: var(--color-bg);
+        }
+
+            .btn-pay-card:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 24px rgba(212, 168, 83, 0.3);
+            }
+
+        .btn-pay-paypal {
+            background: linear-gradient(135deg, var(--color-paypal-light), var(--color-paypal));
+            color: white;
+        }
+
+            .btn-pay-paypal:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 24px rgba(0, 156, 222, 0.3);
+            }
+
+        .btn-pay:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .btn-cancel {
             width: 100%;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
-            color: var(--color-midnight);
-            box-shadow: var(--shadow-gold);
-        }
-
-            .btn-primary:hover:not(:disabled) {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 24px rgba(212, 168, 83, 0.4);
-            }
-
-            .btn-primary:disabled {
-                opacity: 0.6;
-                cursor: not-allowed;
-                transform: none;
-            }
-
-        .btn-paypal {
-            background: linear-gradient(135deg, var(--color-paypal) 0%, #001c4a 100%);
-            color: var(--color-white);
-        }
-
-            .btn-paypal:hover:not(:disabled) {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 24px rgba(0, 48, 135, 0.4);
-            }
-
-        .btn-outline {
+            padding: 14px;
             background: transparent;
-            border: 1px solid var(--color-charcoal);
-            color: var(--color-mist);
+            border: 1px solid var(--color-border);
+            border-radius: 10px;
+            color: var(--color-silver);
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: all 0.3s ease;
         }
 
-            .btn-outline:hover {
-                background: var(--color-slate);
-                border-color: var(--color-steel);
+            .btn-cancel:hover {
+                border-color: var(--color-error);
+                color: var(--color-error);
             }
 
-        /* Order Summary Card */
         .order-summary {
             position: sticky;
-            top: var(--space-5);
+            top: 24px;
         }
 
-        .booking-preview {
+        .package-preview {
             display: flex;
-            gap: var(--space-4);
-            padding-bottom: var(--space-5);
-            border-bottom: 1px solid var(--color-slate);
-            margin-bottom: var(--space-5);
+            gap: 16px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--color-border);
+            margin-bottom: 20px;
         }
 
-            .booking-preview img {
-                width: 100px;
-                height: 80px;
-                object-fit: cover;
-                border-radius: var(--radius-md);
-            }
+        .package-image {
+            width: 100px;
+            height: 80px;
+            border-radius: 10px;
+            object-fit: cover;
+            background: var(--color-bg);
+        }
 
-            .booking-preview .details h3 {
-                font-family: var(--font-display);
-                font-size: 1.125rem;
-                font-weight: 500;
-                margin-bottom: var(--space-1);
-            }
+        .package-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-white);
+            margin-bottom: 4px;
+        }
 
-            .booking-preview .details p {
-                font-size: 0.8125rem;
-                color: var(--color-silver);
-            }
+        .package-info p {
+            font-size: 13px;
+            color: var(--color-silver);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 4px;
+        }
 
-                .booking-preview .details p i {
-                    margin-right: var(--space-1);
-                    color: var(--color-gold);
-                }
+            .package-info p i {
+                color: var(--color-gold);
+            }
 
         .summary-row {
             display: flex;
             justify-content: space-between;
-            padding: var(--space-3) 0;
-            font-size: 0.9375rem;
-            color: var(--color-mist);
+            padding: 12px 0;
+            font-size: 14px;
         }
 
-            .summary-row.total {
-                border-top: 1px solid var(--color-slate);
-                margin-top: var(--space-3);
-                padding-top: var(--space-4);
-                font-size: 1.25rem;
-                font-weight: 600;
+            .summary-row span:first-child {
+                color: var(--color-silver);
+            }
+
+            .summary-row span:last-child {
                 color: var(--color-white);
             }
 
+            .summary-row.total {
+                border-top: 1px solid var(--color-border);
+                margin-top: 12px;
+                padding-top: 16px;
+                font-size: 18px;
+                font-weight: 600;
+            }
+
                 .summary-row.total span:last-child {
-                    font-family: var(--font-display);
                     color: var(--color-gold);
                 }
 
         .booking-ref {
-            background: var(--color-slate);
-            border-radius: var(--radius-md);
-            padding: var(--space-4);
+            margin-top: 20px;
+            padding: 16px;
+            background: var(--color-bg);
+            border-radius: 10px;
             text-align: center;
-            margin-top: var(--space-5);
         }
 
             .booking-ref span {
                 display: block;
-                font-size: 0.75rem;
+                font-size: 12px;
                 color: var(--color-silver);
-                margin-bottom: var(--space-1);
+                margin-bottom: 4px;
             }
 
             .booking-ref strong {
-                font-family: 'Courier New', monospace;
-                font-size: 1.125rem;
-                letter-spacing: 1px;
+                font-size: 18px;
+                color: var(--color-gold);
+                font-family: monospace;
             }
 
-        /* Security Notice */
-        .security-notice {
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-            padding: var(--space-4);
-            background: var(--color-slate);
-            border-radius: var(--radius-md);
-            margin-top: var(--space-5);
-            font-size: 0.8125rem;
-            color: var(--color-silver);
+        .paypal-section {
+            text-align: center;
+            padding: 32px 0;
         }
 
-            .security-notice i {
-                font-size: 1.5rem;
-                color: var(--color-success);
-            }
+        .paypal-logo {
+            font-size: 48px;
+            color: var(--color-paypal-light);
+            margin-bottom: 16px;
+        }
 
-        /* Spinner */
-        .spinner {
+        .paypal-section p {
+            color: var(--color-silver);
+            margin-bottom: 24px;
+        }
+
+        .loader {
             width: 20px;
             height: 20px;
-            border: 2px solid var(--color-slate);
-            border-top-color: var(--color-midnight);
+            border: 2px solid transparent;
+            border-top-color: currentColor;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
@@ -593,67 +452,7 @@
             }
         }
 
-        /* Loading State */
-        .loading-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: var(--space-7);
-        }
-
-            .loading-state .spinner {
-                width: 48px;
-                height: 48px;
-                border: 3px solid var(--color-slate);
-                border-top-color: var(--color-gold);
-                margin-bottom: var(--space-4);
-            }
-
-            .loading-state p {
-                color: var(--color-silver);
-            }
-
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: var(--space-6);
-            right: var(--space-6);
-            background: var(--color-navy);
-            border: 1px solid var(--color-slate);
-            border-radius: var(--radius-md);
-            padding: var(--space-4) var(--space-5);
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-            box-shadow: var(--shadow-lg);
-            transform: translateX(calc(100% + var(--space-6)));
-            transition: transform var(--transition-normal);
-            z-index: 2000;
-        }
-
-            .toast.show {
-                transform: translateX(0);
-            }
-
-            .toast.success {
-                border-color: var(--color-success);
-            }
-
-                .toast.success i {
-                    color: var(--color-success);
-                }
-
-            .toast.error {
-                border-color: var(--color-error);
-            }
-
-                .toast.error i {
-                    color: var(--color-error);
-                }
-
-        /* Responsive */
-        @@media (max-width: 1024px) {
+        @@media (max-width: 900px) {
             .payment-grid {
                 grid-template-columns: 1fr;
             }
@@ -661,33 +460,9 @@
             .order-summary {
                 position: static;
             }
-
-            .secure-badges {
-                display: none;
-            }
         }
 
-        @@media (max-width: 768px) {
-            .navbar {
-                padding: var(--space-3) var(--space-4);
-            }
-
-            .navbar-brand span {
-                display: none;
-            }
-
-            .payment-container {
-                padding: var(--space-4);
-            }
-
-            .page-header h1 {
-                font-size: 2rem;
-            }
-
-            .card {
-                padding: var(--space-4);
-            }
-
+        @@media (max-width: 600px) {
             .payment-methods {
                 grid-template-columns: 1fr;
             }
@@ -695,180 +470,114 @@
             .form-row {
                 grid-template-columns: 1fr;
             }
-
-            .booking-preview {
-                flex-direction: column;
-            }
-
-                .booking-preview img {
-                    width: 100%;
-                    height: 150px;
-                }
         }
     </style>
 </head>
 <body>
-    <!-- SSL Security Banner -->
     <div class="ssl-banner">
         <div class="lock-icon">
             <i class="fas fa-lock"></i>
             <span>SSL Secured</span>
         </div>
-        <span>Your payment information is encrypted and secure. <strong>256-bit SSL encryption</strong></span>
+        <span>Your payment information is encrypted and secure</span>
     </div>
 
-    <!-- Navbar -->
-    <nav class="navbar">
-        <a href="/" class="navbar-brand">
-            <div class="logo">
-                <i class="fas fa-paper-plane"></i>
-            </div>
-            <span>TRAVEL</span>
-        </a>
-
-        <div class="secure-badges">
-            <div class="badge-item">
-                <i class="fas fa-shield-halved"></i>
-                <span>Secure Payment</span>
-            </div>
-            <div class="badge-item">
-                <i class="fas fa-lock"></i>
-                <span>PCI Compliant</span>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Main Container -->
     <div class="payment-container">
-        <div class="page-header">
+        <div class="payment-header">
+            <a href="/" class="logo">
+                <div class="logo-icon"><i class="fas fa-compass"></i></div>
+                <span class="logo-text">TRAVIL</span>
+            </a>
+        </div>
+
+        <div class="page-title">
             <h1>Complete Your Payment</h1>
             <p>Your booking is almost confirmed. Complete the payment to secure your trip.</p>
         </div>
 
-        <!-- Alerts -->
-        <div id="errorAlert" class="alert alert-danger d-none">
+        <div class="alert alert-danger d-none" id="errorAlert">
             <i class="fas fa-exclamation-circle"></i>
-            <span id="errorMessage"></span>
+            <span id="errorMessage">An error occurred</span>
         </div>
-
-        <div id="successAlert" class="alert alert-success d-none">
+        <div class="alert alert-success d-none" id="successAlert">
             <i class="fas fa-check-circle"></i>
-            <span id="successMessage"></span>
+            <span id="successMessage">Success!</span>
         </div>
 
-        <!-- Loading State -->
-        <div id="loadingState" class="loading-state">
-            <div class="spinner"></div>
-            <p>Loading booking details...</p>
-        </div>
-
-        <!-- Payment Grid -->
-        <div id="paymentContent" class="payment-grid" style="display: none;">
-            <!-- Payment Form Card -->
+        <div class="payment-grid">
             <div class="card">
-                <h2 class="card-title">
-                    <i class="fas fa-credit-card"></i>
-                    Payment Method
-                </h2>
+                <h2 class="card-title"><i class="fas fa-credit-card"></i> Payment Method</h2>
 
-                <!-- Payment Methods -->
                 <div class="payment-methods">
-                    <div class="payment-method active" data-method="card" onclick="selectPaymentMethod('card')">
+                    <div class="payment-method active" onclick="selectPaymentMethod('card')">
                         <i class="fas fa-credit-card"></i>
                         <span>Credit / Debit Card</span>
                     </div>
-                    <div class="payment-method" data-method="paypal" onclick="selectPaymentMethod('paypal')">
+                    <div class="payment-method" onclick="selectPaymentMethod('paypal')">
                         <i class="fab fa-paypal"></i>
                         <span>PayPal</span>
                     </div>
                 </div>
 
-                <!-- Card Payment Form -->
-                <div id="cardPaymentForm">
-                    <!-- Card Preview -->
-                    <div class="card-preview">
-                        <div class="chip"></div>
-                        <div class="card-number" id="previewCardNumber">•••• •••• •••• ••••</div>
-                        <div class="card-info">
-                            <div class="card-holder">
-                                <span>Card Holder</span>
-                                <p id="previewCardName">YOUR NAME</p>
-                            </div>
-                            <div class="card-expiry">
-                                <span>Expires</span>
-                                <p id="previewExpiry">MM/YY</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <form id="paymentForm">
+                <form id="paymentForm">
+                    <div id="cardPaymentSection">
                         <div class="form-group">
                             <label class="form-label">Card Number</label>
-                            <div class="input-group">
-                                <input type="text" id="cardNumber" class="form-input" placeholder="1234 5678 9012 3456" maxlength="19" required>
-                                <i id="cardBrand" class="far fa-credit-card card-icon"></i>
+                            <div class="input-icon-wrapper">
+                                <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                                <i class="far fa-credit-card card-icon" id="cardBrand"></i>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Cardholder Name</label>
-                            <input type="text" id="cardName" class="form-input" placeholder="John Doe" required>
+                            <input type="text" class="form-control" id="cardName" placeholder="John Doe">
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
                                 <label class="form-label">Expiry Date</label>
-                                <input type="text" id="expiry" class="form-input" placeholder="MM/YY" maxlength="5" required>
+                                <input type="text" class="form-control" id="expiry" placeholder="MM/YY" maxlength="5">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">CVV</label>
-                                <input type="password" id="cvv" class="form-input" placeholder="•••" maxlength="4" required>
+                                <input type="text" class="form-control" id="cvv" placeholder="123" maxlength="4">
                             </div>
                         </div>
 
-                        <button type="submit" id="payCardBtn" class="btn btn-primary">
+                        <button type="submit" class="btn-pay btn-pay-card" id="payCardBtn">
                             <span id="payCardText"><i class="fas fa-lock"></i> Pay Now</span>
-                            <div id="payCardLoader" class="spinner d-none"></div>
+                            <div class="loader d-none" id="payCardLoader"></div>
                         </button>
-                    </form>
-                </div>
-
-                <!-- PayPal Section -->
-                <div id="paypalSection" class="paypal-section" style="display: none;">
-                    <div class="paypal-logo">
-                        <i class="fab fa-paypal"></i>
                     </div>
-                    <p>You will be redirected to PayPal to complete your payment securely.</p>
-                    <button id="paypalBtn" class="btn btn-paypal" onclick="redirectToPayPal()">
-                        <span id="paypalText"><i class="fab fa-paypal"></i> Pay with PayPal</span>
-                        <div id="paypalLoader" class="spinner d-none"></div>
-                    </button>
-                </div>
+                </form>
 
-                <!-- Security Notice -->
-                <div class="security-notice">
-                    <i class="fas fa-shield-halved"></i>
-                    <div>
-                        <strong>Your payment is secure.</strong>
-                        <span>We do not store your credit card details. All transactions are processed securely.</span>
+                <div id="paypalPaymentSection" class="d-none">
+                    <div class="paypal-section">
+                        <div class="paypal-logo"><i class="fab fa-paypal"></i></div>
+                        <p>You will be redirected to PayPal to complete your payment securely.</p>
+                        <button type="button" class="btn-pay btn-pay-paypal" id="paypalBtn" onclick="processPayPal()">
+                            <span id="paypalText"><i class="fab fa-paypal"></i> Pay with PayPal</span>
+                            <div class="loader d-none" id="paypalLoader"></div>
+                        </button>
                     </div>
                 </div>
+
+                <button type="button" class="btn-cancel" onclick="cancelPayment()">
+                    <i class="fas fa-times"></i> Cancel Payment
+                </button>
             </div>
 
-            <!-- Order Summary Card -->
             <div class="card order-summary">
-                <h2 class="card-title">
-                    <i class="fas fa-receipt"></i>
-                    Order Summary
-                </h2>
+                <h2 class="card-title"><i class="fas fa-receipt"></i> Order Summary</h2>
 
-                <div class="booking-preview">
-                    <img id="packageImage" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80" alt="Package">
-                    <div class="details">
-                        <h3 id="packageDestination">Loading...</h3>
-                        <p><i class="fas fa-map-marker-alt"></i> <span id="packageCountry">-</span></p>
+                <div class="package-preview">
+                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400" alt="Package" class="package-image" id="packageImage">
+                    <div class="package-info">
+                        <h3 id="packageName">Travel Package</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> <span id="packageLocation">-</span></p>
                         <p><i class="far fa-calendar"></i> <span id="packageDates">-</span></p>
-                        <p><i class="fas fa-users"></i> <span id="guestCount">-</span> guests</p>
+                        <p><i class="fas fa-users"></i> <span id="guestCount">2 guests</span></p>
                     </div>
                 </div>
 
@@ -878,7 +587,7 @@
                 </div>
                 <div class="summary-row">
                     <span>Rooms</span>
-                    <span id="roomCount">× 1</span>
+                    <span id="roomCount">×1</span>
                 </div>
                 <div class="summary-row">
                     <span>Service Fee (5%)</span>
@@ -891,180 +600,129 @@
 
                 <div class="booking-ref">
                     <span>Booking Reference</span>
-                    <strong id="bookingRef">-</strong>
+                    <strong id="bookingRef">BK8</strong>
                 </div>
-
-                <button class="btn btn-outline" style="margin-top: var(--space-4);" onclick="cancelPayment()">
-                    <i class="fas fa-arrow-left"></i> Cancel Payment
-                </button>
             </div>
         </div>
     </div>
 
-    <!-- Toast -->
-    <div id="toast" class="toast">
-        <i class="fas fa-check-circle"></i>
-        <span id="toastMessage"></span>
-    </div>
-
     <script>
         let bookingId = null;
-        let bookingData = null;
-        let paymentMethod = 1; // 1 = Card, 2 = PayPal
 
-        // Extract booking ID from URL
-        const pathParts = window.location.pathname.split('/');
-        bookingId = pathParts[pathParts.length - 1];
+        // Get booking ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        bookingId = urlParams.get('bookingId') || urlParams.get('id');
 
-        document.addEventListener('DOMContentLoaded', function () {
+        if (!bookingId) {
+            const pathMatch = window.location.pathname.match(/\/payment\/(\d+)/);
+            if (pathMatch) bookingId = pathMatch[1];
+        }
+
+        document.addEventListener('DOMContentLoaded', async function() {
             const token = localStorage.getItem('token');
-
             if (!token) {
-                window.location.href = '/account/login?returnUrl=' + encodeURIComponent(window.location.pathname);
+                window.location.href = '/account/login?returnUrl=' + encodeURIComponent(window.location.pathname + window.location.search);
                 return;
             }
 
-            loadBookingDetails();
-        });
-
-        // Load booking details
-        async function loadBookingDetails() {
-            const loadingState = document.getElementById('loadingState');
-            const paymentContent = document.getElementById('paymentContent');
+            if (!bookingId) {
+                showError('No booking ID provided');
+                return;
+            }
 
             try {
-                const token = localStorage.getItem('token');
-                const response = await fetch(`/api/booking/${bookingId}`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                const response = await fetch('/api/booking/' + bookingId, {
+                    headers: { 'Authorization': 'Bearer ' + token }
                 });
 
                 if (response.ok) {
                     const result = await response.json();
-                    bookingData = result.data || result;
-
-                    if (bookingData.status === 'Completed' || bookingData.status === 'Paid') {
-                        showError('This booking has already been paid.');
-                        loadingState.style.display = 'none';
-                        return;
-                    }
-
-                    renderBookingDetails(bookingData);
-                    loadingState.style.display = 'none';
-                    paymentContent.style.display = 'grid';
-                } else if (response.status === 404) {
-                    showError('Booking not found.');
-                    loadingState.innerHTML = '<p style="color: var(--color-error);">Booking not found. <a href="/account/mybookings" style="color: var(--color-gold);">Return to My Bookings</a></p>';
+                    displayBookingDetails(result.data || result);
                 } else {
-                    showError('Failed to load booking details.');
-                    loadingState.style.display = 'none';
+                    showError('Failed to load booking details');
                 }
             } catch (error) {
-                console.error('Error loading booking:', error);
-                showError('Error loading booking details.');
-                loadingState.style.display = 'none';
+                console.error('Error:', error);
+                showError('Error loading booking details');
+            }
+        });
+
+        function displayBookingDetails(booking) {
+            const pkg = booking.travelPackage || booking.package || {};
+
+            document.getElementById('packageName').textContent = pkg.destination || 'Travel Package';
+            document.getElementById('packageLocation').textContent = pkg.country || '-';
+            document.getElementById('guestCount').textContent = (booking.numberOfGuests || 2) + ' guests';
+            document.getElementById('roomCount').textContent = '×' + (booking.numberOfRooms || 1);
+
+            if (pkg.startDate && pkg.endDate) {
+                const start = new Date(pkg.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                const end = new Date(pkg.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                document.getElementById('packageDates').textContent = start + ' - ' + end;
+            }
+
+            const price = booking.totalPrice || pkg.discountedPrice || pkg.price || 0;
+            const serviceFee = Math.round(price * 0.05);
+            const total = price + serviceFee;
+
+            document.getElementById('packagePrice').textContent = '$' + price.toLocaleString();
+            document.getElementById('serviceFee').textContent = '$' + serviceFee.toLocaleString();
+            document.getElementById('totalAmount').textContent = '$' + total.toLocaleString();
+
+            if (booking.bookingReference) {
+                document.getElementById('bookingRef').textContent = booking.bookingReference;
+            }
+
+            if (pkg.imageUrl) {
+                document.getElementById('packageImage').src = pkg.imageUrl;
             }
         }
 
-        // Render booking details
-        function renderBookingDetails(booking) {
-            const pkg = booking.travelPackage || {};
-
-            document.getElementById('packageImage').src = pkg.imageUrl || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80';
-            document.getElementById('packageImage').onerror = function () {
-                this.src = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80';
-            };
-            document.getElementById('packageDestination').textContent = pkg.destination || 'Travel Package';
-            document.getElementById('packageCountry').textContent = pkg.country || '-';
-
-            const startDate = pkg.startDate ? new Date(pkg.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
-            const endDate = pkg.endDate ? new Date(pkg.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
-            document.getElementById('packageDates').textContent = startDate && endDate ? `${startDate} - ${endDate}` : '-';
-
-            document.getElementById('guestCount').textContent = booking.numberOfGuests || 1;
-
-            const unitPrice = pkg.discountedPrice || pkg.price || 0;
-            const rooms = booking.numberOfRooms || 1;
-            const subtotal = unitPrice * rooms;
-            const serviceFee = Math.round(subtotal * 0.05);
-            const total = subtotal + serviceFee;
-
-            document.getElementById('packagePrice').textContent = `$${unitPrice.toLocaleString()}`;
-            document.getElementById('roomCount').textContent = `× ${rooms}`;
-            document.getElementById('serviceFee').textContent = `$${serviceFee.toLocaleString()}`;
-            document.getElementById('totalAmount').textContent = `$${total.toLocaleString()}`;
-
-            document.getElementById('bookingRef').textContent = booking.referenceNumber || `BK${booking.bookingId}`;
-        }
-
-        // Select payment method
         function selectPaymentMethod(method) {
-            const methods = document.querySelectorAll('.payment-method');
-            methods.forEach(m => m.classList.remove('active'));
-            document.querySelector(`.payment-method[data-method="${method}"]`).classList.add('active');
+            document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('active'));
 
-            paymentMethod = method === 'card' ? 1 : 2;
-
-            document.getElementById('cardPaymentForm').style.display = method === 'card' ? 'block' : 'none';
-            document.getElementById('paypalSection').style.display = method === 'paypal' ? 'block' : 'none';
+            if (method === 'card') {
+                document.querySelectorAll('.payment-method')[0].classList.add('active');
+                document.getElementById('cardPaymentSection').classList.remove('d-none');
+                document.getElementById('paypalPaymentSection').classList.add('d-none');
+            } else {
+                document.querySelectorAll('.payment-method')[1].classList.add('active');
+                document.getElementById('cardPaymentSection').classList.add('d-none');
+                document.getElementById('paypalPaymentSection').classList.remove('d-none');
+            }
         }
 
-        // Card number formatting and preview
-        document.getElementById('cardNumber').addEventListener('input', function (e) {
+        // Card formatting
+        document.getElementById('cardNumber').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
-            value = value.replace(/(.{4})/g, '$1 ').trim();
-            e.target.value = value;
+            e.target.value = value.match(/.{1,4}/g)?.join(' ') || value;
 
-            // Update preview
-            const preview = document.getElementById('previewCardNumber');
-            if (value.length > 0) {
-                preview.textContent = value.replace(/\d(?=\d{4})/g, '•');
-            } else {
-                preview.textContent = '•••• •••• •••• ••••';
-            }
-
-            // Detect card brand
             const cardBrand = document.getElementById('cardBrand');
-            const firstDigit = value.charAt(0);
-            const firstTwo = value.substring(0, 2);
-
-            if (firstDigit === '4') {
+            if (value.startsWith('4')) {
                 cardBrand.className = 'fab fa-cc-visa card-icon';
-            } else if (['51', '52', '53', '54', '55'].includes(firstTwo) || (parseInt(firstTwo) >= 22 && parseInt(firstTwo) <= 27)) {
+            } else if (value.startsWith('5') || value.startsWith('2')) {
                 cardBrand.className = 'fab fa-cc-mastercard card-icon';
-            } else if (['34', '37'].includes(firstTwo)) {
+            } else if (value.startsWith('3')) {
                 cardBrand.className = 'fab fa-cc-amex card-icon';
-            } else if (firstDigit === '6') {
-                cardBrand.className = 'fab fa-cc-discover card-icon';
             } else {
                 cardBrand.className = 'far fa-credit-card card-icon';
             }
         });
 
-        // Card name preview
-        document.getElementById('cardName').addEventListener('input', function (e) {
-            const preview = document.getElementById('previewCardName');
-            preview.textContent = e.target.value.toUpperCase() || 'YOUR NAME';
-        });
-
-        // Expiry date formatting
-        document.getElementById('expiry').addEventListener('input', function (e) {
+        document.getElementById('expiry').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length >= 2) {
                 value = value.substring(0, 2) + '/' + value.substring(2, 4);
             }
             e.target.value = value;
-
-            // Update preview
-            document.getElementById('previewExpiry').textContent = value || 'MM/YY';
         });
 
-        // CVV validation
-        document.getElementById('cvv').addEventListener('input', function (e) {
+        document.getElementById('cvv').addEventListener('input', function(e) {
             e.target.value = e.target.value.replace(/\D/g, '').substring(0, 4);
         });
 
-        // Card payment form submission
-        document.getElementById('paymentForm').addEventListener('submit', async function (e) {
+        // Credit Card Payment
+        document.getElementById('paymentForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
@@ -1072,29 +730,15 @@
             const expiry = document.getElementById('expiry').value;
             const cvv = document.getElementById('cvv').value;
 
-            // Validation
-            if (cardNumber.length < 13) {
-                showError('Please enter a valid card number');
-                return;
-            }
-
-            if (!cardName) {
-                showError('Please enter the cardholder name');
-                return;
-            }
+            if (cardNumber.length < 13) { showError('Please enter a valid card number'); return; }
+            if (!cardName) { showError('Please enter the cardholder name'); return; }
 
             const expiryParts = expiry.split('/');
             if (expiryParts.length !== 2 || expiryParts[0].length !== 2 || expiryParts[1].length !== 2) {
-                showError('Please enter a valid expiry date (MM/YY)');
-                return;
+                showError('Please enter a valid expiry date (MM/YY)'); return;
             }
+            if (cvv.length < 3) { showError('Please enter a valid CVV'); return; }
 
-            if (cvv.length < 3) {
-                showError('Please enter a valid CVV');
-                return;
-            }
-
-            // Show loading
             setButtonLoading('card', true);
 
             try {
@@ -1103,145 +747,118 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': 'Bearer ' + token
                     },
                     body: JSON.stringify({
                         bookingId: parseInt(bookingId),
-                        cardNumber: cardNumber, // NOT stored in database
-                        cardHolderName: cardName, // NOT stored in database
+                        cardNumber: cardNumber,
+                        cardHolderName: cardName,
                         expiryMonth: parseInt(expiryParts[0]),
                         expiryYear: parseInt('20' + expiryParts[1]),
-                        cvv: cvv, // NOT stored in database
-                        paymentMethod: paymentMethod
+                        cvv: cvv,
+                        paymentMethod: 0
                     })
                 });
 
                 const result = await response.json();
 
                 if (result.success) {
-                    showSuccess('Payment successful! Redirecting to home page...');
-                    showToast('Payment completed successfully!', 'success');
-                    setTimeout(function () {
-                        const ref = document.getElementById('bookingRef').textContent;
-                        window.location.href = '/?payment=success&ref=' + encodeURIComponent(ref);
+                    showSuccess('Payment successful! Redirecting...');
+                    setTimeout(function() {
+                        window.location.href = '/?payment=success&ref=' + encodeURIComponent(document.getElementById('bookingRef').textContent);
                     }, 2000);
                 } else {
-                    showError(result.message || 'Payment failed. Please try again.');
+                    showError(result.message || 'Payment failed');
                     setButtonLoading('card', false);
                 }
             } catch (error) {
-                console.error('Error:', error);
-                showError('Payment processing error. Please try again.');
+                showError('Payment processing error');
                 setButtonLoading('card', false);
             }
         });
 
-        // PayPal redirect
-        async function redirectToPayPal() {
+        // PayPal Payment - FIXED!
+        async function processPayPal() {
             setButtonLoading('paypal', true);
-            showSuccess('Redirecting to PayPal...');
+            showSuccess('Processing PayPal payment...');
 
             try {
                 const token = localStorage.getItem('token');
-                const response = await fetch('/api/payment/paypal/initiate', {
+
+                // Step 1: Initiate PayPal
+                const initiateResponse = await fetch('/api/payment/paypal/initiate', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': 'Bearer ' + token
                     },
                     body: JSON.stringify({ bookingId: parseInt(bookingId) })
                 });
 
-                const result = await response.json();
-
-                if (result.success && result.data && result.data.redirectUrl) {
-                    window.location.href = result.data.redirectUrl;
-                } else {
-                    simulatePayPalRedirect();
+                if (!initiateResponse.ok) {
+                    const errorData = await initiateResponse.json();
+                    throw new Error(errorData.message || 'Failed to initiate PayPal');
                 }
+
+                const initiateResult = await initiateResponse.json();
+
+                if (!initiateResult.success) {
+                    throw new Error(initiateResult.message || 'PayPal initiation failed');
+                }
+
+                const orderId = initiateResult.data.orderId;
+
+                // Step 2: Capture PayPal payment
+                showSuccess('Completing PayPal payment...');
+
+                const captureResponse = await fetch('/api/payment/paypal/capture', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({
+                        bookingId: parseInt(bookingId),
+                        orderId: orderId
+                    })
+                });
+
+                if (!captureResponse.ok) {
+                    const errorData = await captureResponse.json();
+                    throw new Error(errorData.message || 'Failed to capture PayPal payment');
+                }
+
+                const captureResult = await captureResponse.json();
+
+                if (captureResult.success) {
+                    showSuccess('PayPal payment successful! Redirecting...');
+                    setTimeout(function() {
+                        window.location.href = '/?payment=success&ref=' + encodeURIComponent(document.getElementById('bookingRef').textContent);
+                    }, 2000);
+                } else {
+                    throw new Error(captureResult.message || 'PayPal capture failed');
+                }
+
             } catch (error) {
                 console.error('PayPal error:', error);
-                simulatePayPalRedirect();
+                showError(error.message || 'PayPal payment failed');
+                setButtonLoading('paypal', false);
             }
         }
 
-        // Simulate PayPal redirect
-        function simulatePayPalRedirect() {
-            showSuccess('Processing PayPal payment...');
-
-            setTimeout(async function () {
-                try {
-                    const token = localStorage.getItem('token');
-                    const response = await fetch('/api/payment', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: JSON.stringify({
-                            bookingId: parseInt(bookingId),
-                            cardNumber: 'PAYPAL',
-                            cardHolderName: 'PayPal User',
-                            expiryMonth: 12,
-                            expiryYear: 2030,
-                            cvv: '000',
-                            paymentMethod: 2
-                        })
-                    });
-
-                    const result = await response.json();
-
-                    if (result.success) {
-                        showSuccess('PayPal payment successful! Redirecting to home page...');
-                        showToast('Payment completed successfully!', 'success');
-                        setTimeout(function () {
-                            const ref = document.getElementById('bookingRef').textContent;
-                            window.location.href = '/?payment=success&ref=' + encodeURIComponent(ref);
-                        }, 2000);
-                    } else {
-                        showError(result.message || 'PayPal payment failed');
-                        setTimeout(function () {
-                            window.location.href = '/?payment=failed';
-                        }, 2000);
-                    }
-                } catch (error) {
-                    showError('PayPal payment error');
-                    setTimeout(function () {
-                        window.location.href = '/?payment=failed';
-                    }, 2000);
-                }
-            }, 3000);
-        }
-
         function setButtonLoading(type, loading) {
-            if (type === 'card') {
-                const textEl = document.getElementById('payCardText');
-                const loaderEl = document.getElementById('payCardLoader');
-                const btn = document.getElementById('payCardBtn');
+            const textEl = document.getElementById(type === 'card' ? 'payCardText' : 'paypalText');
+            const loaderEl = document.getElementById(type === 'card' ? 'payCardLoader' : 'paypalLoader');
+            const btn = document.getElementById(type === 'card' ? 'payCardBtn' : 'paypalBtn');
 
-                if (loading) {
-                    textEl.classList.add('d-none');
-                    loaderEl.classList.remove('d-none');
-                    btn.disabled = true;
-                } else {
-                    textEl.classList.remove('d-none');
-                    loaderEl.classList.add('d-none');
-                    btn.disabled = false;
-                }
+            if (loading) {
+                textEl.classList.add('d-none');
+                loaderEl.classList.remove('d-none');
+                btn.disabled = true;
             } else {
-                const textEl = document.getElementById('paypalText');
-                const loaderEl = document.getElementById('paypalLoader');
-                const btn = document.getElementById('paypalBtn');
-
-                if (loading) {
-                    textEl.classList.add('d-none');
-                    loaderEl.classList.remove('d-none');
-                    btn.disabled = true;
-                } else {
-                    textEl.classList.remove('d-none');
-                    loaderEl.classList.add('d-none');
-                    btn.disabled = false;
-                }
+                textEl.classList.remove('d-none');
+                loaderEl.classList.add('d-none');
+                btn.disabled = false;
             }
         }
 
@@ -1258,22 +875,9 @@
             document.getElementById('errorAlert').classList.add('d-none');
         }
 
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-            const icon = toast.querySelector('i');
-
-            toastMessage.textContent = message;
-            toast.className = 'toast ' + type;
-            icon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
-
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
         function cancelPayment() {
-            if (confirm('Are you sure you want to cancel this payment?')) {
-                window.location.href = '/account/mybookings';
+            if (confirm('Are you sure you want to cancel?')) {
+                window.location.href = '/my-trips';
             }
         }
     </script>
