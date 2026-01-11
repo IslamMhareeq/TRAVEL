@@ -2,7 +2,6 @@
     ViewData["Title"] = "Travel Packages";
     Layout = null;
 }
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,25 +10,23 @@
     <title>Travel Packages - TRAVIL</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
         :root {
-            --color-bg: #0a0a0f;
-            --color-navy: #0d1117;
-            --color-charcoal: #161b22;
+            --color-midnight: #0d1117;
+            --color-navy: #161b22;
             --color-slate: #21262d;
-            --color-border: #30363d;
-            --color-gold: #d4a853;
-            --color-gold-muted: rgba(212, 168, 83, 0.15);
-            --color-white: #ffffff;
+            --color-charcoal: #30363d;
+            --color-steel: #484f58;
             --color-silver: #8b949e;
-            --color-success: #3fb950;
-            --color-error: #f85149;
-            --font-main: 'Plus Jakarta Sans', sans-serif;
-            --radius-sm: 6px;
-            --radius-md: 10px;
-            --radius-lg: 16px;
+            --color-mist: #c9d1d9;
+            --color-white: #ffffff;
+            --color-gold: #d4a853;
+            --color-gold-dark: #b8943f;
+            --color-gold-muted: rgba(212, 168, 83, 0.15);
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Outfit', sans-serif;
             --space-1: 4px;
             --space-2: 8px;
             --space-3: 12px;
@@ -37,6 +34,12 @@
             --space-5: 24px;
             --space-6: 32px;
             --space-7: 48px;
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-full: 9999px;
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
         }
 
         * {
@@ -46,99 +49,131 @@
         }
 
         body {
-            font-family: var(--font-main);
-            background: var(--color-bg);
+            font-family: var(--font-body);
+            background: var(--color-midnight);
             color: var(--color-white);
             line-height: 1.6;
         }
 
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 var(--space-5);
-        }
-
         /* Header */
-        .site-header {
-            background: rgba(10, 10, 15, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--color-border);
+        .header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 100;
+            z-index: 1000;
+            padding: var(--space-4) var(--space-6);
+            background: var(--color-navy);
+            border-bottom: 1px solid var(--color-slate);
         }
 
         .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: var(--space-4) var(--space-5);
-            max-width: 1280px;
+            max-width: 1400px;
             margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--color-gold);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: var(--space-6);
-        }
-
-            .nav-links a {
-                color: var(--color-silver);
-                text-decoration: none;
-                font-size: 0.9375rem;
-                transition: color 0.2s;
-            }
-
-                .nav-links a:hover, .nav-links a.active {
-                    color: var(--color-gold);
-                }
-
-        .header-actions {
             display: flex;
             align-items: center;
             gap: var(--space-3);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--color-midnight);
+        }
+
+        .logo-text {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 500;
+            color: var(--color-white);
+            letter-spacing: 0.1em;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: var(--space-6);
+        }
+
+        .nav-link {
+            color: var(--color-mist);
+            text-decoration: none;
+            font-size: 0.9375rem;
+            transition: color var(--transition-fast);
+        }
+
+            .nav-link:hover, .nav-link.active {
+                color: var(--color-gold);
+            }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
         }
 
         .btn {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: var(--space-2);
-            padding: var(--space-3) var(--space-4);
-            border-radius: var(--radius-md);
-            font-size: 0.875rem;
+            padding: var(--space-3) var(--space-5);
+            font-family: var(--font-body);
+            font-size: 0.9375rem;
             font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
             text-decoration: none;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-fast);
         }
 
+        .btn-ghost {
+            background: transparent;
+            color: var(--color-mist);
+        }
+
+            .btn-ghost:hover {
+                color: var(--color-gold);
+            }
+
         .btn-primary {
-            background: var(--color-gold);
-            color: var(--color-bg);
+            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+            color: var(--color-midnight);
         }
 
             .btn-primary:hover {
-                background: #e4b863;
-                transform: translateY(-1px);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 20px rgba(212, 168, 83, 0.3);
+            }
+
+        .btn-success {
+            background: #3fb950;
+            color: var(--color-white);
+        }
+
+            .btn-success:hover {
+                background: #2ea043;
+                transform: translateY(-2px);
             }
 
         .btn-outline {
             background: transparent;
-            border: 1px solid var(--color-border);
-            color: var(--color-white);
+            border: 1px solid var(--color-slate);
+            color: var(--color-mist);
         }
 
             .btn-outline:hover {
@@ -146,197 +181,152 @@
                 color: var(--color-gold);
             }
 
-        .btn-success {
-            background: var(--color-success);
-            color: white;
-        }
-
-            .btn-success:hover {
-                background: #4fc760;
-            }
-
         .btn-sm {
             padding: var(--space-2) var(--space-3);
             font-size: 0.8125rem;
         }
 
-        /* Page Header */
-        .page-header {
-            background: linear-gradient(135deg, var(--color-navy), var(--color-charcoal));
-            padding: calc(var(--space-7) + 70px) 0 var(--space-7);
-            text-align: center;
-            border-bottom: 1px solid var(--color-border);
+        /* Page Content */
+        .page-content {
+            padding-top: 80px;
+            min-height: 100vh;
         }
 
-            .page-header h1 {
-                font-size: 2.5rem;
-                font-weight: 700;
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+        }
+
+        /* Hero */
+        .page-hero {
+            padding: var(--space-7) 0;
+            text-align: center;
+            border-bottom: 1px solid var(--color-slate);
+        }
+
+            .page-hero h1 {
+                font-family: var(--font-display);
+                font-size: 3rem;
+                font-weight: 500;
                 margin-bottom: var(--space-3);
             }
 
-            .page-header p {
+            .page-hero p {
                 color: var(--color-silver);
-                font-size: 1.125rem;
-                margin-bottom: var(--space-4);
+                max-width: 600px;
+                margin: 0 auto;
             }
 
-        .package-count {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-2);
-            padding: var(--space-2) var(--space-4);
-            background: var(--color-gold-muted);
-            border-radius: 20px;
-            color: var(--color-gold);
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
+            .page-hero .packages-count {
+                display: inline-flex;
+                align-items: center;
+                gap: var(--space-2);
+                background: var(--color-gold-muted);
+                color: var(--color-gold);
+                padding: var(--space-2) var(--space-4);
+                border-radius: var(--radius-full);
+                font-size: 0.875rem;
+                font-weight: 500;
+                margin-top: var(--space-4);
+            }
 
-        /* Filters Section */
+        /* Filters */
         .filters-section {
-            background: var(--color-navy);
             padding: var(--space-5) 0;
-            border-bottom: 1px solid var(--color-border);
-            position: sticky;
-            top: 70px;
-            z-index: 50;
+            border-bottom: 1px solid var(--color-slate);
         }
 
-        .filters-grid {
-            display: grid;
-            grid-template-columns: 1fr repeat(6, auto);
-            gap: var(--space-3);
-            align-items: end;
-        }
-
-        .filter-group {
+        .filters-row {
             display: flex;
-            flex-direction: column;
-            gap: var(--space-1);
+            flex-wrap: wrap;
+            gap: var(--space-4);
+            align-items: center;
+            justify-content: space-between;
         }
 
-            .filter-group label {
-                font-size: 0.75rem;
-                color: var(--color-silver);
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-            }
-
-        .filter-control {
-            padding: var(--space-3) var(--space-4);
-            background: var(--color-charcoal);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-md);
-            color: var(--color-white);
-            font-size: 0.875rem;
-            font-family: var(--font-main);
-            min-width: 140px;
-        }
-
-            .filter-control:focus {
-                outline: none;
-                border-color: var(--color-gold);
-            }
-
-        .search-input {
-            width: 100%;
-            padding: var(--space-3) var(--space-4) var(--space-3) 40px;
-            background: var(--color-charcoal);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-md);
-            color: var(--color-white);
-            font-size: 0.875rem;
-        }
-
-            .search-input:focus {
-                outline: none;
-                border-color: var(--color-gold);
-            }
-
-        .search-wrapper {
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            max-width: 400px;
             position: relative;
         }
 
-            .search-wrapper i {
+            .search-box input {
+                width: 100%;
+                padding: var(--space-3) var(--space-4) var(--space-3) 44px;
+                background: var(--color-navy);
+                border: 1px solid var(--color-slate);
+                border-radius: var(--radius-md);
+                color: var(--color-white);
+                font-family: var(--font-body);
+                font-size: 0.9375rem;
+            }
+
+                .search-box input:focus {
+                    outline: none;
+                    border-color: var(--color-gold);
+                }
+
+            .search-box i {
                 position: absolute;
-                left: 14px;
+                left: var(--space-4);
                 top: 50%;
                 transform: translateY(-50%);
-                color: var(--color-silver);
+                color: var(--color-steel);
             }
 
-        .filter-toggle {
+        .filter-group {
             display: flex;
-            align-items: center;
-            gap: var(--space-2);
+            gap: var(--space-3);
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
             padding: var(--space-3) var(--space-4);
-            background: var(--color-charcoal);
-            border: 1px solid var(--color-border);
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
             border-radius: var(--radius-md);
-            color: var(--color-silver);
+            color: var(--color-mist);
+            font-family: var(--font-body);
+            font-size: 0.875rem;
             cursor: pointer;
-            transition: all 0.2s;
         }
 
-            .filter-toggle:hover {
+            .filter-select:focus {
+                outline: none;
                 border-color: var(--color-gold);
-                color: var(--color-gold);
             }
 
-            .filter-toggle.active {
-                background: var(--color-gold-muted);
-                border-color: var(--color-gold);
-                color: var(--color-gold);
-            }
-
-        /* Packages Section */
+        /* Packages Grid */
         .packages-section {
-            padding: var(--space-6) 0 var(--space-7);
+            padding: var(--space-6) 0;
         }
-
-        .results-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--space-5);
-            padding-bottom: var(--space-4);
-            border-bottom: 1px solid var(--color-border);
-        }
-
-        .results-count {
-            color: var(--color-silver);
-            font-size: 0.9375rem;
-        }
-
-            .results-count span {
-                color: var(--color-gold);
-                font-weight: 600;
-            }
 
         .packages-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: var(--space-5);
         }
 
-        /* Package Card */
         .package-card {
-            background: var(--color-charcoal);
-            border: 1px solid var(--color-border);
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
             border-radius: var(--radius-lg);
             overflow: hidden;
-            transition: all 0.3s;
+            transition: all var(--transition-normal);
+            cursor: pointer;
         }
 
             .package-card:hover {
-                transform: translateY(-4px);
+                transform: translateY(-8px);
                 border-color: var(--color-gold);
-                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             }
 
         .package-image {
             position: relative;
-            height: 200px;
+            height: 220px;
             overflow: hidden;
         }
 
@@ -344,188 +334,161 @@
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
-                transition: transform 0.5s;
+                transition: transform var(--transition-normal);
             }
 
         .package-card:hover .package-image img {
             transform: scale(1.05);
         }
 
-        .package-badges {
+        .package-badge {
             position: absolute;
-            top: var(--space-3);
-            left: var(--space-3);
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-2);
-        }
-
-        .badge {
+            top: var(--space-4);
+            left: var(--space-4);
+            background: var(--color-gold);
+            color: var(--color-midnight);
             padding: var(--space-1) var(--space-3);
-            border-radius: 20px;
+            border-radius: var(--radius-full);
             font-size: 0.75rem;
             font-weight: 600;
         }
 
-        .badge-sale {
-            background: var(--color-success);
-            color: white;
+        .package-wishlist {
+            position: absolute;
+            top: var(--space-4);
+            right: var(--space-4);
+            width: 36px;
+            height: 36px;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            border-radius: var(--radius-full);
+            color: var(--color-white);
+            cursor: pointer;
+            transition: all var(--transition-fast);
         }
 
-        .badge-category {
-            background: var(--color-gold);
-            color: var(--color-bg);
-        }
+            .package-wishlist:hover {
+                background: var(--color-gold);
+                color: var(--color-midnight);
+            }
 
-        .badge-age {
-            background: rgba(0,0,0,0.7);
-            color: white;
-        }
+            .package-wishlist.active {
+                background: var(--color-error);
+                color: var(--color-white);
+            }
 
         .package-content {
-            padding: var(--space-4);
+            padding: var(--space-5);
         }
 
-        .package-location {
+        .package-destination {
             display: flex;
             align-items: center;
             gap: var(--space-2);
             color: var(--color-gold);
             font-size: 0.8125rem;
+            font-weight: 500;
             margin-bottom: var(--space-2);
         }
 
         .package-title {
-            font-size: 1.125rem;
-            font-weight: 600;
+            font-family: var(--font-display);
+            font-size: 1.375rem;
+            font-weight: 500;
             margin-bottom: var(--space-3);
-            line-height: 1.3;
         }
 
         .package-meta {
             display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-3);
+            gap: var(--space-4);
             margin-bottom: var(--space-4);
-            padding-bottom: var(--space-4);
-            border-bottom: 1px solid var(--color-border);
         }
 
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: var(--space-1);
-            font-size: 0.8125rem;
-            color: var(--color-silver);
-        }
-
-            .meta-item i {
-                color: var(--color-gold);
-                font-size: 0.75rem;
+            .package-meta span {
+                display: flex;
+                align-items: center;
+                gap: var(--space-2);
+                font-size: 0.8125rem;
+                color: var(--color-silver);
             }
 
         .package-footer {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            padding-top: var(--space-4);
+            border-top: 1px solid var(--color-slate);
         }
-
-        .package-price {
-        }
-
-            .package-price .old-price {
-                font-size: 0.875rem;
-                color: var(--color-silver);
-                text-decoration: line-through;
-                margin-right: var(--space-2);
-            }
-
-            .package-price .current-price {
-                font-size: 1.25rem;
-                font-weight: 700;
-                color: var(--color-gold);
-            }
-
-            .package-price .per-person {
-                font-size: 0.75rem;
-                color: var(--color-silver);
-            }
 
         .package-actions {
             display: flex;
             gap: var(--space-2);
+            margin-top: var(--space-4);
+            padding-top: var(--space-4);
+            border-top: 1px solid var(--color-slate);
         }
 
-        /* Wishlist Button */
-        .wishlist-btn {
-            position: absolute;
-            top: var(--space-3);
-            right: var(--space-3);
-            width: 40px;
-            height: 40px;
+            .package-actions .btn {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .package-actions .sold-out {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+        .package-price {
+            font-family: var(--font-display);
+        }
+
+            .package-price .original {
+                text-decoration: line-through;
+                color: var(--color-steel);
+                font-size: 0.875rem;
+            }
+
+            .package-price .amount {
+                font-size: 1.5rem;
+                font-weight: 600;
+                color: var(--color-gold);
+            }
+
+            .package-price .period {
+                font-size: 0.8125rem;
+                color: var(--color-silver);
+            }
+
+        .package-rating {
             display: flex;
             align-items: center;
-            justify-content: center;
-            background: rgba(0, 0, 0, 0.6);
-            border: none;
-            border-radius: 50%;
-            color: white;
-            cursor: pointer;
-            transition: all 0.2s;
-            z-index: 2;
+            gap: var(--space-2);
         }
 
-            .wishlist-btn:hover {
-                background: var(--color-error);
-                transform: scale(1.1);
+            .package-rating i {
+                color: var(--color-gold);
+                font-size: 0.875rem;
             }
 
-            .wishlist-btn.active {
-                background: var(--color-error);
-                color: white;
+            .package-rating span {
+                font-size: 0.875rem;
+                color: var(--color-mist);
             }
 
-                .wishlist-btn.active i {
-                    font-weight: 900;
-                }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: var(--space-7);
-            grid-column: 1 / -1;
-        }
-
-            .empty-state i {
-                font-size: 3rem;
-                color: var(--color-silver);
-                margin-bottom: var(--space-4);
-                opacity: 0.5;
-            }
-
-            .empty-state h3 {
-                margin-bottom: var(--space-2);
-            }
-
-            .empty-state p {
-                color: var(--color-silver);
-            }
-
-        /* Loading */
+        /* Loading & Empty */
         .loading {
-            text-align: center;
-            padding: var(--space-7);
-            grid-column: 1 / -1;
+            display: flex;
+            justify-content: center;
+            padding: var(--space-8);
         }
 
         .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--color-border);
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--color-slate);
             border-top-color: var(--color-gold);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            margin: 0 auto var(--space-4);
         }
 
         @@keyframes spin {
@@ -534,13 +497,62 @@
             }
         }
 
+        .empty-state {
+            text-align: center;
+            padding: var(--space-8);
+        }
+
+            .empty-state i {
+                font-size: 4rem;
+                color: var(--color-steel);
+                margin-bottom: var(--space-4);
+            }
+
+            .empty-state h3 {
+                font-family: var(--font-display);
+                font-size: 1.5rem;
+                margin-bottom: var(--space-2);
+            }
+
+            .empty-state p {
+                color: var(--color-silver);
+            }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-6) 0;
+        }
+
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-md);
+            color: var(--color-mist);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+            .page-btn:hover, .page-btn.active {
+                background: var(--color-gold);
+                border-color: var(--color-gold);
+                color: var(--color-midnight);
+            }
+
         /* Toast */
         .toast {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: var(--color-charcoal);
-            border: 1px solid var(--color-border);
+            bottom: var(--space-5);
+            right: var(--space-5);
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
             border-radius: var(--radius-md);
             padding: var(--space-4) var(--space-5);
             display: flex;
@@ -548,7 +560,7 @@
             gap: var(--space-3);
             transform: translateY(100px);
             opacity: 0;
-            transition: all 0.3s;
+            transition: all var(--transition-normal);
             z-index: 2000;
         }
 
@@ -558,31 +570,30 @@
             }
 
             .toast.success i {
-                color: var(--color-success);
+                color: #3fb950;
             }
 
             .toast.error i {
-                color: var(--color-error);
+                color: #f85149;
             }
 
-        /* Responsive */
         @@media (max-width: 1024px) {
-            .filters-grid {
-                grid-template-columns: 1fr 1fr;
+            .nav {
+                display: none;
             }
         }
 
         @@media (max-width: 768px) {
-            .nav-links {
-                display: none;
+            .page-hero h1 {
+                font-size: 2rem;
             }
 
-            .page-header h1 {
-                font-size: 1.75rem;
+            .filters-row {
+                flex-direction: column;
             }
 
-            .filters-grid {
-                grid-template-columns: 1fr;
+            .search-box {
+                max-width: 100%;
             }
 
             .packages-grid {
@@ -592,433 +603,275 @@
     </style>
 </head>
 <body>
-    <header class="site-header">
+    <header class="header">
         <div class="header-content">
-            <a href="/" class="logo"><i class="fas fa-compass"></i> TRAVIL</a>
-            <nav class="nav-links">
-                <a href="/">Home</a>
-                <a href="/packages" class="active">Packages</a>
-                <a href="/#about">About</a>
-                <a href="/#contact">Contact</a>
+            <a href="/" class="logo">
+                <div class="logo-icon"><i class="fas fa-paper-plane"></i></div>
+                <span class="logo-text">TRAVIL</span>
+            </a>
+            <nav class="nav">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/packages" class="nav-link active">Packages</a>
+                <a href="/home/privacy" class="nav-link">About</a>
             </nav>
-            <div class="header-actions" id="navAuth">
-                <a href="/account/login" class="btn btn-outline">Sign In</a>
-                <a href="/account/register" class="btn btn-primary">Get Started</a>
+            <div class="nav-actions">
+                <a href="/account/login" class="btn btn-ghost" id="loginBtn">Sign In</a>
+                <a href="/account/dashboard" class="btn btn-primary" id="dashboardBtn" style="display: none;"><i class="fas fa-user"></i> Dashboard</a>
+                <a href="/cart" class="btn btn-ghost" id="cartBtn"><i class="fas fa-shopping-cart"></i></a>
             </div>
         </div>
     </header>
 
-    <section class="page-header">
-        <div class="container">
-            <h1>Travel Packages</h1>
-            <p>Discover handcrafted journeys to the world's most incredible destinations</p>
-            <div class="package-count">
-                <i class="fas fa-suitcase"></i>
-                <span id="totalPackages">0</span> packages available
+    <main class="page-content">
+        <section class="page-hero">
+            <div class="container">
+                <h1>Explore Our Packages</h1>
+                <p>Discover handpicked travel experiences tailored for every type of adventurer</p>
+                <div class="packages-count"><i class="fas fa-suitcase"></i> <span id="packagesCount">0</span> packages available</div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="filters-section">
-        <div class="container">
-            <div class="filters-grid">
-                <div class="filter-group">
-                    <label>Search</label>
-                    <div class="search-wrapper">
+        <section class="filters-section">
+            <div class="container">
+                <div class="filters-row">
+                    <div class="search-box">
                         <i class="fas fa-search"></i>
-                        <input type="text" class="search-input" id="searchInput" placeholder="Search destinations..." oninput="filterPackages()">
+                        <input type="text" id="searchInput" placeholder="Search destinations, packages...">
+                    </div>
+                    <div class="filter-group">
+                        <select class="filter-select" id="categoryFilter">
+                            <option value="">All Categories</option>
+                            <option value="Adventure">Adventure</option>
+                            <option value="Family">Family</option>
+                            <option value="Honeymoon">Honeymoon</option>
+                            <option value="Luxury">Luxury</option>
+                            <option value="Cruise">Cruise</option>
+                        </select>
+                        <select class="filter-select" id="sortFilter">
+                            <option value="">Sort By</option>
+                            <option value="price-asc">Price: Low to High</option>
+                            <option value="price-desc">Price: High to Low</option>
+                            <option value="popular">Most Popular</option>
+                            <option value="date">Travel Date</option>
+                        </select>
                     </div>
                 </div>
-                <div class="filter-group">
-                    <label>Country</label>
-                    <select class="filter-control" id="countryFilter" onchange="filterPackages()">
-                        <option value="">All Countries</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Category</label>
-                    <select class="filter-control" id="categoryFilter" onchange="filterPackages()">
-                        <option value="">All Categories</option>
-                        <option value="0">Family</option>
-                        <option value="1">Honeymoon</option>
-                        <option value="2">Adventure</option>
-                        <option value="3">Cruise</option>
-                        <option value="4">Luxury</option>
-                        <option value="5">Budget</option>
-                        <option value="6">Cultural</option>
-                        <option value="7">Beach</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Price Range</label>
-                    <select class="filter-control" id="priceFilter" onchange="filterPackages()">
-                        <option value="">All Prices</option>
-                        <option value="0-1000">Under $1,000</option>
-                        <option value="1000-2000">$1,000 - $2,000</option>
-                        <option value="2000-3500">$2,000 - $3,500</option>
-                        <option value="3500-5000">$3,500 - $5,000</option>
-                        <option value="5000-99999">$5,000+</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Travel Date</label>
-                    <input type="month" class="filter-control" id="dateFilter" onchange="filterPackages()">
-                </div>
-                <div class="filter-group">
-                    <label>Sort By</label>
-                    <select class="filter-control" id="sortFilter" onchange="filterPackages()">
-                        <option value="default">Default</option>
-                        <option value="price-low">Price: Low to High</option>
-                        <option value="price-high">Price: High to Low</option>
-                        <option value="popular">Most Popular</option>
-                        <option value="date">Travel Date</option>
-                        <option value="category">Category</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>&nbsp;</label>
-                    <button class="filter-toggle" id="saleToggle" onclick="toggleSaleFilter()">
-                        <i class="fas fa-tag"></i> On Sale
-                    </button>
-                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="packages-section">
-        <div class="container">
-            <div class="results-info">
-                <div class="results-count">Showing <span id="resultsCount">0</span> packages</div>
-                <button class="btn btn-outline btn-sm" onclick="resetFilters()"><i class="fas fa-redo"></i> Reset Filters</button>
+        <section class="packages-section">
+            <div class="container">
+                <div class="packages-grid" id="packagesGrid">
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+                <div class="pagination" id="pagination"></div>
             </div>
-            <div class="packages-grid" id="packagesGrid">
-                <div class="loading"><div class="spinner"></div><p>Loading packages...</p></div>
-            </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage"></span></div>
+    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">Success!</span></div>
 
     <script>
         var allPackages = [];
-        var filteredPackages = [];
-        var saleOnly = false;
-        var categoryNames = ['Family', 'Honeymoon', 'Adventure', 'Cruise', 'Luxury', 'Budget', 'Cultural', 'Beach'];
+        var currentPage = 1;
+        var itemsPerPage = 9;
+        var wishlist = [];
 
-        function showToast(message, type) {
-            type = type || 'success';
-            var toast = document.getElementById('toast');
-            document.getElementById('toastMessage').textContent = message;
-            toast.className = 'toast ' + type;
-            toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
-            toast.classList.add('show');
-            setTimeout(function() { toast.classList.remove('show'); }, 3000);
-        }
-
-        function updateNav() {
+        function checkAuth() {
             var token = localStorage.getItem('token');
-            var user = localStorage.getItem('user');
-            var nav = document.getElementById('navAuth');
-
-            if (token && user) {
-                try {
-                    var userData = JSON.parse(user);
-                    var isAdmin = userData.role === 0 || userData.role === '0' || userData.role === 'Admin';
-                    var dashUrl = isAdmin ? '/admin/dashboard' : '/account/dashboard';
-                    var name = userData.firstName || 'Account';
-                    nav.innerHTML = '<a href="/cart" class="btn btn-outline"><i class="fas fa-shopping-cart"></i></a>' +
-                                   '<a href="' + dashUrl + '" class="btn btn-primary"><i class="fas fa-user"></i> ' + name + '</a>';
-                } catch (e) { }
+            if (token) {
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('dashboardBtn').style.display = 'inline-flex';
             }
         }
 
-        function getDefaultImage(index) {
-            var images = [
-                'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800',
-                'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800',
-                'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800',
-                'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800'
-            ];
-            return images[index % images.length];
-        }
-
-        function calcDuration(start, end) {
-            if (!start || !end) return 7;
-            var s = new Date(start);
-            var e = new Date(end);
-            return Math.ceil((e - s) / (1000 * 60 * 60 * 24)) || 7;
-        }
-
-        function formatDate(dateStr) {
-            if (!dateStr) return '';
-            return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        function showToast(message, type) {
+            var toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+            toast.className = 'toast ' + type + ' show';
+            setTimeout(function() { toast.classList.remove('show'); }, 3000);
         }
 
         async function loadPackages() {
             try {
                 var response = await fetch('/api/packages');
-                if (!response.ok) throw new Error('Failed to load');
-
-                var result = await response.json();
-                allPackages = result.data || result || [];
-
-                // Update total count
-                document.getElementById('totalPackages').textContent = allPackages.length;
-
-                // Populate country filter
-                var countries = {};
-                allPackages.forEach(function(p) {
-                    if (p.country && !countries[p.country]) {
-                        countries[p.country] = true;
-                    }
-                });
-
-                var countrySelect = document.getElementById('countryFilter');
-                Object.keys(countries).sort().forEach(function(country) {
-                    var option = document.createElement('option');
-                    option.value = country;
-                    option.textContent = country;
-                    countrySelect.appendChild(option);
-                });
-
-                filterPackages();
-
+                if (response.ok) {
+                    var result = await response.json();
+                    allPackages = result.data || result || [];
+                    document.getElementById('packagesCount').textContent = allPackages.length;
+                    renderPackages();
+                }
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('packagesGrid').innerHTML =
-                    '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h3>Error Loading Packages</h3><p>Please try again later</p></div>';
+                document.getElementById('packagesGrid').innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-circle"></i><h3>Error Loading Packages</h3><p>Please try again later.</p></div>';
             }
         }
 
-        function toggleSaleFilter() {
-            saleOnly = !saleOnly;
-            var btn = document.getElementById('saleToggle');
-            if (saleOnly) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-            filterPackages();
+        async function loadWishlist() {
+            var token = localStorage.getItem('token');
+            if (!token) return;
+            try {
+                var response = await fetch('/api/wishlist', { headers: { 'Authorization': 'Bearer ' + token } });
+                if (response.ok) {
+                    var result = await response.json();
+                    wishlist = (result.data || result || []).map(function(w) { return w.packageId; });
+                }
+            } catch (error) { console.error('Wishlist error:', error); }
         }
 
-        function resetFilters() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('countryFilter').value = '';
-            document.getElementById('categoryFilter').value = '';
-            document.getElementById('priceFilter').value = '';
-            document.getElementById('dateFilter').value = '';
-            document.getElementById('sortFilter').value = 'default';
-            saleOnly = false;
-            document.getElementById('saleToggle').classList.remove('active');
-            filterPackages();
-        }
-
-        function filterPackages() {
+        function getFilteredPackages() {
             var search = document.getElementById('searchInput').value.toLowerCase();
-            var country = document.getElementById('countryFilter').value;
             var category = document.getElementById('categoryFilter').value;
-            var price = document.getElementById('priceFilter').value;
-            var dateFilter = document.getElementById('dateFilter').value;
             var sort = document.getElementById('sortFilter').value;
 
-            filteredPackages = allPackages.filter(function(p) {
-                // Search
+            var filtered = allPackages.filter(function(p) {
                 var matchesSearch = !search ||
-                    (p.destination && p.destination.toLowerCase().indexOf(search) >= 0) ||
-                    (p.country && p.country.toLowerCase().indexOf(search) >= 0) ||
-                    (p.description && p.description.toLowerCase().indexOf(search) >= 0);
-
-                // Country
-                var matchesCountry = !country || p.country === country;
-
-                // Category
-                var matchesCategory = !category || p.packageType === parseInt(category);
-
-                // Price
-                var matchesPrice = true;
-                if (price) {
-                    var range = price.split('-');
-                    var pkgPrice = p.discountedPrice || p.price || 0;
-                    matchesPrice = pkgPrice >= parseInt(range[0]) && pkgPrice <= parseInt(range[1]);
-                }
-
-                // Date
-                var matchesDate = true;
-                if (dateFilter && p.startDate) {
-                    var startMonth = p.startDate.substring(0, 7);
-                    matchesDate = startMonth === dateFilter;
-                }
-
-                // On Sale
-                var matchesSale = !saleOnly || (p.discountedPrice && p.discountedPrice < p.price);
-
-                return matchesSearch && matchesCountry && matchesCategory && matchesPrice && matchesDate && matchesSale;
+                    (p.destination && p.destination.toLowerCase().includes(search)) ||
+                    (p.country && p.country.toLowerCase().includes(search)) ||
+                    (p.description && p.description.toLowerCase().includes(search));
+                var matchesCategory = !category || p.packageType === category;
+                return matchesSearch && matchesCategory;
             });
 
-            // Sort
-            if (sort === 'price-low') {
-                filteredPackages.sort(function(a, b) {
-                    return (a.discountedPrice || a.price) - (b.discountedPrice || b.price);
-                });
-            } else if (sort === 'price-high') {
-                filteredPackages.sort(function(a, b) {
-                    return (b.discountedPrice || b.price) - (a.discountedPrice || a.price);
-                });
-            } else if (sort === 'popular') {
-                filteredPackages.sort(function(a, b) {
-                    var aBookings = (a.bookings ? a.bookings.length : 0) + (a.reviews ? a.reviews.length : 0);
-                    var bBookings = (b.bookings ? b.bookings.length : 0) + (b.reviews ? b.reviews.length : 0);
-                    return bBookings - aBookings;
-                });
-            } else if (sort === 'date') {
-                filteredPackages.sort(function(a, b) {
-                    return new Date(a.startDate) - new Date(b.startDate);
-                });
-            } else if (sort === 'category') {
-                filteredPackages.sort(function(a, b) {
-                    return (a.packageType || 0) - (b.packageType || 0);
-                });
-            }
+            if (sort === 'price-asc') filtered.sort(function(a, b) { return (a.discountedPrice || a.price) - (b.discountedPrice || b.price); });
+            else if (sort === 'price-desc') filtered.sort(function(a, b) { return (b.discountedPrice || b.price) - (a.discountedPrice || a.price); });
+            else if (sort === 'popular') filtered.sort(function(a, b) { return (b.bookingsCount || 0) - (a.bookingsCount || 0); });
+            else if (sort === 'date') filtered.sort(function(a, b) { return new Date(a.startDate) - new Date(b.startDate); });
 
-            renderPackages();
+            return filtered;
         }
 
         function renderPackages() {
+            var filtered = getFilteredPackages();
+            var totalPages = Math.ceil(filtered.length / itemsPerPage);
+            var start = (currentPage - 1) * itemsPerPage;
+            var pagePackages = filtered.slice(start, start + itemsPerPage);
             var grid = document.getElementById('packagesGrid');
-            document.getElementById('resultsCount').textContent = filteredPackages.length;
 
-            if (filteredPackages.length === 0) {
-                grid.innerHTML = '<div class="empty-state"><i class="fas fa-search"></i><h3>No Packages Found</h3><p>Try adjusting your filters</p></div>';
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div class="empty-state"><i class="fas fa-search"></i><h3>No Packages Found</h3><p>Try adjusting your search or filters.</p></div>';
+                document.getElementById('pagination').innerHTML = '';
                 return;
             }
 
-            var html = '';
-            for (var i = 0; i < filteredPackages.length; i++) {
-                var p = filteredPackages[i];
-                var img = p.imageUrl || getDefaultImage(i);
-                var duration = calcDuration(p.startDate, p.endDate);
-                var hasDiscount = p.discountedPrice && p.discountedPrice < p.price;
-                var displayPrice = hasDiscount ? p.discountedPrice : p.price;
-                var categoryName = categoryNames[p.packageType] || 'Travel';
-                var ageText = '';
-                if (p.minimumAge || p.maximumAge) {
-                    if (p.minimumAge && p.maximumAge) {
-                        ageText = p.minimumAge + '-' + p.maximumAge + ' yrs';
-                    } else if (p.minimumAge) {
-                        ageText = p.minimumAge + '+ yrs';
-                    } else {
-                        ageText = 'Up to ' + p.maximumAge + ' yrs';
-                    }
-                }
+            var html = pagePackages.map(function(pkg) {
+                var image = pkg.imageUrl || pkg.images?.[0]?.imageUrl || 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&q=80';
+                var price = pkg.discountedPrice || pkg.price || 0;
+                var hasDiscount = pkg.discountedPrice && pkg.discountedPrice < pkg.price;
+                var rating = pkg.averageRating || 4.5;
+                var isWishlisted = wishlist.includes(pkg.packageId);
+                var startDate = pkg.startDate ? new Date(pkg.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
 
-                html += '<div class="package-card">';
-                html += '<div class="package-image">';
-                html += '<img src="' + img + '" alt="' + (p.destination || 'Package') + '" onerror="this.src=\'' + getDefaultImage(i) + '\'">';
-                html += '<button class="wishlist-btn" onclick="toggleWishlist(event, ' + p.packageId + ')" title="Add to Wishlist"><i class="far fa-heart"></i></button>';
-                html += '<div class="package-badges">';
-                if (hasDiscount) {
-                    var discount = Math.round((1 - p.discountedPrice / p.price) * 100);
-                    html += '<span class="badge badge-sale">' + discount + '% OFF</span>';
-                }
-                html += '<span class="badge badge-category">' + categoryName + '</span>';
-                if (ageText) {
-                    html += '<span class="badge badge-age"><i class="fas fa-user"></i> ' + ageText + '</span>';
-                }
-                html += '</div></div>';
-
-                html += '<div class="package-content">';
-                html += '<div class="package-location"><i class="fas fa-map-marker-alt"></i> ' + (p.country || 'Unknown') + '</div>';
-                html += '<h3 class="package-title"><a href="/packages/' + p.packageId + '" style="color: inherit; text-decoration: none;">' + (p.destination || 'Travel Package') + '</a></h3>';
-
-                html += '<div class="package-meta">';
-                html += '<span class="meta-item"><i class="far fa-clock"></i> ' + duration + ' Days</span>';
-                html += '<span class="meta-item"><i class="fas fa-bed"></i> ' + (p.availableRooms || 0) + ' Rooms</span>';
-                html += '<span class="meta-item"><i class="far fa-calendar"></i> ' + formatDate(p.startDate) + '</span>';
-                html += '</div>';
-
-                html += '<div class="package-footer">';
-                html += '<div class="package-price">';
-                if (hasDiscount) {
-                    html += '<span class="old-price">$' + Math.round(p.price) + '</span>';
-                }
-                html += '<span class="current-price">$' + Math.round(displayPrice) + '</span>';
-                html += '<span class="per-person"> /person</span>';
-                html += '</div>';
-
-                html += '<div class="package-actions">';
-                html += '<a href="/packages/' + p.packageId + '" class="btn btn-outline btn-sm" title="View Details"><i class="fas fa-eye"></i></a>';
-                if (p.availableRooms > 0) {
-                    html += '<a href="/booking/create/' + p.packageId + '" class="btn btn-primary btn-sm" title="Book"><i class="fas fa-calendar-check"></i></a>';
-                    html += '<a href="/booking/buynow/' + p.packageId + '" class="btn btn-success btn-sm" title="Buy Now"><i class="fas fa-bolt"></i></a>';
+                var actionsHtml = '<div class="package-actions">';
+                if (pkg.availableRooms > 0) {
+                    actionsHtml += '<a href="/booking/create/' + pkg.packageId + '" class="btn btn-primary btn-sm" onclick="event.stopPropagation()"><i class="fas fa-calendar-check"></i> Book</a>';
+                    actionsHtml += '<a href="/booking/buynow/' + pkg.packageId + '" class="btn btn-success btn-sm" onclick="event.stopPropagation()"><i class="fas fa-bolt"></i> Buy Now</a>';
                 } else {
-                    html += '<span class="btn btn-outline btn-sm" style="opacity: 0.5;">Sold Out</span>';
+                    actionsHtml += '<span class="btn btn-outline btn-sm sold-out">Sold Out</span>';
                 }
-                html += '</div>';
-                html += '</div></div></div>';
-            }
+                actionsHtml += '</div>';
+
+                return '<div class="package-card" data-id="' + pkg.packageId + '">' +
+                    '<div class="package-image">' +
+                        '<img src="' + image + '" alt="' + (pkg.destination || 'Destination') + '" onerror="this.src=\'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&q=80\'">' +
+                        (hasDiscount ? '<span class="package-badge">Sale</span>' : '') +
+                        '<button class="package-wishlist' + (isWishlisted ? ' active' : '') + '" onclick="toggleWishlist(event, ' + pkg.packageId + ')"><i class="' + (isWishlisted ? 'fas' : 'far') + ' fa-heart"></i></button>' +
+                    '</div>' +
+                    '<div class="package-content">' +
+                        '<div class="package-destination"><i class="fas fa-map-marker-alt"></i> ' + (pkg.country || 'Worldwide') + '</div>' +
+                        '<h3 class="package-title">' + (pkg.destination || 'Amazing Destination') + '</h3>' +
+                        '<div class="package-meta">' +
+                            '<span><i class="far fa-calendar"></i> ' + (startDate || 'Flexible') + '</span>' +
+                            '<span><i class="fas fa-bed"></i> ' + (pkg.availableRooms || 0) + ' rooms</span>' +
+                        '</div>' +
+                        '<div class="package-footer">' +
+                            '<div class="package-price">' +
+                                (hasDiscount ? '<span class="original">$' + pkg.price.toLocaleString() + '</span> ' : '') +
+                                '<span class="amount">$' + price.toLocaleString() + '</span><span class="period">/person</span>' +
+                            '</div>' +
+                            '<div class="package-rating"><i class="fas fa-star"></i><span>' + rating.toFixed(1) + '</span></div>' +
+                        '</div>' +
+                        actionsHtml +
+                    '</div>' +
+                '</div>';
+            }).join('');
 
             grid.innerHTML = html;
+
+            // Card click handlers
+            document.querySelectorAll('.package-card').forEach(function(card) {
+                card.addEventListener('click', function(e) {
+                    if (!e.target.closest('.package-wishlist')) {
+                        window.location.href = '/packages/' + this.dataset.id;
+                    }
+                });
+            });
+
+            // Pagination
+            var paginationHtml = '';
+            if (totalPages > 1) {
+                paginationHtml += '<button class="page-btn" onclick="changePage(' + (currentPage - 1) + ')" ' + (currentPage === 1 ? 'disabled' : '') + '><i class="fas fa-chevron-left"></i></button>';
+                for (var i = 1; i <= totalPages; i++) {
+                    paginationHtml += '<button class="page-btn' + (i === currentPage ? ' active' : '') + '" onclick="changePage(' + i + ')">' + i + '</button>';
+                }
+                paginationHtml += '<button class="page-btn" onclick="changePage(' + (currentPage + 1) + ')" ' + (currentPage === totalPages ? 'disabled' : '') + '><i class="fas fa-chevron-right"></i></button>';
+            }
+            document.getElementById('pagination').innerHTML = paginationHtml;
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            updateNav();
-            loadPackages();
-        });
+        function changePage(page) {
+            var filtered = getFilteredPackages();
+            var totalPages = Math.ceil(filtered.length / itemsPerPage);
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderPackages();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-        // Wishlist functionality
         async function toggleWishlist(event, packageId) {
-            event.preventDefault();
             event.stopPropagation();
-
             var token = localStorage.getItem('token');
-            if (!token) {
-                showToast('Please login to add to wishlist', 'error');
-                setTimeout(function() { window.location.href = '/account/login'; }, 1500);
-                return;
-            }
+            if (!token) { window.location.href = '/account/login'; return; }
 
-            var btn = event.currentTarget;
-            var icon = btn.querySelector('i');
+            var btn = event.target.closest('.package-wishlist');
+            var isWishlisted = wishlist.includes(packageId);
 
             try {
                 var response = await fetch('/api/wishlist/' + packageId, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': 'Bearer ' + token,
-                        'Content-Type': 'application/json'
-                    }
+                    method: isWishlisted ? 'DELETE' : 'POST',
+                    headers: { 'Authorization': 'Bearer ' + token }
                 });
 
                 if (response.ok) {
-                    btn.classList.add('active');
-                    icon.classList.remove('far');
-                    icon.classList.add('fas');
-                    showToast('Added to wishlist!', 'success');
-                } else {
-                    var error = await response.json();
-                    if (error.message && error.message.indexOf('already') >= 0) {
-                        // Already in wishlist, try to remove
-                        var removeResponse = await fetch('/api/wishlist/' + packageId, {
-                            method: 'DELETE',
-                            headers: {
-                                'Authorization': 'Bearer ' + token
-                            }
-                        });
-                        if (removeResponse.ok) {
-                            btn.classList.remove('active');
-                            icon.classList.remove('fas');
-                            icon.classList.add('far');
-                            showToast('Removed from wishlist', 'success');
-                        }
+                    if (isWishlisted) {
+                        wishlist = wishlist.filter(function(id) { return id !== packageId; });
+                        btn.classList.remove('active');
+                        btn.innerHTML = '<i class="far fa-heart"></i>';
+                        showToast('Removed from wishlist', 'success');
                     } else {
-                        showToast(error.message || 'Failed to update wishlist', 'error');
+                        wishlist.push(packageId);
+                        btn.classList.add('active');
+                        btn.innerHTML = '<i class="fas fa-heart"></i>';
+                        showToast('Added to wishlist', 'success');
                     }
                 }
             } catch (error) {
-                console.error('Wishlist error:', error);
                 showToast('Error updating wishlist', 'error');
             }
         }
+
+        // Filter events
+        document.getElementById('searchInput').addEventListener('input', function() { currentPage = 1; renderPackages(); });
+        document.getElementById('categoryFilter').addEventListener('change', function() { currentPage = 1; renderPackages(); });
+        document.getElementById('sortFilter').addEventListener('change', function() { currentPage = 1; renderPackages(); });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadPackages();
+            loadWishlist();
+        });
     </script>
 </body>
 </html>

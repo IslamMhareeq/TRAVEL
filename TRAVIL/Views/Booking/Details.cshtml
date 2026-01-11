@@ -1,4 +1,4 @@
-@{
+ï»¿@{
     ViewData["Title"] = "Booking Details";
     Layout = null;
     var bookingId = ViewData["BookingId"];
@@ -759,7 +759,7 @@
             html += '<div class="price-summary">';
             var pricePerRoom = booking.totalPrice / (booking.numberOfRooms || 1);
             html += '<div class="price-row"><span>Package Price</span><span>$' + Math.round(pricePerRoom).toLocaleString() + '</span></div>';
-            html += '<div class="price-row"><span>Rooms</span><span>× ' + (booking.numberOfRooms || 1) + '</span></div>';
+            html += '<div class="price-row"><span>Rooms</span><span>ï¿½ ' + (booking.numberOfRooms || 1) + '</span></div>';
             html += '<div class="price-row total"><span>Total</span><span class="value">$' + Math.round(booking.totalPrice || 0).toLocaleString() + '</span></div>';
             html += '</div>';
             html += '</div>';

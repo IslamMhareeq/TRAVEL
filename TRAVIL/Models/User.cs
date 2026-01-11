@@ -55,7 +55,8 @@ namespace TRAVEL.Models
         [Required(ErrorMessage = "Password is required")]
         [Display(Name = "Password Hash")]
         public string PasswordHash { get; set; } = string.Empty;
-
+        public string? PasswordResetToken { get; set; }
+        public DateTime? PasswordResetExpiry { get; set; }
         [Required]
         [Display(Name = "User Role")]
         public UserRole Role { get; set; } = UserRole.User;

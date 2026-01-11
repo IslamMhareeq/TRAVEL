@@ -7,7 +7,6 @@ using TRAVEL.Data;
 using MongoDB.Driver;
 using TRAVEL.Services;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services with JSON options to handle circular references
@@ -19,9 +18,14 @@ builder.Services.AddControllersWithViews()
     });
 
 // Add Entity Framework Core with PostgreSQL
+// FIXED: Removed MigrationsAssembly("TRAVIL") - was causing assembly not found error
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<TravelDbContext>(options =>
-    options.UseNpgsql(connectionString, b => b.MigrationsAssembly("TRAVIL"))
+    options.UseNpgsql(connectionString, npgsqlOptions =>
+    {
+        // Use query splitting to improve performance with multiple includes
+        npgsqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+    })
 );
 
 // Add MongoDB for Image Storage (GridFS)
@@ -53,8 +57,8 @@ builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IUserManagementService, UserManagementService>();
 builder.Services.AddScoped<IWishlistService, WishlistService>();
-builder.Services.AddScoped<ICartService, CartService>();           // ADD THIS
-builder.Services.AddScoped<IWishlistService, WishlistService>();   // ADD THIS
+builder.Services.AddScoped<ICartService, CartService>();
+
 // MongoDB Image Storage Service
 builder.Services.AddScoped<IImageStorageService, ImageStorageService>();
 
@@ -139,21 +143,36 @@ app.MapControllerRoute(
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
+
     try
     {
         var context = services.GetRequiredService<TravelDbContext>();
-        context.Database.Migrate();
+
+        // Use EnsureCreated for development, Migrate for production
+        // EnsureCreated doesn't use migrations but creates schema from model
+        if (app.Environment.IsDevelopment())
+        {
+            // For development - creates DB if not exists
+            context.Database.EnsureCreated();
+            logger.LogInformation("Database ensured/created successfully.");
+        }
+        else
+        {
+            // For production - applies migrations
+            context.Database.Migrate();
+            logger.LogInformation("Database migrations applied successfully.");
+        }
 
         // Test MongoDB connection
         var mongoClient = services.GetRequiredService<IMongoClient>();
         var mongoDb = services.GetRequiredService<IMongoDatabase>();
-        var logger = services.GetRequiredService<ILogger<Program>>();
         logger.LogInformation($"MongoDB connected: {mongoDb.DatabaseNamespace.DatabaseName}");
     }
     catch (Exception ex)
     {
-        var logger = services.GetRequiredService<ILogger<Program>>();
         logger.LogError(ex, "An error occurred while initializing the database.");
+        // Don't throw - let app continue even if DB init fails
     }
 }
 

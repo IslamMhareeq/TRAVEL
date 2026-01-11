@@ -9,15 +9,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Account - TRAVIL</title>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    
+
     <style>
         :root {
             --color-midnight: #0d1117;
@@ -88,22 +88,24 @@
             transition: opacity 0.4s ease, visibility 0.4s ease;
         }
 
-        .page-transition.active {
-            opacity: 1;
-            visibility: visible;
-        }
+            .page-transition.active {
+                opacity: 1;
+                visibility: visible;
+            }
 
-        .page-transition .loader {
-            width: 48px;
-            height: 48px;
-            border: 3px solid var(--color-slate);
-            border-top-color: var(--color-gold);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
+            .page-transition .loader {
+                width: 48px;
+                height: 48px;
+                border: 3px solid var(--color-slate);
+                border-top-color: var(--color-gold);
+                border-radius: 50%;
+                animation: spin 0.8s linear infinite;
+            }
 
         @@keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* Auth Container */
@@ -135,8 +137,13 @@
         }
 
         @@keyframes slowZoom {
-            0% { transform: scale(1.05); }
-            100% { transform: scale(1.15); }
+            0% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1.15);
+            }
         }
 
         .auth-visual::before {
@@ -151,8 +158,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(ellipse at 20% 20%, rgba(212, 168, 83, 0.2) 0%, transparent 50%),
-                        radial-gradient(ellipse at 80% 80%, rgba(212, 168, 83, 0.1) 0%, transparent 40%);
+            background: radial-gradient(ellipse at 20% 20%, rgba(212, 168, 83, 0.2) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(212, 168, 83, 0.1) 0%, transparent 40%);
             z-index: 2;
         }
 
@@ -173,44 +179,44 @@
             text-decoration: none;
         }
 
-        .visual-brand .logo {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            color: var(--color-midnight);
-        }
+            .visual-brand .logo {
+                width: 48px;
+                height: 48px;
+                background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+                border-radius: var(--radius-md);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.25rem;
+                color: var(--color-midnight);
+            }
 
-        .visual-brand span {
-            font-family: var(--font-display);
-            font-size: 1.75rem;
-            font-weight: 500;
-            color: var(--color-white);
-            letter-spacing: 0.15em;
-        }
+            .visual-brand span {
+                font-family: var(--font-display);
+                font-size: 1.75rem;
+                font-weight: 500;
+                color: var(--color-white);
+                letter-spacing: 0.15em;
+            }
 
         .visual-quote {
             max-width: 400px;
         }
 
-        .visual-quote blockquote {
-            font-family: var(--font-display);
-            font-size: 1.75rem;
-            font-style: italic;
-            color: var(--color-white);
-            line-height: 1.4;
-            margin-bottom: var(--space-4);
-        }
+            .visual-quote blockquote {
+                font-family: var(--font-display);
+                font-size: 1.75rem;
+                font-style: italic;
+                color: var(--color-white);
+                line-height: 1.4;
+                margin-bottom: var(--space-4);
+            }
 
-        .visual-quote cite {
-            font-size: 0.875rem;
-            color: var(--color-gold);
-            font-style: normal;
-        }
+            .visual-quote cite {
+                font-size: 0.875rem;
+                color: var(--color-gold);
+                font-style: normal;
+            }
 
         .visual-features {
             display: flex;
@@ -335,6 +341,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -346,19 +353,19 @@
             margin-bottom: var(--space-6);
         }
 
-        .form-header h1 {
-            font-family: var(--font-display);
-            font-size: 2rem;
-            font-weight: 500;
-            color: var(--color-white);
-            margin-bottom: var(--space-3);
-            letter-spacing: 0.02em;
-        }
+            .form-header h1 {
+                font-family: var(--font-display);
+                font-size: 2rem;
+                font-weight: 500;
+                color: var(--color-white);
+                margin-bottom: var(--space-3);
+                letter-spacing: 0.02em;
+            }
 
-        .form-header p {
-            font-size: 1rem;
-            color: var(--color-silver);
-        }
+            .form-header p {
+                font-size: 1rem;
+                color: var(--color-silver);
+            }
 
         /* Alert Messages */
         .alert {
@@ -406,60 +413,60 @@
             margin-bottom: var(--space-4);
         }
 
-        .form-group label {
-            display: block;
-            font-size: 0.8125rem;
-            font-weight: 500;
-            color: var(--color-mist);
-            margin-bottom: var(--space-2);
-            letter-spacing: 0.025em;
-        }
+            .form-group label {
+                display: block;
+                font-size: 0.8125rem;
+                font-weight: 500;
+                color: var(--color-mist);
+                margin-bottom: var(--space-2);
+                letter-spacing: 0.025em;
+            }
 
         .input-wrapper {
             position: relative;
         }
 
-        .input-wrapper i {
-            position: absolute;
-            left: var(--space-4);
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--color-steel);
-            font-size: 1rem;
-            pointer-events: none;
-            transition: color var(--transition-fast);
-        }
+            .input-wrapper i {
+                position: absolute;
+                left: var(--space-4);
+                top: 50%;
+                transform: translateY(-50%);
+                color: var(--color-steel);
+                font-size: 1rem;
+                pointer-events: none;
+                transition: color var(--transition-fast);
+            }
 
-        .input-wrapper input {
-            width: 100%;
-            padding: var(--space-4);
-            padding-left: calc(var(--space-4) + 28px);
-            background: var(--color-slate);
-            border: 1px solid var(--color-charcoal);
-            border-radius: var(--radius-md);
-            font-family: var(--font-body);
-            font-size: 0.9375rem;
-            color: var(--color-white);
-            transition: all var(--transition-fast);
-        }
+            .input-wrapper input {
+                width: 100%;
+                padding: var(--space-4);
+                padding-left: calc(var(--space-4) + 28px);
+                background: var(--color-slate);
+                border: 1px solid var(--color-charcoal);
+                border-radius: var(--radius-md);
+                font-family: var(--font-body);
+                font-size: 0.9375rem;
+                color: var(--color-white);
+                transition: all var(--transition-fast);
+            }
 
-        .input-wrapper input::placeholder {
-            color: var(--color-steel);
-        }
+                .input-wrapper input::placeholder {
+                    color: var(--color-steel);
+                }
 
-        .input-wrapper input:focus {
-            outline: none;
-            border-color: var(--color-gold);
-            background: var(--color-charcoal);
-        }
+                .input-wrapper input:focus {
+                    outline: none;
+                    border-color: var(--color-gold);
+                    background: var(--color-charcoal);
+                }
 
-        .input-wrapper:focus-within i:first-of-type {
-            color: var(--color-gold);
-        }
+            .input-wrapper:focus-within i:first-of-type {
+                color: var(--color-gold);
+            }
 
-        .input-wrapper input.is-invalid {
-            border-color: var(--color-error);
-        }
+            .input-wrapper input.is-invalid {
+                border-color: var(--color-error);
+            }
 
         .password-toggle {
             position: absolute;
@@ -475,9 +482,9 @@
             transition: color var(--transition-fast);
         }
 
-        .password-toggle:hover {
-            color: var(--color-gold);
-        }
+            .password-toggle:hover {
+                color: var(--color-gold);
+            }
 
         /* Password Strength */
         .password-strength {
@@ -498,10 +505,21 @@
             transition: background var(--transition-fast);
         }
 
-        .strength-bar.weak { background: var(--color-error); }
-        .strength-bar.fair { background: var(--color-warning); }
-        .strength-bar.good { background: var(--color-success); }
-        .strength-bar.strong { background: var(--color-gold); }
+            .strength-bar.weak {
+                background: var(--color-error);
+            }
+
+            .strength-bar.fair {
+                background: var(--color-warning);
+            }
+
+            .strength-bar.good {
+                background: var(--color-success);
+            }
+
+            .strength-bar.strong {
+                background: var(--color-gold);
+            }
 
         .strength-text {
             font-size: 0.75rem;
@@ -510,10 +528,21 @@
             text-transform: capitalize;
         }
 
-        .strength-text.weak { color: var(--color-error); }
-        .strength-text.fair { color: var(--color-warning); }
-        .strength-text.good { color: var(--color-success); }
-        .strength-text.strong { color: var(--color-gold); }
+            .strength-text.weak {
+                color: var(--color-error);
+            }
+
+            .strength-text.fair {
+                color: var(--color-warning);
+            }
+
+            .strength-text.good {
+                color: var(--color-success);
+            }
+
+            .strength-text.strong {
+                color: var(--color-gold);
+            }
 
         /* Form Options */
         .form-options {
@@ -530,23 +559,23 @@
             line-height: 1.5;
         }
 
-        .checkbox-wrapper input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            margin-top: 2px;
-            accent-color: var(--color-gold);
-            cursor: pointer;
-            flex-shrink: 0;
-        }
+            .checkbox-wrapper input[type="checkbox"] {
+                width: 18px;
+                height: 18px;
+                margin-top: 2px;
+                accent-color: var(--color-gold);
+                cursor: pointer;
+                flex-shrink: 0;
+            }
 
-        .checkbox-wrapper a {
-            color: var(--color-gold);
-            text-decoration: none;
-        }
+            .checkbox-wrapper a {
+                color: var(--color-gold);
+                text-decoration: none;
+            }
 
-        .checkbox-wrapper a:hover {
-            color: var(--color-gold-light);
-        }
+                .checkbox-wrapper a:hover {
+                    color: var(--color-gold-light);
+                }
 
         /* Submit Button */
         .btn {
@@ -570,15 +599,15 @@
             color: var(--color-midnight);
         }
 
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-gold);
-        }
+            .btn-primary:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-gold);
+            }
 
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+            .btn-primary:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
 
         .btn-lg {
             padding: var(--space-4) var(--space-6);
@@ -606,20 +635,20 @@
             margin: var(--space-5) 0;
         }
 
-        .auth-divider::before,
-        .auth-divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--color-charcoal), transparent);
-        }
+            .auth-divider::before,
+            .auth-divider::after {
+                content: '';
+                flex: 1;
+                height: 1px;
+                background: linear-gradient(90deg, transparent, var(--color-charcoal), transparent);
+            }
 
-        .auth-divider span {
-            font-size: 0.75rem;
-            color: var(--color-silver);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
+            .auth-divider span {
+                font-size: 0.75rem;
+                color: var(--color-silver);
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+            }
 
         /* Social Auth */
         .social-auth {
@@ -645,15 +674,15 @@
             transition: all var(--transition-fast);
         }
 
-        .social-btn:hover {
-            border-color: var(--color-gold);
-            background: var(--color-gold-muted);
-            transform: translateY(-2px);
-        }
+            .social-btn:hover {
+                border-color: var(--color-gold);
+                background: var(--color-gold-muted);
+                transform: translateY(-2px);
+            }
 
-        .social-btn i {
-            font-size: 1.125rem;
-        }
+            .social-btn i {
+                font-size: 1.125rem;
+            }
 
         /* Auth Switch */
         .auth-switch {
@@ -663,16 +692,16 @@
             color: var(--color-silver);
         }
 
-        .auth-switch a {
-            color: var(--color-gold);
-            font-weight: 600;
-            text-decoration: none;
-            transition: color var(--transition-fast);
-        }
+            .auth-switch a {
+                color: var(--color-gold);
+                font-weight: 600;
+                text-decoration: none;
+                transition: color var(--transition-fast);
+            }
 
-        .auth-switch a:hover {
-            color: var(--color-gold-light);
-        }
+                .auth-switch a:hover {
+                    color: var(--color-gold-light);
+                }
 
         /* Toast Notification */
         .toast {
@@ -695,13 +724,18 @@
             transition: all 0.3s ease;
         }
 
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
+            .toast.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
 
-        .toast.success i { color: var(--color-success); }
-        .toast.error i { color: var(--color-error); }
+            .toast.success i {
+                color: var(--color-success);
+            }
+
+            .toast.error i {
+                color: var(--color-error);
+            }
     </style>
 </head>
 <body>
@@ -721,14 +755,14 @@
                     </div>
                     <span>TRAVIL</span>
                 </a>
-                
+
                 <div class="visual-quote">
                     <blockquote>
                         "Adventure awaits those who dare to dream."
                     </blockquote>
                     <cite>— TRAVIL</cite>
                 </div>
-                
+
                 <div class="visual-features">
                     <div class="feature-item">
                         <div class="feature-icon">
@@ -759,13 +793,13 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="visual-decor">
                 <div class="decor-circle"></div>
                 <div class="decor-circle"></div>
             </div>
         </div>
-        
+
         <!-- Form Panel -->
         <div class="auth-form-panel">
             <div class="mobile-brand">
@@ -776,15 +810,15 @@
                     <span>TRAVIL</span>
                 </a>
             </div>
-            
+
             <div class="form-container">
                 <div class="form-header">
                     <h1>Create Account</h1>
                     <p>Start your journey with us today</p>
                 </div>
-                
+
                 <div id="alertContainer"></div>
-                
+
                 <form id="registerForm" class="auth-form">
                     <div class="form-row">
                         <div class="form-group">
@@ -802,7 +836,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="email">Email Address</label>
                         <div class="input-wrapper">
@@ -810,7 +844,7 @@
                             <input type="email" id="email" name="email" placeholder="john@example.com" required autocomplete="email">
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="phone">Phone Number</label>
                         <div class="input-wrapper">
@@ -818,7 +852,7 @@
                             <input type="tel" id="phone" name="phone" placeholder="+1 (555) 123-4567" autocomplete="tel">
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="password">Password</label>
                         <div class="input-wrapper">
@@ -838,7 +872,7 @@
                             <span class="strength-text" id="strengthText">Password strength</span>
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="confirmPassword">Confirm Password</label>
                         <div class="input-wrapper">
@@ -849,24 +883,24 @@
                             </button>
                         </div>
                     </div>
-                    
+
                     <div class="form-options">
                         <label class="checkbox-wrapper">
                             <input type="checkbox" name="agreeTerms" id="agreeTerms" required>
                             <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></span>
                         </label>
                     </div>
-                    
+
                     <button type="submit" class="btn btn-primary btn-lg btn-block" id="submitBtn">
                         <span id="btnText">Create Account</span>
                         <i class="fas fa-arrow-right" id="btnIcon"></i>
                     </button>
                 </form>
-                
+
                 <div class="auth-divider">
                     <span>or sign up with</span>
                 </div>
-                
+
                 <div class="social-auth">
                     <button type="button" class="social-btn">
                         <i class="fab fa-google"></i>
@@ -877,7 +911,7 @@
                         <span>Facebook</span>
                     </button>
                 </div>
-                
+
                 <p class="auth-switch">
                     Already have an account? <a href="/account/login" onclick="navigateTo('/account/login', event)">Sign in</a>
                 </p>
@@ -896,7 +930,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const token = localStorage.getItem('token');
             const user = localStorage.getItem('user');
-            
+
             if (token && user) {
                 const userData = JSON.parse(user);
                 if (userData.role === 'Admin' || userData.role === 0) {
@@ -911,7 +945,7 @@
         function togglePassword(fieldId) {
             const passwordInput = document.getElementById(fieldId);
             const toggleIcon = document.getElementById(fieldId === 'password' ? 'toggleIconPassword' : 'toggleIconConfirm');
-            
+
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 toggleIcon.classList.remove('fa-eye');
@@ -931,27 +965,27 @@
             const bar3 = document.getElementById('bar3');
             const bar4 = document.getElementById('bar4');
             const strengthText = document.getElementById('strengthText');
-            
+
             // Reset bars
             [bar1, bar2, bar3, bar4].forEach(bar => bar.className = 'strength-bar');
             strengthText.className = 'strength-text';
-            
+
             if (password.length === 0) {
                 strengthText.textContent = 'Password strength';
                 return;
             }
-            
+
             let strength = 0;
-            
+
             // Length check
             if (password.length >= 8) strength++;
             if (password.length >= 12) strength++;
-            
+
             // Character variety checks
             if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
             if (/[0-9]/.test(password)) strength++;
             if (/[^a-zA-Z0-9]/.test(password)) strength++;
-            
+
             // Determine strength level
             let level, className;
             if (strength <= 2) {
@@ -977,7 +1011,7 @@
                 bar3.classList.add('strong');
                 bar4.classList.add('strong');
             }
-            
+
             strengthText.textContent = level;
             strengthText.classList.add(className);
         });
@@ -986,7 +1020,7 @@
         function showAlert(message, type = 'danger') {
             const container = document.getElementById('alertContainer');
             const iconClass = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
-            
+
             container.innerHTML = `
                 <div class="alert alert-${type}">
                     <i class="fas ${iconClass}"></i>
@@ -1000,13 +1034,13 @@
             const toast = document.getElementById('toast');
             const toastMessage = document.getElementById('toastMessage');
             const toastIcon = toast.querySelector('i');
-            
+
             toastMessage.textContent = message;
             toast.className = 'toast ' + type;
             toastIcon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
-            
+
             toast.classList.add('show');
-            
+
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 3000);
@@ -1015,10 +1049,10 @@
         // Navigate with Transition
         function navigateTo(url, event) {
             if (event) event.preventDefault();
-            
+
             const transition = document.getElementById('pageTransition');
             transition.classList.add('active');
-            
+
             setTimeout(() => {
                 window.location.href = url;
             }, 400);
@@ -1027,35 +1061,35 @@
         // Form Submission
         document.getElementById('registerForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
             const submitBtn = document.getElementById('submitBtn');
             const btnText = document.getElementById('btnText');
             const btnIcon = document.getElementById('btnIcon');
-            
+
             const firstName = document.getElementById('firstName').value.trim();
             const lastName = document.getElementById('lastName').value.trim();
             const email = document.getElementById('email').value.trim();
             const phone = document.getElementById('phone').value.trim();
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
-            
+
             // Validation
             if (password !== confirmPassword) {
                 showAlert('Passwords do not match');
                 return;
             }
-            
+
             if (password.length < 8) {
                 showAlert('Password must be at least 8 characters');
                 return;
             }
-            
+
             // Disable button and show loading
             submitBtn.disabled = true;
             btnText.textContent = 'Creating account...';
             btnIcon.className = 'spinner';
             btnIcon.innerHTML = '';
-            
+
             try {
                 const response = await fetch('/api/account/register', {
                     method: 'POST',
@@ -1071,16 +1105,16 @@
                         confirmPassword: confirmPassword
                     })
                 });
-                
+
                 const result = await response.json();
-                
+
                 if (response.ok && result.success) {
                     // Store token and user data
                     localStorage.setItem('token', result.token);
                     localStorage.setItem('user', JSON.stringify(result.user));
-                    
+
                     showAlert('Account created successfully! Redirecting...', 'success');
-                    
+
                     // Redirect to dashboard
                     setTimeout(() => {
                         navigateTo('/account/dashboard');

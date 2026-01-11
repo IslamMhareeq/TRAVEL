@@ -5,64 +5,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Wishlist - TRAVIL</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wishlist - TRAVIL</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
         :root {
-            --color-bg: #0a0a0f;
-            --color-surface: #12121a;
-            --color-surface-2: #1a1a24;
-            --color-border: #2a2a3a;
+            --color-bg: #0d1117;
+            --color-surface: #161b22;
+            --color-surface-2: #21262d;
+            --color-border: #30363d;
+            --color-text: #c9d1d9;
+            --color-text-muted: #8b949e;
             --color-gold: #d4a853;
-            --color-gold-hover: #e4b863;
-            --color-white: #ffffff;
-            --color-silver: #a0a0b0;
+            --color-gold-dark: #b8943f;
             --color-success: #3fb950;
-            --color-warning: #d29922;
             --color-danger: #f85149;
-            --color-info: #58a6ff;
-            --font-main: 'Plus Jakarta Sans', sans-serif;
-            --radius-sm: 6px;
-            --radius-md: 10px;
-            --radius-lg: 16px;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Outfit', sans-serif;
             --space-1: 4px;
             --space-2: 8px;
             --space-3: 12px;
             --space-4: 16px;
             --space-5: 24px;
             --space-6: 32px;
-            --sidebar-width: 260px;
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
-            font-family: var(--font-main);
+            font-family: var(--font-body);
             background: var(--color-bg);
-            color: var(--color-white);
+            color: var(--color-text);
             min-height: 100vh;
         }
 
+        /* Dashboard Layout */
         .dashboard-layout {
             display: flex;
             min-height: 100vh;
         }
 
+        /* Sidebar */
         .sidebar {
-            width: var(--sidebar-width);
+            width: 260px;
             background: var(--color-surface);
             border-right: 1px solid var(--color-border);
+            display: flex;
+            flex-direction: column;
             position: fixed;
             top: 0;
             left: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
+            bottom: 0;
             z-index: 100;
             transition: transform 0.3s ease;
         }
@@ -73,14 +77,20 @@
         }
 
         .sidebar-logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--color-gold);
-            text-decoration: none;
             display: flex;
             align-items: center;
-            gap: var(--space-2);
+            gap: var(--space-3);
+            text-decoration: none;
+            color: var(--color-text);
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
         }
+
+            .sidebar-logo i {
+                color: var(--color-gold);
+                font-size: 1.5rem;
+            }
 
         .sidebar-nav {
             flex: 1;
@@ -95,26 +105,26 @@
             align-items: center;
             gap: var(--space-3);
             padding: var(--space-3) var(--space-4);
-            border-radius: var(--radius-md);
-            color: var(--color-silver);
+            color: var(--color-text-muted);
             text-decoration: none;
+            border-radius: var(--radius-md);
             transition: all 0.2s;
         }
 
-        .nav-item:hover {
-            background: var(--color-surface-2);
-            color: var(--color-white);
-        }
+            .nav-item:hover {
+                background: var(--color-surface-2);
+                color: var(--color-text);
+            }
 
-        .nav-item.active {
-            background: rgba(212, 168, 83, 0.15);
-            color: var(--color-gold);
-        }
+            .nav-item.active {
+                background: rgba(212, 168, 83, 0.1);
+                color: var(--color-gold);
+            }
 
-        .nav-item i {
-            width: 20px;
-            text-align: center;
-        }
+            .nav-item i {
+                width: 20px;
+                text-align: center;
+            }
 
         .sidebar-footer {
             padding: var(--space-4);
@@ -130,161 +140,125 @@
         .user-avatar {
             width: 40px;
             height: 40px;
+            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
             border-radius: 50%;
-            background: var(--color-gold);
-            color: var(--color-bg);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 600;
+            color: var(--color-bg);
+        }
+
+        .user-details {
+            flex: 1;
+            min-width: 0;
         }
 
         .user-name {
-            font-weight: 600;
-            font-size: 0.9rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .user-email {
             font-size: 0.75rem;
-            color: var(--color-silver);
+            color: var(--color-text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .sidebar-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0,0,0,0.5);
             z-index: 99;
         }
 
-        .sidebar-overlay.active {
-            display: block;
-        }
-
+        /* Main Content */
         .main-content {
             flex: 1;
-            margin-left: var(--sidebar-width);
+            margin-left: 260px;
             min-height: 100vh;
         }
 
         .header {
             padding: var(--space-5) var(--space-6);
             border-bottom: 1px solid var(--color-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: var(--space-4);
+            background: var(--color-surface);
         }
 
-        .header h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-        }
+            .header h2 {
+                font-family: var(--font-display);
+                font-size: 1.75rem;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+            }
 
         .subtitle {
-            color: var(--color-silver);
-            font-size: 0.9rem;
-            margin-top: var(--space-1);
+            color: var(--color-text-muted);
+            margin-top: var(--space-2);
         }
 
         .mobile-menu-btn {
             display: none;
             background: none;
             border: none;
-            color: var(--color-white);
+            color: var(--color-text);
             font-size: 1.25rem;
             cursor: pointer;
             margin-right: var(--space-3);
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-2);
-            padding: var(--space-3) var(--space-4);
-            border-radius: var(--radius-md);
-            font-size: 0.875rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-            border: none;
-        }
-
-        .btn-primary {
-            background: var(--color-gold);
-            color: var(--color-bg);
-        }
-
-        .btn-primary:hover {
-            background: var(--color-gold-hover);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--color-border);
-            color: var(--color-white);
-        }
-
-        .btn-outline:hover {
-            border-color: var(--color-gold);
-            color: var(--color-gold);
-        }
-
-        .btn-sm {
-            padding: var(--space-2) var(--space-3);
-            font-size: 0.8125rem;
         }
 
         #content {
             padding: var(--space-6);
         }
 
-        .loading {
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-4);
+            margin-bottom: var(--space-6);
+        }
+
+        .stat-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
             display: flex;
+            align-items: center;
+            gap: var(--space-4);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(212, 168, 83, 0.1);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
             justify-content: center;
-            padding: var(--space-6);
+            font-size: 1.25rem;
+            color: var(--color-gold);
         }
 
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--color-border);
-            border-top-color: var(--color-gold);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @@keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: var(--space-6);
-        }
-
-        .empty-state i {
-            font-size: 4rem;
-            color: var(--color-danger);
-            margin-bottom: var(--space-4);
-            opacity: 0.5;
-        }
-
-        .empty-state h3 {
+        .stat-value {
             font-size: 1.5rem;
-            margin-bottom: var(--space-2);
+            font-weight: 600;
         }
 
-        .empty-state p {
-            color: var(--color-silver);
-            margin-bottom: var(--space-5);
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
         }
 
+        /* Wishlist Grid */
         .wishlist-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -299,37 +273,31 @@
             transition: all 0.3s;
         }
 
-        .wishlist-card:hover {
-            border-color: var(--color-gold);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-        }
+            .wishlist-card:hover {
+                transform: translateY(-4px);
+                border-color: var(--color-gold);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            }
 
         .wishlist-image-container {
             position: relative;
             height: 200px;
-            overflow: hidden;
         }
 
         .wishlist-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.3s;
-        }
-
-        .wishlist-card:hover .wishlist-image {
-            transform: scale(1.05);
         }
 
         .wishlist-badge {
             position: absolute;
             top: var(--space-3);
             left: var(--space-3);
-            background: var(--color-danger);
+            background: var(--color-success);
             color: white;
             padding: var(--space-1) var(--space-3);
-            border-radius: var(--radius-sm);
+            border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 600;
         }
@@ -340,10 +308,10 @@
             right: var(--space-3);
             width: 36px;
             height: 36px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.6);
-            color: white;
+            background: rgba(0,0,0,0.6);
             border: none;
+            border-radius: 50%;
+            color: white;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -351,26 +319,27 @@
             transition: all 0.2s;
         }
 
-        .wishlist-remove:hover {
-            background: var(--color-danger);
-        }
+            .wishlist-remove:hover {
+                background: var(--color-danger);
+            }
 
         .wishlist-content {
-            padding: var(--space-4);
+            padding: var(--space-5);
         }
 
         .wishlist-location {
-            font-size: 0.8125rem;
-            color: var(--color-gold);
-            margin-bottom: var(--space-2);
             display: flex;
             align-items: center;
             gap: var(--space-2);
+            color: var(--color-gold);
+            font-size: 0.8125rem;
+            margin-bottom: var(--space-2);
         }
 
         .wishlist-title {
-            font-size: 1.125rem;
-            font-weight: 600;
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 500;
             margin-bottom: var(--space-3);
         }
 
@@ -383,7 +352,7 @@
 
         .wishlist-meta-item {
             font-size: 0.8125rem;
-            color: var(--color-silver);
+            color: var(--color-text-muted);
             display: flex;
             align-items: center;
             gap: var(--space-1);
@@ -398,23 +367,106 @@
         }
 
         .wishlist-price {
-            font-size: 1.25rem;
-            font-weight: 700;
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
             color: var(--color-gold);
         }
 
         .wishlist-price-old {
             font-size: 0.875rem;
-            color: var(--color-silver);
+            color: var(--color-text-muted);
             text-decoration: line-through;
             margin-right: var(--space-2);
         }
 
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+            color: var(--color-bg);
+        }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(212, 168, 83, 0.3);
+            }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--color-border);
+            color: var(--color-text);
+        }
+
+            .btn-outline:hover {
+                border-color: var(--color-gold);
+                color: var(--color-gold);
+            }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px var(--space-5);
+            color: var(--color-text-muted);
+        }
+
+            .empty-state i {
+                font-size: 4rem;
+                margin-bottom: var(--space-5);
+                opacity: 0.5;
+            }
+
+            .empty-state h3 {
+                font-size: 1.25rem;
+                margin-bottom: var(--space-3);
+                color: var(--color-text);
+            }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            gap: var(--space-4);
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--color-border);
+            border-top-color: var(--color-gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @@keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Toast */
         .toast {
             position: fixed;
             bottom: var(--space-5);
             right: var(--space-5);
-            background: var(--color-surface-2);
+            background: var(--color-surface);
             border: 1px solid var(--color-border);
             border-radius: var(--radius-md);
             padding: var(--space-3) var(--space-4);
@@ -427,33 +479,49 @@
             z-index: 1000;
         }
 
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
+            .toast.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
 
-        .toast.success i { color: var(--color-success); }
-        .toast.error i { color: var(--color-danger); }
+            .toast.success i {
+                color: var(--color-success);
+            }
+
+            .toast.error i {
+                color: var(--color-danger);
+            }
+
+        /* Responsive */
+        @@media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
 
         @@media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
             }
 
-            .sidebar.active {
-                transform: translateX(0);
+                .sidebar.active {
+                    transform: translateX(0);
+                }
+
+            .sidebar-overlay.active {
+                display: block;
             }
 
             .main-content {
                 margin-left: 0;
             }
 
-            .header {
-                padding: var(--space-4);
-            }
-
             .mobile-menu-btn {
                 display: block;
+            }
+
+            .header {
+                padding: var(--space-4);
             }
 
             .wishlist-grid {
@@ -462,6 +530,10 @@
 
             #content {
                 padding: var(--space-4);
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -518,33 +590,48 @@
                     <h2><i class="fas fa-heart" style="color: var(--color-danger); margin-right: 10px;"></i>My Wishlist</h2>
                     <p class="subtitle">Packages you've saved for later</p>
                 </div>
-                <a href="/packages" class="btn btn-primary" onclick="navigateTo('/packages', event)">
-                    <i class="fas fa-search"></i> Browse Packages
-                </a>
             </div>
 
             <div id="content">
-                <div class="loading" id="loader">
-                    <div class="spinner"></div>
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-heart"></i></div>
+                        <div>
+                            <div class="stat-value" id="wishlistCount">0</div>
+                            <div class="stat-label">Saved Packages</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                        <div>
+                            <div class="stat-value" id="bookingsCount">0</div>
+                            <div class="stat-label">Total Bookings</div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="empty-state" id="emptyState" style="display: none;">
+                <!-- Wishlist Grid -->
+                <div id="loader" class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading wishlist...</p>
+                </div>
+                <div id="emptyState" class="empty-state" style="display: none;">
                     <i class="fas fa-heart-broken"></i>
-                    <h3>Your Wishlist is Empty</h3>
-                    <p>Start adding packages to your wishlist by clicking the heart icon on any package you like!</p>
-                    <a href="/packages" class="btn btn-primary" onclick="navigateTo('/packages', event)">
-                        <i class="fas fa-compass"></i> Explore Packages
+                    <h3>Your wishlist is empty</h3>
+                    <p>Start exploring and save packages you love!</p>
+                    <a href="/packages" class="btn btn-primary" style="margin-top: 20px;" onclick="navigateTo('/packages', event)">
+                        <i class="fas fa-search"></i> Browse Packages
                     </a>
                 </div>
-
                 <div class="wishlist-grid" id="wishlistGrid"></div>
             </div>
         </main>
     </div>
 
-    <div id="toast" class="toast">
+    <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
-        <span id="toastMessage">Message</span>
+        <span id="toastMessage"></span>
     </div>
 
     <script>
@@ -557,28 +644,30 @@
             if (event) event.preventDefault();
             localStorage.removeItem('token');
             localStorage.removeItem('user');
-            navigateTo('/account/login');
+            window.location.href = '/account/login';
         }
 
         function showToast(message, type) {
             type = type || 'success';
             var toast = document.getElementById('toast');
             document.getElementById('toastMessage').textContent = message;
-            toast.className = 'toast ' + type + ' show';
+            toast.className = 'toast ' + type;
+            toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+            toast.classList.add('show');
             setTimeout(function() { toast.classList.remove('show'); }, 3000);
         }
 
-        function formatDate(dateString) {
-            if (!dateString) return 'N/A';
-            var date = new Date(dateString);
-            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        function formatDate(dateStr) {
+            if (!dateStr) return 'N/A';
+            var date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         }
 
-        function calculateDuration(start, end) {
-            if (!start || !end) return 0;
-            var startDate = new Date(start);
-            var endDate = new Date(end);
-            var days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+        function calculateDuration(startDate, endDate) {
+            if (!startDate || !endDate) return 1;
+            var start = new Date(startDate);
+            var end = new Date(endDate);
+            var days = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
             return days > 0 ? days : 1;
         }
 
@@ -592,6 +681,25 @@
             document.getElementById('sidebar').classList.remove('active');
             this.classList.remove('active');
         });
+
+        // Load stats - FIXED ENDPOINT: /api/booking/my-bookings (NOT /api/bookings/my)
+        async function loadStats() {
+            var token = localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                // CORRECT ENDPOINT
+                var bookingsRes = await fetch('/api/booking/my-bookings', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                if (bookingsRes.ok) {
+                    var data = await bookingsRes.json();
+                    document.getElementById('bookingsCount').textContent = (data.data || []).length;
+                }
+            } catch (error) {
+                console.log('Could not load booking stats:', error);
+            }
+        }
 
         async function removeFromWishlist(packageId) {
             var token = localStorage.getItem('token');
@@ -659,6 +767,10 @@
                     var result = await response.json();
                     console.log('Wishlist data:', result);
 
+                    // Update count
+                    var count = result.count || (result.data ? result.data.length : 0);
+                    document.getElementById('wishlistCount').textContent = count;
+
                     // Check if we have data
                     if (!result.data || result.data.length === 0) {
                         console.log('No items in wishlist');
@@ -679,6 +791,7 @@
                             continue;
                         }
 
+                        // FIX: Get image URL properly from package
                         var imageUrl = pkg.imageUrl || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80';
                         var duration = calculateDuration(pkg.startDate, pkg.endDate);
                         var hasDiscount = pkg.discountedPrice && pkg.discountedPrice < pkg.price;
@@ -706,7 +819,7 @@
                         }
                         html += '$' + (price || 0).toLocaleString();
                         html += '</div>';
-                        html += '<a href="/packages/' + pkg.packageId + '" class="btn btn-outline btn-sm">View Details</a>';
+                        html += '<a href="/packages/' + pkg.packageId + '" class="btn btn-outline">View Details</a>';
                         html += '</div>';
                         html += '</div>';
                         html += '</div>';
@@ -751,6 +864,7 @@
             }
 
             loadWishlist();
+            loadStats();
         });
     </script>
 </body>

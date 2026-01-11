@@ -66,6 +66,7 @@ namespace TRAVEL.Controllers
             });
         }
 
+
         /// <summary>
         /// Get user's bookings
         /// </summary>
@@ -83,6 +84,7 @@ namespace TRAVEL.Controllers
             {
                 bookingId = b.BookingId,
                 bookingReference = b.BookingReference,
+                packageId = b.PackageId,  // <-- ADD THIS LINE (was missing)
                 destination = b.TravelPackage?.Destination,
                 country = b.TravelPackage?.Country,
                 startDate = b.TravelPackage?.StartDate,
@@ -96,11 +98,26 @@ namespace TRAVEL.Controllers
                 paymentStatus = b.Payment?.Status.ToString() ?? "Pending",
                 daysUntilTrip = b.TravelPackage != null ?
                     (int)(b.TravelPackage.StartDate - DateTime.UtcNow).TotalDays : 0,
-                imageUrl = b.TravelPackage?.ImageUrl ?? b.TravelPackage?.Images?.FirstOrDefault()?.ImageUrl
+                imageUrl = b.TravelPackage?.ImageUrl ?? b.TravelPackage?.Images?.FirstOrDefault()?.ImageUrl,
+                // Optional: include more package details
+                travelPackage = b.TravelPackage != null ? new
+                {
+                    packageId = b.TravelPackage.PackageId,
+                    destination = b.TravelPackage.Destination,
+                    country = b.TravelPackage.Country,
+                    description = b.TravelPackage.Description,
+                    imageUrl = b.TravelPackage.ImageUrl
+                } : null
             }).ToList();
 
             return Ok(new { success = true, data = result, count = result.Count });
         }
+
+
+
+
+
+
 
         /// <summary>
         /// Get booking by ID

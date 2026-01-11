@@ -39,7 +39,16 @@ namespace TRAVEL.Controllers
             ViewData["BookingId"] = id;
             return View("~/Views/Booking/Payment.cshtml");
         }
-
+        /// <summary>
+        /// Buy Now page - /booking/buynow/{packageId}
+        /// Direct purchase with payment in one step
+        /// </summary>
+        [HttpGet("buynow/{packageId:int}")]
+        public IActionResult BuyNow(int packageId)
+        {
+            ViewData["PackageId"] = packageId;
+            return View("~/Views/Booking/BuyNow.cshtml");
+        }
         /// <summary>
         /// Checkout page (for cart) - /booking/checkout
         /// </summary>

@@ -5,38 +5,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Dashboard - TRAVIL</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - TRAVIL</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
         :root {
-            --color-bg: #0a0a0f;
-            --color-surface: #12121a;
-            --color-surface-2: #1a1a24;
-            --color-border: #2a2a3a;
-            --color-gold: #d4a853;
-            --color-gold-hover: #e4b863;
+            --color-midnight: #0d1117;
+            --color-navy: #161b22;
+            --color-slate: #21262d;
+            --color-charcoal: #30363d;
+            --color-steel: #484f58;
+            --color-silver: #8b949e;
+            --color-mist: #c9d1d9;
             --color-white: #ffffff;
-            --color-silver: #a0a0b0;
+            --color-gold: #d4a853;
+            --color-gold-dark: #b8943f;
+            --color-gold-muted: rgba(212, 168, 83, 0.15);
             --color-success: #3fb950;
+            --color-success-muted: rgba(63, 185, 80, 0.15);
             --color-warning: #d29922;
-            --color-danger: #f85149;
-            --color-info: #58a6ff;
-            --font-main: 'Plus Jakarta Sans', sans-serif;
-            --radius-sm: 6px;
-            --radius-md: 10px;
-            --radius-lg: 16px;
+            --color-warning-muted: rgba(210, 153, 34, 0.15);
+            --color-error: #f85149;
+            --color-error-muted: rgba(248, 81, 73, 0.15);
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Outfit', sans-serif;
             --space-1: 4px;
             --space-2: 8px;
             --space-3: 12px;
             --space-4: 16px;
             --space-5: 24px;
             --space-6: 32px;
-            --sidebar-width: 260px;
+            --space-7: 48px;
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-full: 9999px;
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --sidebar-width: 280px;
         }
 
         * {
@@ -46,9 +56,10 @@
         }
 
         body {
-            font-family: var(--font-main);
-            background: var(--color-bg);
+            font-family: var(--font-body);
+            background: var(--color-midnight);
             color: var(--color-white);
+            line-height: 1.6;
             min-height: 100vh;
         }
 
@@ -60,8 +71,8 @@
         /* Sidebar */
         .sidebar {
             width: var(--sidebar-width);
-            background: var(--color-surface);
-            border-right: 1px solid var(--color-border);
+            background: var(--color-navy);
+            border-right: 1px solid var(--color-slate);
             position: fixed;
             top: 0;
             left: 0;
@@ -69,30 +80,58 @@
             display: flex;
             flex-direction: column;
             z-index: 100;
-            transition: transform 0.3s ease;
+            transition: transform var(--transition-normal);
         }
 
         .sidebar-header {
             padding: var(--space-5);
-            border-bottom: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-slate);
         }
 
         .sidebar-logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--color-gold);
-            text-decoration: none;
             display: flex;
             align-items: center;
-            gap: var(--space-2);
+            gap: var(--space-3);
+            text-decoration: none;
         }
+
+            .sidebar-logo .logo-icon {
+                width: 44px;
+                height: 44px;
+                background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+                border-radius: var(--radius-md);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.25rem;
+                color: var(--color-midnight);
+            }
+
+            .sidebar-logo .logo-text {
+                font-family: var(--font-display);
+                font-size: 1.5rem;
+                font-weight: 500;
+                color: var(--color-white);
+                letter-spacing: 0.1em;
+            }
 
         .sidebar-nav {
             flex: 1;
             padding: var(--space-4);
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-2);
+            overflow-y: auto;
+        }
+
+        .nav-section {
+            margin-bottom: var(--space-5);
+        }
+
+        .nav-section-title {
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-steel);
+            padding: var(--space-2) var(--space-3);
+            margin-bottom: var(--space-2);
         }
 
         .nav-item {
@@ -103,68 +142,73 @@
             color: var(--color-silver);
             text-decoration: none;
             border-radius: var(--radius-md);
-            transition: all 0.2s ease;
+            transition: all var(--transition-fast);
+            margin-bottom: var(--space-1);
         }
 
-            .nav-item:hover, .nav-item.active {
-                background: var(--color-surface-2);
+            .nav-item:hover {
+                background: var(--color-slate);
                 color: var(--color-white);
             }
 
             .nav-item.active {
-                background: linear-gradient(135deg, rgba(212, 168, 83, 0.2), rgba(212, 168, 83, 0.1));
+                background: var(--color-gold-muted);
                 color: var(--color-gold);
             }
 
             .nav-item i {
                 width: 20px;
                 text-align: center;
-            }
-
-            .nav-item .badge {
-                margin-left: auto;
-                background: var(--color-danger);
-                color: white;
-                padding: 2px 8px;
-                border-radius: 10px;
-                font-size: 0.75rem;
+                font-size: 0.9375rem;
             }
 
         .sidebar-footer {
             padding: var(--space-4);
-            border-top: 1px solid var(--color-border);
+            border-top: 1px solid var(--color-slate);
         }
 
-        .user-info {
+        .user-profile {
             display: flex;
             align-items: center;
             gap: var(--space-3);
+            padding: var(--space-3);
+            background: var(--color-slate);
+            border-radius: var(--radius-md);
         }
 
         .user-avatar {
             width: 40px;
             height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--color-gold), #b8934a);
+            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+            border-radius: var(--radius-full);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
-            color: var(--color-bg);
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: var(--color-midnight);
         }
 
-        .user-details {
+        .user-info {
             flex: 1;
+            overflow: hidden;
         }
 
         .user-name {
-            font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .user-email {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--color-silver);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* Main Content */
@@ -172,177 +216,140 @@
             flex: 1;
             margin-left: var(--sidebar-width);
             padding: var(--space-6);
+            min-height: 100vh;
         }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--space-6);
-            flex-wrap: wrap;
-            gap: var(--space-4);
+        .page-header {
+            margin-bottom: var(--space-5);
         }
 
-            .header h2 {
-                font-size: 1.75rem;
-                font-weight: 700;
+            .page-header h1 {
+                font-family: var(--font-display);
+                font-size: 2rem;
+                font-weight: 500;
+                margin-bottom: var(--space-1);
             }
 
-        .subtitle {
-            color: var(--color-silver);
-            margin-top: var(--space-1);
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-2);
-            padding: var(--space-3) var(--space-4);
-            border-radius: var(--radius-md);
-            font-weight: 500;
-            text-decoration: none;
-            cursor: pointer;
-            border: none;
-            transition: all 0.2s ease;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--color-gold), #b8934a);
-            color: var(--color-bg);
-        }
-
-            .btn-primary:hover {
-                background: linear-gradient(135deg, var(--color-gold-hover), var(--color-gold));
-                transform: translateY(-2px);
+            .page-header p {
+                color: var(--color-silver);
             }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--color-border);
-            color: var(--color-white);
-        }
-
-            .btn-outline:hover {
-                background: var(--color-surface-2);
-                border-color: var(--color-gold);
-            }
-
-        .btn-sm {
-            padding: var(--space-2) var(--space-3);
-            font-size: 0.85rem;
-        }
 
         /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: var(--space-5);
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-4);
             margin-bottom: var(--space-6);
         }
 
         .stat-card {
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
             border-radius: var(--radius-lg);
             padding: var(--space-5);
-            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
         }
 
         .stat-icon {
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
             border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto var(--space-3);
             font-size: 1.25rem;
         }
 
-        .stat-card.trips .stat-icon {
-            background: rgba(212, 168, 83, 0.2);
-            color: var(--color-gold);
-        }
+            .stat-icon.bookings {
+                background: var(--color-gold-muted);
+                color: var(--color-gold);
+            }
 
-        .stat-card.upcoming .stat-icon {
-            background: rgba(88, 166, 255, 0.2);
-            color: var(--color-info);
-        }
+            .stat-icon.upcoming {
+                background: var(--color-success-muted);
+                color: var(--color-success);
+            }
 
-        .stat-card.wishlist .stat-icon {
-            background: rgba(248, 81, 73, 0.2);
-            color: var(--color-danger);
-        }
+            .stat-icon.wishlist {
+                background: var(--color-error-muted);
+                color: var(--color-error);
+            }
 
-        .stat-card.rewards .stat-icon {
-            background: rgba(63, 185, 80, 0.2);
-            color: var(--color-success);
-        }
+            .stat-icon.spent {
+                background: var(--color-warning-muted);
+                color: var(--color-warning);
+            }
 
         .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: var(--space-1);
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 600;
         }
 
         .stat-label {
+            font-size: 0.8125rem;
             color: var(--color-silver);
-            font-size: 0.9rem;
         }
 
         /* Content Grid */
         .content-grid {
             display: grid;
-            grid-template-columns: 1.5fr 1fr;
+            grid-template-columns: 2fr 1fr;
             gap: var(--space-5);
         }
 
         .card {
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
             border-radius: var(--radius-lg);
             overflow: hidden;
         }
 
         .card-header {
+            padding: var(--space-4) var(--space-5);
+            border-bottom: 1px solid var(--color-slate);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: var(--space-4) var(--space-5);
-            border-bottom: 1px solid var(--color-border);
         }
 
             .card-header h3 {
-                font-size: 1.1rem;
-                font-weight: 600;
+                font-family: var(--font-display);
+                font-size: 1.125rem;
+                font-weight: 500;
+            }
+
+            .card-header a {
+                color: var(--color-gold);
+                text-decoration: none;
+                font-size: 0.875rem;
             }
 
         .card-body {
             padding: var(--space-5);
         }
 
-        /* Booking Items */
+        /* Booking Item */
         .booking-item {
             display: flex;
             gap: var(--space-4);
             padding: var(--space-4);
-            border-bottom: 1px solid var(--color-border);
-            transition: background 0.2s;
+            background: var(--color-slate);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-3);
         }
 
             .booking-item:last-child {
-                border-bottom: none;
-            }
-
-            .booking-item:hover {
-                background: var(--color-surface-2);
+                margin-bottom: 0;
             }
 
         .booking-image {
             width: 80px;
-            height: 60px;
-            object-fit: cover;
+            height: 80px;
             border-radius: var(--radius-sm);
+            object-fit: cover;
         }
 
         .booking-info {
@@ -350,95 +357,95 @@
         }
 
         .booking-destination {
-            font-weight: 600;
+            font-family: var(--font-display);
+            font-size: 1.0625rem;
+            font-weight: 500;
             margin-bottom: var(--space-1);
         }
 
-        .booking-dates {
-            font-size: 0.85rem;
+        .booking-meta {
+            display: flex;
+            gap: var(--space-4);
+            font-size: 0.8125rem;
             color: var(--color-silver);
-            margin-bottom: var(--space-2);
         }
 
         .booking-status {
+            margin-top: var(--space-2);
+        }
+
+        .status-badge {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            padding: 4px 10px;
-            border-radius: 20px;
+            gap: var(--space-1);
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--radius-full);
             font-size: 0.75rem;
             font-weight: 500;
         }
 
-            .booking-status.upcoming {
-                background: rgba(88, 166, 255, 0.2);
-                color: var(--color-info);
-            }
-
-            .booking-status.confirmed {
-                background: rgba(63, 185, 80, 0.2);
+            .status-badge.confirmed {
+                background: var(--color-success-muted);
                 color: var(--color-success);
             }
 
-            .booking-status.pending {
-                background: rgba(210, 153, 34, 0.2);
+            .status-badge.pending {
+                background: var(--color-warning-muted);
                 color: var(--color-warning);
             }
 
-            .booking-status.cancelled {
-                background: rgba(248, 81, 73, 0.2);
-                color: var(--color-danger);
+            .status-badge.cancelled {
+                background: var(--color-error-muted);
+                color: var(--color-error);
             }
 
-        /* Package Cards */
-        .package-card {
-            border: 1px solid var(--color-border);
+        /* Quick Actions */
+        .quick-action {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-4);
+            background: var(--color-slate);
             border-radius: var(--radius-md);
-            overflow: hidden;
-            margin-bottom: var(--space-4);
+            margin-bottom: var(--space-3);
+            text-decoration: none;
+            color: var(--color-mist);
+            transition: all var(--transition-fast);
         }
 
-            .package-card:last-child {
+            .quick-action:last-child {
                 margin-bottom: 0;
             }
 
-            .package-card img {
-                width: 100%;
-                height: 120px;
-                object-fit: cover;
+            .quick-action:hover {
+                background: var(--color-charcoal);
+                transform: translateX(4px);
             }
 
-        .package-card-body {
-            padding: var(--space-4);
-        }
-
-        .package-location {
-            font-size: 0.8rem;
-            color: var(--color-gold);
-            margin-bottom: var(--space-1);
-        }
-
-        .package-title {
-            font-weight: 600;
-            margin-bottom: var(--space-3);
-        }
-
-        .package-footer {
+        .quick-action-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: center;
+            background: var(--color-gold-muted);
+            color: var(--color-gold);
         }
 
-        .package-price {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--color-gold);
+        .quick-action span {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .quick-action i.fa-chevron-right {
+            color: var(--color-steel);
         }
 
         /* Empty State */
         .empty-state {
             text-align: center;
-            padding: var(--space-6);
+            padding: var(--space-7);
             color: var(--color-silver);
         }
 
@@ -448,97 +455,37 @@
                 opacity: 0.5;
             }
 
-            .empty-state p {
-                margin-bottom: var(--space-4);
+            .empty-state h4 {
+                font-family: var(--font-display);
+                font-size: 1.25rem;
+                color: var(--color-mist);
+                margin-bottom: var(--space-2);
             }
 
-        /* Loading */
-        .loading {
-            display: flex;
-            justify-content: center;
-            padding: var(--space-6);
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--color-border);
-            border-top-color: var(--color-gold);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @@keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--color-surface-2);
-            border: 1px solid var(--color-border);
-            padding: var(--space-4) var(--space-5);
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-
-            .toast.show {
-                transform: translateY(0);
-                opacity: 1;
-            }
-
-            .toast.success {
-                border-color: var(--color-success);
-            }
-
-            .toast.error {
-                border-color: var(--color-danger);
-            }
-
-        /* Mobile Menu */
+        /* Mobile */
         .mobile-menu-btn {
             display: none;
-            background: none;
-            border: none;
+            position: fixed;
+            top: var(--space-4);
+            left: var(--space-4);
+            z-index: 200;
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-md);
+            padding: var(--space-3);
             color: var(--color-white);
-            font-size: 1.5rem;
             cursor: pointer;
-            margin-right: var(--space-3);
         }
 
         .sidebar-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            inset: 0;
             background: rgba(0,0,0,0.5);
             z-index: 99;
         }
 
-        /* Responsive */
         @@media (max-width: 1024px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @@media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
             }
@@ -553,387 +500,232 @@
 
             .main-content {
                 margin-left: 0;
-                padding: var(--space-4);
             }
 
             .mobile-menu-btn {
                 display: block;
             }
 
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .header-actions {
-                width: 100%;
+            .content-grid {
+                grid-template-columns: 1fr;
             }
         }
 
-        @@media (max-width: 480px) {
+        @@media (max-width: 768px) {
             .stats-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: var(--space-3);
-            }
-
-            .stat-card {
-                padding: var(--space-4);
-            }
-
-            .stat-value {
-                font-size: 1.5rem;
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
 </head>
 <body>
+    <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <div class="dashboard-layout">
-        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <a href="/" class="sidebar-logo" onclick="navigateTo('/', event)">
-                    <i class="fas fa-plane"></i> TRAVIL
+                <a href="/" class="sidebar-logo">
+                    <div class="logo-icon"><i class="fas fa-paper-plane"></i></div>
+                    <span class="logo-text">TRAVIL</span>
                 </a>
             </div>
-
             <nav class="sidebar-nav">
-                <a href="/account/dashboard" class="nav-item active">
-                    <i class="fas fa-th-large"></i>
-                    <span>Dashboard</span>
-                </a>
-                <a href="/account/bookings" class="nav-item" onclick="navigateTo('/account/bookings', event)">
-                    <i class="fas fa-calendar-check"></i>
-                    <span>My Bookings</span>
-                </a>
-                <a href="/account/wishlist" class="nav-item" onclick="navigateTo('/account/wishlist', event)">
-                    <i class="fas fa-heart"></i>
-                    <span>Wishlist</span>
-                </a>
-                <a href="/packages" class="nav-item" onclick="navigateTo('/packages', event)">
-                    <i class="fas fa-suitcase"></i>
-                    <span>Browse Packages</span>
-                </a>
-                <a href="/account/profile" class="nav-item" onclick="navigateTo('/account/profile', event)">
-                    <i class="fas fa-user"></i>
-                    <span>Profile</span>
-                </a>
-                <a href="/account/settings" class="nav-item" onclick="navigateTo('/account/settings', event)">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </a>
-                <a href="#" class="nav-item" onclick="logout(event)">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Logout</span>
-                </a>
+                <div class="nav-section">
+                    <div class="nav-section-title">Menu</div>
+                    <a href="/account/dashboard" class="nav-item active"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                    <a href="/account/bookings" class="nav-item"><i class="fas fa-calendar-check"></i><span>My Bookings</span></a>
+                    <a href="/account/wishlist" class="nav-item"><i class="fas fa-heart"></i><span>Wishlist</span></a>
+                    <a href="/cart" class="nav-item"><i class="fas fa-shopping-cart"></i><span>Cart</span></a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Account</div>
+                    <a href="/account/profile" class="nav-item"><i class="fas fa-user"></i><span>Profile</span></a>
+                    <a href="/account/settings" class="nav-item"><i class="fas fa-cog"></i><span>Settings</span></a>
+                    <a href="/account/notifications" class="nav-item"><i class="fas fa-bell"></i><span>Notifications</span></a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Explore</div>
+                    <a href="/packages" class="nav-item"><i class="fas fa-compass"></i><span>Browse Packages</span></a>
+                    <a href="/" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
+                    <a href="#" class="nav-item" onclick="logout(event)"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+                </div>
             </nav>
-
             <div class="sidebar-footer">
-                <div class="user-info">
+                <div class="user-profile">
                     <div class="user-avatar" id="userAvatar">U</div>
-                    <div class="user-details">
+                    <div class="user-info">
                         <div class="user-name" id="userName">User</div>
-                        <div class="user-email" id="userEmail">user@example.com</div>
+                        <div class="user-email" id="userEmail">user@email.com</div>
                     </div>
                 </div>
             </div>
         </aside>
 
-        <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-        <!-- Main Content -->
         <main class="main-content">
-            <div class="header">
-                <div>
-                    <button class="mobile-menu-btn" id="mobileMenuBtn">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <h2>Welcome back, <span id="welcomeName">User</span>!</h2>
-                    <p class="subtitle">Here's what's happening with your travel plans.</p>
-                </div>
-                <div class="header-actions">
-                    <a href="/packages" class="btn btn-primary" onclick="navigateTo('/packages', event)">
-                        <i class="fas fa-plus"></i> Book New Trip
-                    </a>
-                </div>
+            <div class="page-header">
+                <h1>Welcome back, <span id="welcomeName">User</span>!</h1>
+                <p>Here's what's happening with your travel plans.</p>
             </div>
 
-            <!-- Stats Grid -->
             <div class="stats-grid">
-                <div class="stat-card trips">
-                    <div class="stat-icon"><i class="fas fa-plane"></i></div>
-                    <div class="stat-value" id="totalTrips">0</div>
-                    <div class="stat-label">Total Trips</div>
+                <div class="stat-card">
+                    <div class="stat-icon bookings"><i class="fas fa-suitcase"></i></div>
+                    <div><div class="stat-value" id="totalBookings">0</div><div class="stat-label">Total Bookings</div></div>
                 </div>
-                <div class="stat-card upcoming">
-                    <div class="stat-icon"><i class="fas fa-calendar"></i></div>
-                    <div class="stat-value" id="upcomingTrips">0</div>
-                    <div class="stat-label">Upcoming</div>
+                <div class="stat-card">
+                    <div class="stat-icon upcoming"><i class="fas fa-plane-departure"></i></div>
+                    <div><div class="stat-value" id="upcomingTrips">0</div><div class="stat-label">Upcoming Trips</div></div>
                 </div>
-                <div class="stat-card wishlist">
-                    <div class="stat-icon"><i class="fas fa-heart"></i></div>
-                    <div class="stat-value" id="wishlistCount">0</div>
-                    <div class="stat-label">Wishlist</div>
+                <div class="stat-card">
+                    <div class="stat-icon wishlist"><i class="fas fa-heart"></i></div>
+                    <div><div class="stat-value" id="wishlistCount">0</div><div class="stat-label">In Wishlist</div></div>
                 </div>
-                <div class="stat-card rewards">
-                    <div class="stat-icon"><i class="fas fa-award"></i></div>
-                    <div class="stat-value" id="rewardPoints">0</div>
-                    <div class="stat-label">Reward Points</div>
+                <div class="stat-card">
+                    <div class="stat-icon spent"><i class="fas fa-dollar-sign"></i></div>
+                    <div><div class="stat-value" id="totalSpent">$0</div><div class="stat-label">Total Spent</div></div>
                 </div>
             </div>
 
             <div class="content-grid">
-                <!-- Recent Bookings -->
                 <div class="card">
                     <div class="card-header">
                         <h3>Recent Bookings</h3>
-                        <a href="/account/bookings" class="btn btn-outline btn-sm" onclick="navigateTo('/account/bookings', event)">View All</a>
+                        <a href="/account/bookings">View All</a>
                     </div>
-                    <div class="card-body" id="bookingsContainer">
-                        <div class="loading" id="bookingsLoader">
-                            <div class="spinner"></div>
+                    <div class="card-body" id="recentBookings">
+                        <div class="empty-state">
+                            <i class="fas fa-suitcase-rolling"></i>
+                            <h4>No bookings yet</h4>
+                            <p>Start exploring amazing destinations!</p>
                         </div>
-                        <div class="empty-state" id="noBookings" style="display: none;">
-                            <i class="fas fa-calendar-times"></i>
-                            <p>You haven't made any bookings yet.</p>
-                            <a href="/packages" class="btn btn-primary" onclick="navigateTo('/packages', event)">
-                                <i class="fas fa-search"></i> Browse Packages
-                            </a>
-                        </div>
-                        <div id="bookingsList"></div>
                     </div>
                 </div>
 
-                <!-- Recommended Packages -->
                 <div class="card">
                     <div class="card-header">
-                        <h3>Recommended For You</h3>
+                        <h3>Quick Actions</h3>
                     </div>
-                    <div class="card-body" id="recommendedContainer">
-                        <div class="loading" id="recommendedLoader">
-                            <div class="spinner"></div>
-                        </div>
-                        <div class="empty-state" id="noPackages" style="display: none;">
-                            <i class="fas fa-suitcase"></i>
-                            <p>No packages available yet.</p>
-                        </div>
-                        <div id="recommendedList"></div>
+                    <div class="card-body">
+                        <a href="/packages" class="quick-action">
+                            <div class="quick-action-icon"><i class="fas fa-search"></i></div>
+                            <span>Find Packages</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                        <a href="/account/wishlist" class="quick-action">
+                            <div class="quick-action-icon"><i class="fas fa-heart"></i></div>
+                            <span>View Wishlist</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                        <a href="/account/profile" class="quick-action">
+                            <div class="quick-action-icon"><i class="fas fa-user-edit"></i></div>
+                            <span>Edit Profile</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                        <a href="/cart" class="quick-action">
+                            <div class="quick-action-icon"><i class="fas fa-shopping-cart"></i></div>
+                            <span>View Cart</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <div id="toast" class="toast">
-        <i class="fas fa-check-circle"></i>
-        <span id="toastMessage">Message</span>
-    </div>
-
     <script>
-        // Navigation
-        function navigateTo(url, event) {
-            if (event) event.preventDefault();
-            window.location.href = url;
-        }
+        function logout(e) { e.preventDefault(); localStorage.removeItem('token'); localStorage.removeItem('user'); window.location.href = '/account/login'; }
 
-        // Logout
-        function logout(event) {
-            if (event) event.preventDefault();
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            navigateTo('/account/login');
-        }
-
-        // Toast
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-            toastMessage.textContent = message;
-            toast.className = `toast ${type} show`;
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        // Format date
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        }
-
-        // Get status class
-        function getStatusClass(status) {
-            const statusLower = (status || '').toLowerCase();
-            if (statusLower === 'confirmed') return 'confirmed';
-            if (statusLower === 'pending') return 'pending';
-            if (statusLower === 'cancelled') return 'cancelled';
-            return 'upcoming';
-        }
-
-        // Get status icon
-        function getStatusIcon(status) {
-            const statusLower = (status || '').toLowerCase();
-            if (statusLower === 'confirmed') return 'fa-check';
-            if (statusLower === 'pending') return 'fa-hourglass-half';
-            if (statusLower === 'cancelled') return 'fa-times';
-            return 'fa-clock';
-        }
-
-        // Mobile menu
         document.getElementById('mobileMenuBtn').addEventListener('click', function() {
             document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('sidebarOverlay').classList.toggle('active');
         });
-
         document.getElementById('sidebarOverlay').addEventListener('click', function() {
             document.getElementById('sidebar').classList.remove('active');
             this.classList.remove('active');
         });
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', async function() {
-            const token = localStorage.getItem('token');
-            const user = localStorage.getItem('user');
+        async function loadDashboard() {
+            var token = localStorage.getItem('token');
+            var user = JSON.parse(localStorage.getItem('user') || '{}');
 
-            if (!token || !user) {
-                navigateTo('/account/login');
-                return;
-            }
+            if (!token) { window.location.href = '/account/login'; return; }
+
+            var firstName = user.firstName || user.name?.split(' ')[0] || 'User';
+            document.getElementById('welcomeName').textContent = firstName;
+            document.getElementById('userName').textContent = (user.firstName || '') + ' ' + (user.lastName || '');
+            document.getElementById('userEmail').textContent = user.email || '';
+            document.getElementById('userAvatar').textContent = firstName.charAt(0).toUpperCase();
 
             try {
-                const userData = JSON.parse(user);
+                var response = await fetch('/api/account/dashboard', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                if (response.ok) {
+                    var data = await response.json();
+                    document.getElementById('totalBookings').textContent = data.totalBookings || 0;
+                    document.getElementById('upcomingTrips').textContent = data.upcomingTrips || 0;
+                    document.getElementById('wishlistCount').textContent = data.wishlistCount || 0;
+                    document.getElementById('totalSpent').textContent = '$' + (data.totalSpent || 0).toLocaleString();
 
-                // Set user info
-                const firstName = userData.firstName || 'User';
-                const lastName = userData.lastName || '';
-                document.getElementById('welcomeName').textContent = firstName;
-                document.getElementById('userName').textContent = `${firstName} ${lastName}`.trim();
-                document.getElementById('userEmail').textContent = userData.email || '';
-                document.getElementById('userAvatar').textContent = firstName.charAt(0).toUpperCase();
-
-                // Load data
-                await loadUserBookings();
-                await loadRecommendedPackages();
-
+                    if (data.recentBookings && data.recentBookings.length > 0) {
+                        renderBookings(data.recentBookings);
+                    }
+                }
             } catch (error) {
                 console.error('Error:', error);
-                showToast('Error loading dashboard', 'error');
             }
-        });
 
-        // Load user bookings
-        async function loadUserBookings() {
-            const token = localStorage.getItem('token');
-            const bookingsLoader = document.getElementById('bookingsLoader');
-            const noBookings = document.getElementById('noBookings');
-            const bookingsList = document.getElementById('bookingsList');
-
+            // Load bookings separately
             try {
-                const response = await fetch('/api/booking/my-bookings', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
+                var bookingsRes = await fetch('/api/bookings/my', {
+                    headers: { 'Authorization': 'Bearer ' + token }
                 });
-
-                bookingsLoader.style.display = 'none';
-
-                if (response.ok) {
-                    const result = await response.json();
-                    const bookings = result.data || [];
-
-                    // Update stats
-                    document.getElementById('totalTrips').textContent = bookings.length;
-
-                    const now = new Date();
-                    const upcoming = bookings.filter(b => {
-                        const startDate = new Date(b.startDate || b.travelPackage?.startDate);
-                        return startDate > now && b.status !== 'Cancelled';
-                    });
+                if (bookingsRes.ok) {
+                    var result = await bookingsRes.json();
+                    var bookings = result.data || result || [];
+                    document.getElementById('totalBookings').textContent = bookings.length;
+                    var upcoming = bookings.filter(function(b) { return b.status === 'Confirmed' || b.status === 1; });
                     document.getElementById('upcomingTrips').textContent = upcoming.length;
-
-                    if (bookings.length === 0) {
-                        noBookings.style.display = 'block';
-                    } else {
-                        // Show last 3 bookings
-                        const recentBookings = bookings.slice(0, 3);
-                        bookingsList.innerHTML = recentBookings.map(booking => {
-                            const pkg = booking.travelPackage || {};
-                            const imageUrl = pkg.imageUrl || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=200&q=80';
-                            const destination = pkg.destination || 'Unknown Destination';
-                            const startDate = formatDate(pkg.startDate);
-                            const endDate = formatDate(pkg.endDate);
-                            const status = booking.status || 'Pending';
-
-                            return `
-                                <div class="booking-item">
-                                    <img src="${imageUrl}" alt="${destination}" class="booking-image" onerror="this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=200&q=80'">
-                                    <div class="booking-info">
-                                        <div class="booking-destination">${destination}</div>
-                                        <div class="booking-dates"><i class="far fa-calendar"></i> ${startDate} - ${endDate}</div>
-                                        <span class="booking-status ${getStatusClass(status)}">
-                                            <i class="fas ${getStatusIcon(status)}"></i> ${status}
-                                        </span>
-                                    </div>
-                                </div>
-                            `;
-                        }).join('');
-                    }
-                } else {
-                    noBookings.style.display = 'block';
-                    document.getElementById('totalTrips').textContent = '0';
-                    document.getElementById('upcomingTrips').textContent = '0';
+                    var total = bookings.reduce(function(sum, b) { return sum + (b.totalPrice || 0); }, 0);
+                    document.getElementById('totalSpent').textContent = '$' + total.toLocaleString();
+                    if (bookings.length > 0) { renderBookings(bookings.slice(0, 3)); }
                 }
-            } catch (error) {
-                console.error('Error loading bookings:', error);
-                bookingsLoader.style.display = 'none';
-                noBookings.style.display = 'block';
-            }
-        }
+            } catch (error) { console.error('Bookings error:', error); }
 
-        // Load recommended packages
-        async function loadRecommendedPackages() {
-            const recommendedLoader = document.getElementById('recommendedLoader');
-            const noPackages = document.getElementById('noPackages');
-            const recommendedList = document.getElementById('recommendedList');
-
+            // Load wishlist count
             try {
-                const response = await fetch('/api/packages/popular?count=2');
-
-                recommendedLoader.style.display = 'none';
-
-                if (response.ok) {
-                    const result = await response.json();
-                    const packages = result.data || [];
-
-                    if (packages.length === 0) {
-                        noPackages.style.display = 'block';
-                    } else {
-                        recommendedList.innerHTML = packages.map(pkg => {
-                            const imageUrl = pkg.imageUrl || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80';
-                            const price = pkg.discountedPrice || pkg.price || 0;
-
-                            return `
-                                <div class="package-card">
-                                    <img src="${imageUrl}" alt="${pkg.destination}" onerror="this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80'">
-                                    <div class="package-card-body">
-                                        <div class="package-location"><i class="fas fa-map-marker-alt"></i> ${pkg.country || ''}</div>
-                                        <div class="package-title">${pkg.destination || 'Package'}</div>
-                                        <div class="package-footer">
-                                            <span class="package-price">$${price.toLocaleString()}</span>
-                                            <a href="/packages/${pkg.packageId}" class="btn btn-outline btn-sm" onclick="navigateTo('/packages/${pkg.packageId}', event)">View</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        }).join('');
-                    }
-                } else {
-                    noPackages.style.display = 'block';
+                var wishRes = await fetch('/api/wishlist', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                if (wishRes.ok) {
+                    var wishData = await wishRes.json();
+                    document.getElementById('wishlistCount').textContent = (wishData.data || wishData || []).length;
                 }
-            } catch (error) {
-                console.error('Error loading packages:', error);
-                recommendedLoader.style.display = 'none';
-                noPackages.style.display = 'block';
-            }
+            } catch (error) { console.error('Wishlist error:', error); }
         }
+
+        function renderBookings(bookings) {
+            var container = document.getElementById('recentBookings');
+            if (!bookings || bookings.length === 0) return;
+
+            var html = bookings.map(function(b) {
+                var image = b.package?.imageUrl || b.imageUrl || 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=200&q=80';
+                var statusClass = b.status === 'Confirmed' || b.status === 1 ? 'confirmed' : (b.status === 'Cancelled' || b.status === 2 ? 'cancelled' : 'pending');
+                var statusText = b.status === 'Confirmed' || b.status === 1 ? 'Confirmed' : (b.status === 'Cancelled' || b.status === 2 ? 'Cancelled' : 'Pending');
+                return '<div class="booking-item">' +
+                    '<img src="' + image + '" alt="' + (b.package?.destination || 'Destination') + '" class="booking-image" onerror="this.src=\'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=200&q=80\'">' +
+                    '<div class="booking-info">' +
+                        '<div class="booking-destination">' + (b.package?.destination || b.destination || 'Trip') + '</div>' +
+                        '<div class="booking-meta"><span><i class="far fa-calendar"></i> ' + new Date(b.bookingDate || b.createdAt).toLocaleDateString() + '</span><span><i class="far fa-credit-card"></i> $' + (b.totalPrice || 0).toLocaleString() + '</span></div>' +
+                        '<div class="booking-status"><span class="status-badge ' + statusClass + '">' + statusText + '</span></div>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+            container.innerHTML = html;
+        }
+
+        document.addEventListener('DOMContentLoaded', loadDashboard);
     </script>
 </body>
 </html>

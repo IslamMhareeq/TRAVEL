@@ -2,7 +2,6 @@
     ViewData["Title"] = "Package Details";
     Layout = null;
 }
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,33 +10,28 @@
     <title>Package Details - TRAVIL</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
         :root {
-            --color-bg: #0a0a0f;
-            --color-navy: #0d1117;
-            --color-charcoal: #161b22;
-            --color-slate: #21262d;
+            --color-bg: #0d1117;
+            --color-surface: #161b22;
+            --color-surface-2: #21262d;
             --color-border: #30363d;
+            --color-text: #c9d1d9;
+            --color-text-muted: #8b949e;
             --color-gold: #d4a853;
-            --color-gold-muted: rgba(212, 168, 83, 0.15);
-            --color-white: #ffffff;
-            --color-silver: #8b949e;
+            --color-gold-dark: #b8943f;
             --color-success: #3fb950;
-            --color-error: #f85149;
-            --color-warning: #d29922;
-            --font-main: 'Plus Jakarta Sans', sans-serif;
-            --radius-sm: 6px;
-            --radius-md: 10px;
-            --radius-lg: 16px;
-            --space-1: 4px;
-            --space-2: 8px;
+            --color-danger: #f85149;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Outfit', sans-serif;
             --space-3: 12px;
             --space-4: 16px;
             --space-5: 24px;
             --space-6: 32px;
-            --space-7: 48px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
         }
 
         * {
@@ -47,58 +41,51 @@
         }
 
         body {
-            font-family: var(--font-main);
+            font-family: var(--font-body);
             background: var(--color-bg);
-            color: var(--color-white);
+            color: var(--color-text);
             line-height: 1.6;
         }
 
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 var(--space-5);
-        }
-
         /* Header */
-        .site-header {
-            background: rgba(10, 10, 15, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--color-border);
+        .header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 100;
-        }
-
-        .header-content {
+            padding: var(--space-4) var(--space-6);
+            background: rgba(13, 17, 23, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: var(--space-4) var(--space-5);
-            max-width: 1280px;
-            margin: 0 auto;
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--color-gold);
-            text-decoration: none;
             display: flex;
             align-items: center;
-            gap: var(--space-2);
+            gap: var(--space-3);
+            text-decoration: none;
+            color: var(--color-text);
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
         }
+
+            .logo i {
+                color: var(--color-gold);
+            }
 
         .nav-links {
             display: flex;
-            gap: var(--space-6);
+            gap: var(--space-5);
         }
 
             .nav-links a {
-                color: var(--color-silver);
+                color: var(--color-text-muted);
                 text-decoration: none;
-                font-size: 0.9375rem;
                 transition: color 0.2s;
             }
 
@@ -108,37 +95,39 @@
 
         .header-actions {
             display: flex;
-            align-items: center;
             gap: var(--space-3);
         }
 
+        /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
-            gap: var(--space-2);
-            padding: var(--space-3) var(--space-4);
+            gap: var(--space-3);
+            padding: var(--space-3) var(--space-5);
             border-radius: var(--radius-md);
-            font-size: 0.875rem;
+            font-family: var(--font-body);
+            font-size: 0.9375rem;
             font-weight: 500;
+            text-decoration: none;
             cursor: pointer;
             transition: all 0.2s;
             border: none;
-            text-decoration: none;
         }
 
         .btn-primary {
-            background: var(--color-gold);
+            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
             color: var(--color-bg);
         }
 
             .btn-primary:hover {
-                background: #e4b863;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(212, 168, 83, 0.3);
             }
 
         .btn-outline {
             background: transparent;
             border: 1px solid var(--color-border);
-            color: var(--color-white);
+            color: var(--color-text);
         }
 
             .btn-outline:hover {
@@ -151,15 +140,6 @@
             color: white;
         }
 
-            .btn-success:hover {
-                background: #4fc760;
-            }
-
-        .btn-lg {
-            padding: var(--space-4) var(--space-5);
-            font-size: 1rem;
-        }
-
         .btn-block {
             width: 100%;
             justify-content: center;
@@ -167,13 +147,13 @@
 
         /* Main Content */
         .main-content {
-            padding-top: 80px;
+            margin-top: 72px;
         }
 
-        /* Image Gallery */
+        /* Hero Gallery */
         .gallery-section {
-            background: var(--color-navy);
-            padding: var(--space-5) 0;
+            background: var(--color-surface);
+            padding: var(--space-6) 0;
         }
 
         .gallery-container {
@@ -204,11 +184,11 @@
             left: var(--space-4);
             display: flex;
             flex-direction: column;
-            gap: var(--space-2);
+            gap: var(--space-3);
         }
 
         .badge {
-            padding: var(--space-2) var(--space-4);
+            padding: var(--space-3) var(--space-4);
             border-radius: 20px;
             font-size: 0.8125rem;
             font-weight: 600;
@@ -243,17 +223,13 @@
         }
 
             .wishlist-btn:hover {
-                background: var(--color-error);
+                background: var(--color-danger);
                 transform: scale(1.1);
             }
 
             .wishlist-btn.active {
-                background: var(--color-error);
+                background: var(--color-danger);
             }
-
-                .wishlist-btn.active i {
-                    font-weight: 900;
-                }
 
         .thumbnail-grid {
             display: grid;
@@ -266,11 +242,13 @@
             overflow: hidden;
             height: 110px;
             cursor: pointer;
-            border: 2px solid transparent;
+            opacity: 0.7;
             transition: all 0.2s;
+            border: 2px solid transparent;
         }
 
             .thumbnail:hover, .thumbnail.active {
+                opacity: 1;
                 border-color: var(--color-gold);
             }
 
@@ -280,20 +258,25 @@
                 object-fit: cover;
             }
 
-        /* Package Details Section */
+        /* Details Section */
         .details-section {
-            padding: var(--space-6) 0 var(--space-7);
+            padding: var(--space-6) 0;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--space-5);
         }
 
         .details-grid {
             display: grid;
-            grid-template-columns: 1fr 400px;
+            grid-template-columns: 1fr 380px;
             gap: var(--space-6);
         }
 
-        /* Info Cards */
         .info-card {
-            background: var(--color-charcoal);
+            background: var(--color-surface);
             border: 1px solid var(--color-border);
             border-radius: var(--radius-lg);
             padding: var(--space-5);
@@ -301,7 +284,8 @@
         }
 
             .info-card h2 {
-                font-size: 1.25rem;
+                font-family: var(--font-display);
+                font-size: 1.5rem;
                 margin-bottom: var(--space-4);
                 display: flex;
                 align-items: center;
@@ -313,176 +297,136 @@
                 }
 
         .package-title {
-            font-size: 2rem;
-            font-weight: 700;
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 500;
             margin-bottom: var(--space-3);
         }
 
         .package-location {
             display: flex;
             align-items: center;
-            gap: var(--space-2);
-            color: var(--color-gold);
-            font-size: 1rem;
-            margin-bottom: var(--space-4);
+            gap: var(--space-3);
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-5);
         }
+
+            .package-location i {
+                color: var(--color-gold);
+            }
 
         .package-description {
-            color: var(--color-silver);
-            font-size: 1rem;
+            color: var(--color-text-muted);
             line-height: 1.8;
+            white-space: pre-line;
         }
 
-        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: var(--space-4);
-            margin-top: var(--space-4);
+            margin-top: var(--space-5);
         }
 
         .stat-box {
-            text-align: center;
-            padding: var(--space-4);
-            background: var(--color-navy);
+            background: var(--color-surface-2);
             border-radius: var(--radius-md);
+            padding: var(--space-4);
+            text-align: center;
         }
 
             .stat-box i {
-                font-size: 1.5rem;
                 color: var(--color-gold);
-                margin-bottom: var(--space-2);
+                font-size: 1.25rem;
+                margin-bottom: var(--space-3);
+                display: block;
             }
 
         .stat-value {
-            display: block;
-            font-size: 1.125rem;
+            font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: var(--space-1);
         }
 
         .stat-label {
-            font-size: 0.8125rem;
-            color: var(--color-silver);
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
         }
 
-        /* Highlights */
         .highlights-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: var(--space-3);
+            gap: var(--space-4);
         }
 
         .highlight-item {
             display: flex;
             align-items: center;
             gap: var(--space-3);
-            padding: var(--space-3);
-            background: var(--color-navy);
-            border-radius: var(--radius-md);
         }
 
             .highlight-item i {
-                width: 36px;
-                height: 36px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: var(--color-gold-muted);
-                border-radius: 50%;
                 color: var(--color-gold);
+                width: 20px;
             }
-
-            .highlight-item span {
-                font-size: 0.9375rem;
-                color: var(--color-silver);
-            }
-
-        /* Itinerary */
-        .itinerary-item {
-            display: flex;
-            gap: var(--space-4);
-            margin-bottom: var(--space-4);
-        }
-
-        .itinerary-marker {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .itinerary-dot {
-            width: 12px;
-            height: 12px;
-            background: var(--color-gold);
-            border-radius: 50%;
-        }
-
-        .itinerary-line {
-            flex: 1;
-            width: 2px;
-            background: var(--color-border);
-            margin: var(--space-2) 0;
-        }
-
-        .itinerary-content h4 {
-            color: var(--color-gold);
-            margin-bottom: var(--space-2);
-        }
-
-        .itinerary-content p {
-            color: var(--color-silver);
-            font-size: 0.9375rem;
-        }
 
         /* Booking Card */
         .booking-card {
-            position: sticky;
-            top: 100px;
-            background: var(--color-charcoal);
+            background: var(--color-surface);
             border: 1px solid var(--color-border);
             border-radius: var(--radius-lg);
             padding: var(--space-5);
+            position: sticky;
+            top: 100px;
         }
 
         .price-section {
             text-align: center;
-            padding-bottom: var(--space-4);
-            border-bottom: 1px solid var(--color-border);
-            margin-bottom: var(--space-4);
+            margin-bottom: var(--space-5);
         }
 
-        .old-price {
-            font-size: 1.25rem;
-            color: var(--color-silver);
+        .price-original {
+            font-size: 1.125rem;
+            color: var(--color-text-muted);
             text-decoration: line-through;
-            margin-right: var(--space-2);
         }
 
-        .current-price {
+        .price-current {
+            font-family: var(--font-display);
             font-size: 2.5rem;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--color-gold);
         }
 
-        .per-person {
-            font-size: 0.9375rem;
-            color: var(--color-silver);
+        .price-unit {
+            font-size: 1rem;
+            color: var(--color-text-muted);
         }
 
-        .discount-badge {
-            display: inline-block;
-            padding: var(--space-2) var(--space-3);
-            background: var(--color-success);
-            color: white;
-            font-size: 0.75rem;
-            font-weight: 600;
-            border-radius: 20px;
-            margin-top: var(--space-2);
+        .availability {
+            text-align: center;
+            padding: var(--space-3);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-4);
+            font-weight: 500;
         }
+
+            .availability.available {
+                background: rgba(63, 185, 80, 0.1);
+                color: var(--color-success);
+            }
+
+            .availability.limited {
+                background: rgba(212, 168, 83, 0.1);
+                color: var(--color-gold);
+            }
+
+            .availability.sold-out {
+                background: rgba(248, 81, 73, 0.1);
+                color: var(--color-danger);
+            }
 
         .booking-details {
-            margin-bottom: var(--space-4);
+            margin-bottom: var(--space-5);
         }
 
         .booking-row {
@@ -497,36 +441,11 @@
             }
 
             .booking-row .label {
-                color: var(--color-silver);
+                color: var(--color-text-muted);
             }
 
             .booking-row .value {
                 font-weight: 500;
-            }
-
-        .availability {
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
-            padding: var(--space-3);
-            border-radius: var(--radius-md);
-            margin-bottom: var(--space-4);
-            font-size: 0.875rem;
-        }
-
-            .availability.available {
-                background: rgba(63, 185, 80, 0.15);
-                color: var(--color-success);
-            }
-
-            .availability.limited {
-                background: rgba(210, 153, 34, 0.15);
-                color: var(--color-warning);
-            }
-
-            .availability.sold-out {
-                background: rgba(248, 81, 73, 0.15);
-                color: var(--color-error);
             }
 
         .booking-actions {
@@ -535,102 +454,82 @@
             gap: var(--space-3);
         }
 
-        /* Reviews Section */
+        /* Reviews */
+        .reviews-section {
+            margin-top: var(--space-4);
+        }
+
         .reviews-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: var(--space-4);
+            margin-bottom: var(--space-5);
         }
 
-        .rating-summary {
-            display: flex;
-            align-items: center;
-            gap: var(--space-4);
-        }
-
-        .rating-big {
+        .rating-large {
+            font-family: var(--font-display);
             font-size: 3rem;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--color-gold);
         }
 
         .rating-stars {
             color: var(--color-gold);
-            font-size: 1.25rem;
         }
 
         .rating-count {
-            color: var(--color-silver);
+            color: var(--color-text-muted);
             font-size: 0.875rem;
         }
 
-        .review-item {
-            padding: var(--space-4);
-            background: var(--color-navy);
+        .review-card {
+            background: var(--color-surface-2);
             border-radius: var(--radius-md);
-            margin-bottom: var(--space-3);
+            padding: var(--space-4);
+            margin-bottom: var(--space-4);
         }
 
         .review-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
             margin-bottom: var(--space-3);
-        }
-
-        .reviewer {
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-        }
-
-        .reviewer-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--color-gold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: var(--color-bg);
         }
 
         .reviewer-name {
             font-weight: 500;
         }
 
-        .reviewer-date {
-            font-size: 0.8125rem;
-            color: var(--color-silver);
+        .review-date {
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
         }
 
         .review-rating {
             color: var(--color-gold);
+            margin-bottom: var(--space-3);
         }
 
-        .review-text {
-            color: var(--color-silver);
+        .review-comment {
+            color: var(--color-text-muted);
             line-height: 1.6;
         }
 
-        /* Review Form */
-        .review-form {
-            background: var(--color-navy);
+        /* Write Review */
+        .write-review {
+            background: var(--color-surface-2);
             border-radius: var(--radius-md);
-            padding: var(--space-4);
-            margin-top: var(--space-4);
+            padding: var(--space-5);
+            margin-top: var(--space-5);
         }
 
-            .review-form h4 {
-                margin-bottom: var(--space-3);
+            .write-review h4 {
+                margin-bottom: var(--space-4);
             }
 
         .star-rating {
             display: flex;
-            gap: var(--space-2);
-            margin-bottom: var(--space-3);
+            gap: var(--space-3);
+            margin-bottom: var(--space-4);
         }
 
             .star-rating i {
@@ -640,23 +539,24 @@
                 transition: color 0.2s;
             }
 
-                .star-rating i:hover,
-                .star-rating i.active {
+                .star-rating i:hover, .star-rating i.active {
                     color: var(--color-gold);
                 }
 
-        .form-control {
+        .review-textarea {
             width: 100%;
-            padding: var(--space-3);
-            background: var(--color-charcoal);
+            min-height: 100px;
+            padding: var(--space-4);
+            background: var(--color-bg);
             border: 1px solid var(--color-border);
             border-radius: var(--radius-md);
-            color: var(--color-white);
-            font-family: var(--font-main);
+            color: var(--color-text);
+            font-family: var(--font-body);
             resize: vertical;
+            margin-bottom: var(--space-4);
         }
 
-            .form-control:focus {
+            .review-textarea:focus {
                 outline: none;
                 border-color: var(--color-gold);
             }
@@ -664,12 +564,12 @@
         /* Toast */
         .toast {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: var(--color-charcoal);
+            bottom: var(--space-5);
+            right: var(--space-5);
+            background: var(--color-surface);
             border: 1px solid var(--color-border);
             border-radius: var(--radius-md);
-            padding: var(--space-4) var(--space-5);
+            padding: var(--space-3) var(--space-5);
             display: flex;
             align-items: center;
             gap: var(--space-3);
@@ -689,23 +589,26 @@
             }
 
             .toast.error i {
-                color: var(--color-error);
+                color: var(--color-danger);
             }
 
         /* Loading */
         .loading {
-            text-align: center;
-            padding: var(--space-7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 50vh;
+            gap: var(--space-4);
         }
 
         .spinner {
-            width: 40px;
-            height: 40px;
+            width: 48px;
+            height: 48px;
             border: 3px solid var(--color-border);
             border-top-color: var(--color-gold);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            margin: 0 auto var(--space-4);
         }
 
         @@keyframes spin {
@@ -753,31 +656,39 @@
             .thumbnail-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .package-title {
+                font-size: 1.75rem;
+            }
         }
     </style>
 </head>
 <body>
-    <header class="site-header">
-        <div class="header-content">
-            <a href="/" class="logo"><i class="fas fa-compass"></i> TRAVIL</a>
-            <nav class="nav-links">
-                <a href="/">Home</a>
-                <a href="/packages">Packages</a>
-                <a href="/#about">About</a>
-                <a href="/#contact">Contact</a>
-            </nav>
-            <div class="header-actions" id="navAuth">
-                <a href="/account/login" class="btn btn-outline">Sign In</a>
-                <a href="/account/register" class="btn btn-primary">Get Started</a>
-            </div>
+    <header class="header">
+        <a href="/" class="logo"><i class="fas fa-compass"></i> TRAVIL</a>
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="/packages">Packages</a>
+            <a href="/#about">About</a>
+            <a href="/#contact">Contact</a>
+        </nav>
+        <div class="header-actions" id="navAuth">
+            <a href="/account/login" class="btn btn-outline">Sign In</a>
+            <a href="/account/register" class="btn btn-primary">Get Started</a>
         </div>
     </header>
 
     <main class="main-content" id="mainContent">
-        <div class="loading"><div class="spinner"></div><p>Loading package...</p></div>
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Loading package...</p>
+        </div>
     </main>
 
-    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage"></span></div>
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage"></span>
+    </div>
 
     <script>
         var packageData = null;
@@ -785,6 +696,14 @@
         var avgRating = 0;
         var selectedRating = 0;
         var categoryNames = ['Family', 'Honeymoon', 'Adventure', 'Cruise', 'Luxury', 'Budget', 'Cultural', 'Beach'];
+
+        // Default fallback images
+        var defaultImages = [
+            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800',
+            'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800',
+            'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800',
+            'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800'
+        ];
 
         function showToast(message, type) {
             type = type || 'success';
@@ -806,38 +725,31 @@
                     var userData = JSON.parse(user);
                     var isAdmin = userData.role === 0 || userData.role === '0' || userData.role === 'Admin';
                     var dashUrl = isAdmin ? '/admin/dashboard' : '/account/dashboard';
-                    var name = userData.firstName || 'Account';
-                    nav.innerHTML = '<a href="/cart" class="btn btn-outline"><i class="fas fa-shopping-cart"></i></a>' +
-                                   '<a href="' + dashUrl + '" class="btn btn-primary"><i class="fas fa-user"></i> ' + name + '</a>';
+                    nav.innerHTML = '<a href="' + dashUrl + '" class="btn btn-outline"><i class="fas fa-user"></i> Dashboard</a>';
                 } catch (e) { }
             }
         }
 
         function getPackageId() {
             var path = window.location.pathname;
-            var match = path.match(/\/packages\/(\d+)/) || path.match(/\/TravelPackage\/Details\/(\d+)/);
+            var match = path.match(/\/packages\/(\d+)/i) || path.match(/\/travelpackage\/details\/(\d+)/i);
             if (match) return parseInt(match[1]);
             var params = new URLSearchParams(window.location.search);
-            return parseInt(params.get('id')) || 1;
-        }
-
-        function getDefaultImages() {
-            return [
-                'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800',
-                'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800',
-                'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800',
-                'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800'
-            ];
-        }
-
-        function calcDuration(start, end) {
-            if (!start || !end) return 7;
-            return Math.ceil((new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24)) || 7;
+            return parseInt(params.get('id')) || 0;
         }
 
         function formatDate(dateStr) {
-            if (!dateStr) return '';
-            return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            if (!dateStr) return 'N/A';
+            var date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        function calcDuration(start, end) {
+            if (!start || !end) return 1;
+            var s = new Date(start);
+            var e = new Date(end);
+            var days = Math.ceil((e - s) / (1000 * 60 * 60 * 24)) + 1;
+            return days > 0 ? days : 1;
         }
 
         function renderStars(rating, interactive) {
@@ -866,8 +778,51 @@
             });
         }
 
+        // FIX: Properly extract images from database response
+        function getPackageImages(pkg) {
+            var images = [];
+
+            // Check for images array (from API - array of image objects with imageUrl property)
+            if (pkg.images && pkg.images.length > 0) {
+                for (var i = 0; i < pkg.images.length; i++) {
+                    var img = pkg.images[i];
+                    // Handle both object with imageUrl property and direct string
+                    var url = (typeof img === 'string') ? img : (img.imageUrl || img.url || img);
+                    if (url) images.push(url);
+                }
+            }
+
+            // Check for imageUrls array (direct URLs)
+            if (images.length === 0 && pkg.imageUrls && pkg.imageUrls.length > 0) {
+                for (var j = 0; j < pkg.imageUrls.length; j++) {
+                    if (pkg.imageUrls[j]) images.push(pkg.imageUrls[j]);
+                }
+            }
+
+            // Fallback to single imageUrl
+            if (images.length === 0 && pkg.imageUrl) {
+                images.push(pkg.imageUrl);
+            }
+
+            // Use defaults if still no images
+            if (images.length === 0) {
+                images = defaultImages.slice(0, 4);
+            }
+
+            // Ensure we have at least 4 images for the gallery
+            while (images.length < 4) {
+                images.push(defaultImages[images.length % defaultImages.length]);
+            }
+
+            return images;
+        }
+
         async function loadPackage() {
             var packageId = getPackageId();
+            if (!packageId) {
+                showError('Invalid package ID');
+                return;
+            }
 
             try {
                 // Load package
@@ -877,34 +832,40 @@
                 var result = await response.json();
                 packageData = result.data || result;
 
-                // Load reviews
+                // Load reviews - CORRECT ENDPOINT: /api/review/package/{id} (singular)
                 try {
                     var reviewResponse = await fetch('/api/review/package/' + packageId);
                     if (reviewResponse.ok) {
                         var reviewResult = await reviewResponse.json();
-                        reviews = reviewResult.reviews || reviewResult.data || [];
+                        reviews = reviewResult.data || [];
                         avgRating = reviewResult.averageRating || 0;
                     }
-                } catch (e) { }
+                } catch (e) {
+                    console.log('Could not load reviews:', e);
+                }
 
                 renderPackage();
 
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('mainContent').innerHTML =
-                    '<div class="container" style="padding: 100px 0; text-align: center;"><i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--color-silver); margin-bottom: 16px;"></i><h2>Package Not Found</h2><p style="color: var(--color-silver);">The package you\'re looking for doesn\'t exist.</p><a href="/packages" class="btn btn-primary" style="margin-top: 24px;">Browse Packages</a></div>';
+                showError('Package not found');
             }
+        }
+
+        function showError(message) {
+            document.getElementById('mainContent').innerHTML =
+                '<div class="container" style="padding: 100px 0; text-align: center;">' +
+                '<i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--color-text-muted); margin-bottom: 16px;"></i>' +
+                '<h2>' + message + '</h2>' +
+                '<p style="color: var(--color-text-muted);">The package you\'re looking for doesn\'t exist or has been removed.</p>' +
+                '<a href="/packages" class="btn btn-primary" style="margin-top: 24px;">Browse Packages</a></div>';
         }
 
         function renderPackage() {
             var pkg = packageData;
-            var defaultImages = getDefaultImages();
-            var images = pkg.images && pkg.images.length > 0 ? pkg.images.map(function(img) { return img.imageUrl || img.url || img; }) : [pkg.imageUrl || defaultImages[0]];
 
-            // Ensure we have at least 4 images for the gallery
-            while (images.length < 4) {
-                images.push(defaultImages[images.length % defaultImages.length]);
-            }
+            // FIX: Get images properly from database
+            var images = getPackageImages(pkg);
 
             var duration = calcDuration(pkg.startDate, pkg.endDate);
             var hasDiscount = pkg.discountedPrice && pkg.discountedPrice < pkg.price;
@@ -966,127 +927,86 @@
             html += '<div class="stat-box"><i class="far fa-clock"></i><span class="stat-value">' + duration + ' Days</span><span class="stat-label">Duration</span></div>';
             html += '<div class="stat-box"><i class="fas fa-bed"></i><span class="stat-value">' + (pkg.availableRooms || 0) + '</span><span class="stat-label">Rooms</span></div>';
             html += '<div class="stat-box"><i class="fas fa-star"></i><span class="stat-value">' + (avgRating > 0 ? avgRating.toFixed(1) : 'New') + '</span><span class="stat-label">Rating</span></div>';
-            html += '<div class="stat-box"><i class="fas fa-users"></i><span class="stat-value">' + (pkg.maxGuests || 2) + '</span><span class="stat-label">Max Guests</span></div>';
+            html += '<div class="stat-box"><i class="fas fa-users"></i><span class="stat-value">' + reviews.length + '</span><span class="stat-label">Reviews</span></div>';
             html += '</div></div>';
 
-            // Age Restriction (if any)
-            if (pkg.minimumAge || pkg.maximumAge) {
-                html += '<div class="info-card">';
-                html += '<h2><i class="fas fa-user-check"></i> Age Requirements</h2>';
-                if (pkg.minimumAge && pkg.maximumAge) {
-                    html += '<p>This package is suitable for guests aged <strong>' + pkg.minimumAge + ' to ' + pkg.maximumAge + ' years</strong>.</p>';
-                } else if (pkg.minimumAge) {
-                    html += '<p>Minimum age requirement: <strong>' + pkg.minimumAge + '+ years</strong>.</p>';
-                } else {
-                    html += '<p>Maximum age limit: <strong>Up to ' + pkg.maximumAge + ' years</strong>.</p>';
-                }
-                html += '</div>';
-            }
-
             // Highlights
-            html += '<div class="info-card">';
-            html += '<h2><i class="fas fa-star"></i> Highlights</h2>';
+            html += '<div class="info-card"><h2><i class="fas fa-check-circle"></i> Package Highlights</h2>';
             html += '<div class="highlights-grid">';
-            html += '<div class="highlight-item"><i class="fas fa-hotel"></i><span>Premium Accommodation</span></div>';
-            html += '<div class="highlight-item"><i class="fas fa-utensils"></i><span>Breakfast Included</span></div>';
-            html += '<div class="highlight-item"><i class="fas fa-map"></i><span>Guided Tours</span></div>';
-            html += '<div class="highlight-item"><i class="fas fa-shuttle-van"></i><span>Airport Transfer</span></div>';
-            html += '<div class="highlight-item"><i class="fas fa-camera"></i><span>Photo Opportunities</span></div>';
-            html += '<div class="highlight-item"><i class="fas fa-headset"></i><span>24/7 Support</span></div>';
+            html += '<div class="highlight-item"><i class="fas fa-calendar"></i><span>' + formatDate(pkg.startDate) + ' - ' + formatDate(pkg.endDate) + '</span></div>';
+            html += '<div class="highlight-item"><i class="fas fa-tag"></i><span>' + categoryName + ' Package</span></div>';
+            if (pkg.minimumAge || pkg.maximumAge) {
+                html += '<div class="highlight-item"><i class="fas fa-user-friends"></i><span>Ages ' + (pkg.minimumAge || 0) + ' - ' + (pkg.maximumAge || 99) + '</span></div>';
+            }
+            html += '<div class="highlight-item"><i class="fas fa-concierge-bell"></i><span>Premium Services</span></div>';
             html += '</div></div>';
 
             // Itinerary
             if (pkg.itinerary) {
-                html += '<div class="info-card">';
-                html += '<h2><i class="fas fa-route"></i> Itinerary</h2>';
-                var lines = pkg.itinerary.split('\n').filter(function(l) { return l.trim(); });
-                for (var j = 0; j < lines.length; j++) {
-                    html += '<div class="itinerary-item">';
-                    html += '<div class="itinerary-marker"><div class="itinerary-dot"></div>' + (j < lines.length - 1 ? '<div class="itinerary-line"></div>' : '') + '</div>';
-                    html += '<div class="itinerary-content"><h4>Day ' + (j + 1) + '</h4><p>' + lines[j] + '</p></div>';
-                    html += '</div>';
-                }
-                html += '</div>';
+                html += '<div class="info-card"><h2><i class="fas fa-route"></i> Itinerary</h2>';
+                html += '<p class="package-description">' + pkg.itinerary + '</p></div>';
             }
 
-            // Reviews
-            html += '<div class="info-card">';
+            // Reviews Section
+            html += '<div class="info-card reviews-section">';
             html += '<div class="reviews-header">';
-            html += '<h2><i class="fas fa-comments"></i> Reviews</h2>';
-            html += '<div class="rating-summary">';
-            html += '<span class="rating-big">' + (avgRating > 0 ? avgRating.toFixed(1) : '-') + '</span>';
-            html += '<div><div class="rating-stars">' + renderStars(Math.round(avgRating), false) + '</div>';
-            html += '<div class="rating-count">' + reviews.length + ' reviews</div></div>';
-            html += '</div></div>';
+            html += '<h2><i class="fas fa-star"></i> Reviews</h2>';
+            html += '<div><span class="rating-large">' + (avgRating > 0 ? avgRating.toFixed(1) : '—') + '</span>';
+            html += '<div class="rating-stars">' + renderStars(Math.round(avgRating), false) + '</div>';
+            html += '<span class="rating-count">' + reviews.length + ' reviews</span></div>';
+            html += '</div>';
 
             if (reviews.length > 0) {
-                for (var k = 0; k < Math.min(reviews.length, 5); k++) {
-                    var r = reviews[k];
-                    var reviewerName = (r.user ? (r.user.firstName || '') + ' ' + (r.user.lastName || '') : r.userName || 'Anonymous').trim() || 'Anonymous';
-                    html += '<div class="review-item">';
-                    html += '<div class="review-header">';
-                    html += '<div class="reviewer"><div class="reviewer-avatar">' + reviewerName.charAt(0).toUpperCase() + '</div>';
-                    html += '<div><div class="reviewer-name">' + reviewerName + '</div>';
-                    html += '<div class="reviewer-date">' + formatDate(r.createdAt) + '</div></div></div>';
-                    html += '<div class="review-rating">' + renderStars(r.rating, false) + '</div></div>';
-                    html += '<p class="review-text">' + (r.comment || 'Great experience!') + '</p>';
-                    html += '</div>';
-                }
+                reviews.forEach(function(review) {
+                    html += '<div class="review-card">';
+                    html += '<div class="review-header"><span class="reviewer-name">' + (review.userName || 'Anonymous') + '</span>';
+                    html += '<span class="review-date">' + formatDate(review.createdAt) + '</span></div>';
+                    html += '<div class="review-rating">' + renderStars(review.rating, false) + '</div>';
+                    html += '<p class="review-comment">' + review.comment + '</p></div>';
+                });
             } else {
-                html += '<p style="color: var(--color-silver);">No reviews yet. Be the first to review!</p>';
+                html += '<p style="text-align: center; color: var(--color-text-muted); padding: 20px;">No reviews yet. Be the first to review!</p>';
             }
 
-            // Review Form
+            // Write Review
             if (token) {
-                html += '<div class="review-form">';
+                html += '<div class="write-review">';
                 html += '<h4>Write a Review</h4>';
-                html += '<div class="star-rating" id="starRating">' + renderStars(0, true) + '</div>';
-                html += '<textarea class="form-control" id="reviewComment" rows="3" placeholder="Share your experience..."></textarea>';
-                html += '<button class="btn btn-primary" style="margin-top: 12px;" onclick="submitReview()"><i class="fas fa-paper-plane"></i> Submit Review</button>';
-                html += '</div>';
-            } else {
-                html += '<div class="review-form" style="text-align: center;">';
-                html += '<p style="color: var(--color-silver); margin-bottom: 12px;"><a href="/account/login" style="color: var(--color-gold);">Sign in</a> to write a review</p>';
+                html += '<div class="star-rating">' + renderStars(0, true) + '</div>';
+                html += '<textarea id="reviewComment" class="review-textarea" placeholder="Share your experience..."></textarea>';
+                html += '<button class="btn btn-primary" onclick="submitReview()"><i class="fas fa-paper-plane"></i> Submit Review</button>';
                 html += '</div>';
             }
-            html += '</div>';
+
+            html += '</div>'; // End reviews
 
             html += '</div>'; // End left column
 
             // Right Column - Booking Card
             html += '<div>';
             html += '<div class="booking-card">';
-
-            // Price
             html += '<div class="price-section">';
             if (hasDiscount) {
-                html += '<span class="old-price">$' + Math.round(pkg.price) + '</span>';
+                html += '<span class="price-original">$' + pkg.price.toLocaleString() + '</span> ';
             }
-            html += '<span class="current-price">$' + Math.round(displayPrice) + '</span>';
-            html += '<span class="per-person"> /person</span>';
-            if (hasDiscount) {
-                html += '<br><span class="discount-badge">Save $' + Math.round(pkg.price - pkg.discountedPrice) + '</span>';
-            }
+            html += '<span class="price-current">$' + displayPrice.toLocaleString() + '</span>';
+            html += '<span class="price-unit"> / person</span>';
             html += '</div>';
 
-            // Booking Details
+            html += '<div class="availability ' + availabilityClass + '"><i class="fas fa-' + availabilityIcon + '"></i> ' + availabilityText + '</div>';
+
             html += '<div class="booking-details">';
-            html += '<div class="booking-row"><span class="label">Travel Dates</span><span class="value">' + formatDate(pkg.startDate) + ' - ' + formatDate(pkg.endDate) + '</span></div>';
+            html += '<div class="booking-row"><span class="label">Dates</span><span class="value">' + formatDate(pkg.startDate) + ' - ' + formatDate(pkg.endDate) + '</span></div>';
             html += '<div class="booking-row"><span class="label">Duration</span><span class="value">' + duration + ' Days</span></div>';
             html += '<div class="booking-row"><span class="label">Category</span><span class="value">' + categoryName + '</span></div>';
             html += '</div>';
 
-            // Availability
-            html += '<div class="availability ' + availabilityClass + '"><i class="fas fa-' + availabilityIcon + '"></i> ' + availabilityText + '</div>';
-
-            // Actions
             html += '<div class="booking-actions">';
             if (pkg.availableRooms > 0) {
-                html += '<a href="/booking/create/' + pkg.packageId + '" class="btn btn-primary btn-lg btn-block"><i class="fas fa-calendar-check"></i> Book Now</a>';
-                html += '<a href="/booking/buynow/' + pkg.packageId + '" class="btn btn-success btn-lg btn-block"><i class="fas fa-bolt"></i> Buy Now</a>';
-                html += '<button class="btn btn-outline btn-block" onclick="addToCart(' + pkg.packageId + ')"><i class="fas fa-shopping-cart"></i> Add to Cart</button>';
+                html += '<a href="/booking/create/' + pkg.packageId + '" class="btn btn-primary btn-block"><i class="fas fa-calendar-plus"></i> Book Now</a>';
+                html += '<button class="btn btn-success btn-block" onclick="addToCart(' + pkg.packageId + ')"><i class="fas fa-shopping-cart"></i> Add to Cart</button>';
             } else {
-                html += '<button class="btn btn-outline btn-lg btn-block" onclick="joinWaitlist(' + pkg.packageId + ')"><i class="fas fa-bell"></i> Join Waiting List</button>';
+                html += '<button class="btn btn-outline btn-block" onclick="joinWaitlist(' + pkg.packageId + ')"><i class="fas fa-bell"></i> Join Waiting List</button>';
             }
             html += '<button class="btn btn-outline btn-block" onclick="toggleWishlist()"><i class="far fa-heart"></i> Add to Wishlist</button>';
             html += '</div>';
@@ -1096,6 +1016,9 @@
             html += '</div></div></section>'; // End details grid and section
 
             document.getElementById('mainContent').innerHTML = html;
+
+            // Check wishlist status
+            checkWishlistStatus();
         }
 
         function changeImage(index, src) {
@@ -1104,6 +1027,27 @@
             thumbnails.forEach(function(thumb, i) {
                 thumb.classList.toggle('active', i === index);
             });
+        }
+
+        async function checkWishlistStatus() {
+            var token = localStorage.getItem('token');
+            if (!token || !packageData) return;
+
+            try {
+                var response = await fetch('/api/wishlist/check/' + packageData.packageId, {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                if (response.ok) {
+                    var result = await response.json();
+                    if (result.inWishlist) {
+                        var btn = document.getElementById('wishlistBtn');
+                        var icon = btn.querySelector('i');
+                        btn.classList.add('active');
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                    }
+                }
+            } catch (e) { }
         }
 
         async function toggleWishlist() {
@@ -1116,36 +1060,54 @@
 
             var btn = document.getElementById('wishlistBtn');
             var icon = btn.querySelector('i');
+            var isInWishlist = btn.classList.contains('active');
 
             try {
                 var response = await fetch('/api/wishlist/' + packageData.packageId, {
-                    method: 'POST',
-                    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }
+                    method: isInWishlist ? 'DELETE' : 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    }
                 });
 
                 if (response.ok) {
-                    btn.classList.add('active');
-                    icon.classList.remove('far');
-                    icon.classList.add('fas');
-                    showToast('Added to wishlist!');
-                } else {
-                    // Try to remove
-                    var removeResponse = await fetch('/api/wishlist/' + packageData.packageId, {
-                        method: 'DELETE',
-                        headers: { 'Authorization': 'Bearer ' + token }
-                    });
-                    if (removeResponse.ok) {
+                    if (isInWishlist) {
                         btn.classList.remove('active');
                         icon.classList.remove('fas');
                         icon.classList.add('far');
                         showToast('Removed from wishlist');
+                    } else {
+                        btn.classList.add('active');
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                        showToast('Added to wishlist!');
+                    }
+                } else {
+                    var error = await response.json();
+                    if (error.message && error.message.toLowerCase().indexOf('already') >= 0) {
+                        // Try DELETE
+                        var delResponse = await fetch('/api/wishlist/' + packageData.packageId, {
+                            method: 'DELETE',
+                            headers: { 'Authorization': 'Bearer ' + token }
+                        });
+                        if (delResponse.ok) {
+                            btn.classList.remove('active');
+                            icon.classList.remove('fas');
+                            icon.classList.add('far');
+                            showToast('Removed from wishlist');
+                        }
+                    } else {
+                        showToast(error.message || 'Failed to update wishlist', 'error');
                     }
                 }
             } catch (error) {
+                console.error('Wishlist error:', error);
                 showToast('Error updating wishlist', 'error');
             }
         }
 
+        // CORRECT ENDPOINT: /api/cart/add (not /api/cart)
         async function addToCart(packageId) {
             var token = localStorage.getItem('token');
             if (!token) {
@@ -1157,8 +1119,15 @@
             try {
                 var response = await fetch('/api/cart/add', {
                     method: 'POST',
-                    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ packageId: packageId, quantity: 1 })
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        packageId: packageId,
+                        quantity: 1,
+                        numberOfGuests: 1
+                    })
                 });
 
                 if (response.ok) {
@@ -1168,6 +1137,7 @@
                     showToast(error.message || 'Failed to add to cart', 'error');
                 }
             } catch (error) {
+                console.error('Cart error:', error);
                 showToast('Error adding to cart', 'error');
             }
         }
@@ -1187,7 +1157,7 @@
                 });
 
                 if (response.ok) {
-                    showToast('Added to waiting list! We\'ll notify you when a room is available.');
+                    showToast('Added to waiting list! We\'ll notify you when available.');
                 } else {
                     var error = await response.json();
                     showToast(error.message || 'Failed to join waitlist', 'error');
@@ -1197,7 +1167,14 @@
             }
         }
 
+        // CORRECT ENDPOINT: /api/review/package (singular)
         async function submitReview() {
+            var token = localStorage.getItem('token');
+            if (!token) {
+                showToast('Please login to submit a review', 'error');
+                return;
+            }
+
             if (selectedRating === 0) {
                 showToast('Please select a rating', 'error');
                 return;
@@ -1209,28 +1186,36 @@
                 return;
             }
 
-            var token = localStorage.getItem('token');
-
             try {
                 var response = await fetch('/api/review/package', {
                     method: 'POST',
-                    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ packageId: packageData.packageId, rating: selectedRating, comment: comment })
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        packageId: packageData.packageId,
+                        rating: selectedRating,
+                        comment: comment
+                    })
                 });
 
                 if (response.ok) {
-                    showToast('Review submitted! It will appear after approval.');
+                    showToast('Review submitted successfully!');
                     document.getElementById('reviewComment').value = '';
-                    setRating(0);
+                    selectedRating = 0;
+                    setTimeout(function() { location.reload(); }, 1500);
                 } else {
                     var error = await response.json();
                     showToast(error.message || 'Failed to submit review', 'error');
                 }
             } catch (error) {
+                console.error('Review error:', error);
                 showToast('Error submitting review', 'error');
             }
         }
 
+        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             updateNav();
             loadPackage();
