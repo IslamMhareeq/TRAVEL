@@ -58,7 +58,7 @@ builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IUserManagementService, UserManagementService>();
 builder.Services.AddScoped<IWishlistService, WishlistService>();
 builder.Services.AddScoped<ICartService, CartService>();
-
+builder.Services.AddScoped<IPayPalService, PayPalService>();
 // MongoDB Image Storage Service
 builder.Services.AddScoped<IImageStorageService, ImageStorageService>();
 

@@ -14,24 +14,37 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
         :root {
-            --color-bg: #0d1117;
-            --color-surface: #161b22;
-            --color-surface-2: #21262d;
-            --color-border: #30363d;
-            --color-text: #c9d1d9;
-            --color-text-muted: #8b949e;
+            --color-midnight: #0d1117;
+            --color-navy: #161b22;
+            --color-slate: #21262d;
+            --color-charcoal: #30363d;
+            --color-steel: #484f58;
+            --color-silver: #8b949e;
+            --color-mist: #c9d1d9;
+            --color-white: #ffffff;
             --color-gold: #d4a853;
             --color-gold-dark: #b8943f;
+            --color-gold-muted: rgba(212, 168, 83, 0.15);
             --color-success: #3fb950;
-            --color-danger: #f85149;
+            --color-error: #f85149;
+            --color-warning: #d29922;
             --font-display: 'Cormorant Garamond', serif;
             --font-body: 'Outfit', sans-serif;
+            --space-1: 4px;
+            --space-2: 8px;
             --space-3: 12px;
             --space-4: 16px;
             --space-5: 24px;
             --space-6: 32px;
+            --space-7: 48px;
+            --space-8: 64px;
+            --radius-sm: 6px;
             --radius-md: 12px;
             --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-full: 9999px;
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
         }
 
         * {
@@ -42,9 +55,15 @@
 
         body {
             font-family: var(--font-body);
-            background: var(--color-bg);
-            color: var(--color-text);
+            background: var(--color-midnight);
+            color: var(--color-white);
             line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
         }
 
         /* Header */
@@ -53,81 +72,90 @@
             top: 0;
             left: 0;
             right: 0;
-            z-index: 100;
+            z-index: 1000;
             padding: var(--space-4) var(--space-6);
-            background: rgba(13, 17, 23, 0.95);
+            background: rgba(22, 27, 34, 0.95);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-slate);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
         }
 
         .logo {
             display: flex;
             align-items: center;
             gap: var(--space-3);
-            text-decoration: none;
-            color: var(--color-text);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-midnight);
+            font-size: 1.25rem;
+        }
+
+        .logo-text {
             font-family: var(--font-display);
             font-size: 1.5rem;
             font-weight: 600;
+            color: var(--color-white);
         }
-
-            .logo i {
-                color: var(--color-gold);
-            }
 
         .nav-links {
             display: flex;
+            align-items: center;
             gap: var(--space-5);
         }
 
-            .nav-links a {
-                color: var(--color-text-muted);
-                text-decoration: none;
-                transition: color 0.2s;
-            }
-
-                .nav-links a:hover {
-                    color: var(--color-gold);
-                }
-
-        .header-actions {
-            display: flex;
-            gap: var(--space-3);
+        .nav-link {
+            color: var(--color-silver);
+            font-weight: 500;
+            transition: color var(--transition-fast);
         }
 
-        /* Buttons */
+            .nav-link:hover {
+                color: var(--color-gold);
+            }
+
         .btn {
             display: inline-flex;
             align-items: center;
-            gap: var(--space-3);
+            justify-content: center;
+            gap: var(--space-2);
             padding: var(--space-3) var(--space-5);
             border-radius: var(--radius-md);
-            font-family: var(--font-body);
-            font-size: 0.9375rem;
             font-weight: 500;
-            text-decoration: none;
+            font-size: 0.9375rem;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all var(--transition-fast);
             border: none;
         }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
-            color: var(--color-bg);
+            color: var(--color-midnight);
         }
 
             .btn-primary:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(212, 168, 83, 0.3);
+                box-shadow: 0 4px 12px rgba(212, 168, 83, 0.4);
             }
 
         .btn-outline {
             background: transparent;
-            border: 1px solid var(--color-border);
-            color: var(--color-text);
+            border: 1px solid var(--color-slate);
+            color: var(--color-mist);
         }
 
             .btn-outline:hover {
@@ -135,259 +163,338 @@
                 color: var(--color-gold);
             }
 
+        .btn-danger {
+            background: rgba(248, 81, 73, 0.15);
+            border: 1px solid rgba(248, 81, 73, 0.3);
+            color: var(--color-error);
+        }
+
+            .btn-danger:hover {
+                background: var(--color-error);
+                color: var(--color-white);
+            }
+
         .btn-success {
-            background: var(--color-success);
-            color: white;
+            background: linear-gradient(135deg, var(--color-success), #2ea043);
+            color: var(--color-white);
+        }
+
+            .btn-success:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(63, 185, 80, 0.4);
+            }
+
+        .btn-lg {
+            padding: var(--space-4) var(--space-6);
+            font-size: 1rem;
         }
 
         .btn-block {
             width: 100%;
-            justify-content: center;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
         }
 
         /* Main Content */
         .main-content {
-            margin-top: 72px;
+            padding-top: 80px;
         }
 
-        /* Hero Gallery */
-        .gallery-section {
-            background: var(--color-surface);
-            padding: var(--space-6) 0;
-        }
-
-        .gallery-container {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: var(--space-4);
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 var(--space-5);
-        }
-
-        .main-image {
+        /* Hero Section */
+        .hero {
             position: relative;
-            border-radius: var(--radius-lg);
+            height: 60vh;
+            min-height: 400px;
             overflow: hidden;
-            height: 450px;
         }
 
-            .main-image img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-
-        .image-badges {
+        .hero-image {
             position: absolute;
-            top: var(--space-4);
-            left: var(--space-4);
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-3);
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .badge {
-            padding: var(--space-3) var(--space-4);
-            border-radius: 20px;
-            font-size: 0.8125rem;
-            font-weight: 600;
-        }
-
-        .badge-sale {
-            background: var(--color-success);
-            color: white;
-        }
-
-        .badge-category {
-            background: var(--color-gold);
-            color: var(--color-bg);
-        }
-
-        .wishlist-btn {
+        .hero-overlay {
             position: absolute;
-            top: var(--space-4);
-            right: var(--space-4);
-            width: 48px;
-            height: 48px;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(13, 17, 23, 0.3) 0%, rgba(13, 17, 23, 0.6) 50%, rgba(13, 17, 23, 1) 100%);
+        }
+
+        .hero-content {
+            position: absolute;
+            bottom: var(--space-7);
+            left: 0;
+            right: 0;
+            padding: 0 var(--space-6);
+        }
+
+        .hero-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
             display: flex;
             align-items: center;
-            justify-content: center;
-            background: rgba(0, 0, 0, 0.6);
-            border: none;
-            border-radius: 50%;
-            color: white;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 1.25rem;
+            gap: var(--space-2);
+            margin-bottom: var(--space-4);
+            font-size: 0.875rem;
+            color: var(--color-silver);
         }
 
-            .wishlist-btn:hover {
-                background: var(--color-danger);
-                transform: scale(1.1);
+            .breadcrumb a:hover {
+                color: var(--color-gold);
             }
 
-            .wishlist-btn.active {
-                background: var(--color-danger);
-            }
-
-        .thumbnail-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--space-3);
-        }
-
-        .thumbnail {
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            height: 110px;
-            cursor: pointer;
-            opacity: 0.7;
-            transition: all 0.2s;
-            border: 2px solid transparent;
-        }
-
-            .thumbnail:hover, .thumbnail.active {
-                opacity: 1;
-                border-color: var(--color-gold);
-            }
-
-            .thumbnail img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-
-        /* Details Section */
-        .details-section {
-            padding: var(--space-6) 0;
-        }
-
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 var(--space-5);
-        }
-
-        .details-grid {
-            display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: var(--space-6);
-        }
-
-        .info-card {
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-lg);
-            padding: var(--space-5);
-            margin-bottom: var(--space-5);
-        }
-
-            .info-card h2 {
-                font-family: var(--font-display);
-                font-size: 1.5rem;
-                margin-bottom: var(--space-4);
-                display: flex;
-                align-items: center;
-                gap: var(--space-3);
-            }
-
-                .info-card h2 i {
-                    color: var(--color-gold);
-                }
-
-        .package-title {
+        .hero-title {
             font-family: var(--font-display);
-            font-size: 2.5rem;
-            font-weight: 500;
+            font-size: 3.5rem;
+            font-weight: 600;
             margin-bottom: var(--space-3);
         }
 
-        .package-location {
+        .hero-location {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: 1.25rem;
+            color: var(--color-gold);
+        }
+
+        /* Package Details Section */
+        .details-section {
+            padding: var(--space-7) var(--space-6);
+            margin-top: -var(--space-7);
+            position: relative;
+        }
+
+        .details-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: var(--space-6);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: var(--space-5);
+            border-bottom: 1px solid var(--color-slate);
             display: flex;
             align-items: center;
             gap: var(--space-3);
-            color: var(--color-text-muted);
+        }
+
+            .card-header h3 {
+                font-family: var(--font-display);
+                font-size: 1.25rem;
+                font-weight: 600;
+            }
+
+            .card-header i {
+                color: var(--color-gold);
+            }
+
+        .card-body {
+            padding: var(--space-5);
+        }
+
+        /* Description */
+        .description {
+            color: var(--color-mist);
+            line-height: 1.8;
             margin-bottom: var(--space-5);
         }
 
-            .package-location i {
-                color: var(--color-gold);
-            }
-
-        .package-description {
-            color: var(--color-text-muted);
-            line-height: 1.8;
-            white-space: pre-line;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: var(--space-4);
-            margin-top: var(--space-5);
-        }
-
-        .stat-box {
-            background: var(--color-surface-2);
-            border-radius: var(--radius-md);
-            padding: var(--space-4);
-            text-align: center;
-        }
-
-            .stat-box i {
-                color: var(--color-gold);
-                font-size: 1.25rem;
-                margin-bottom: var(--space-3);
-                display: block;
-            }
-
-        .stat-value {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--color-text-muted);
-        }
-
-        .highlights-grid {
+        /* Features Grid */
+        .features-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: var(--space-4);
+            margin-bottom: var(--space-5);
         }
 
-        .highlight-item {
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-4);
+            background: var(--color-slate);
+            border-radius: var(--radius-md);
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--color-gold-muted);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-gold);
+        }
+
+        .feature-label {
+            font-size: 0.8125rem;
+            color: var(--color-silver);
+        }
+
+        .feature-value {
+            font-weight: 600;
+            color: var(--color-white);
+        }
+
+        /* Itinerary */
+        .itinerary-item {
+            display: flex;
+            gap: var(--space-4);
+            padding: var(--space-4) 0;
+            border-bottom: 1px solid var(--color-slate);
+        }
+
+            .itinerary-item:last-child {
+                border-bottom: none;
+            }
+
+        .itinerary-day {
+            width: 60px;
+            height: 60px;
+            background: var(--color-gold-muted);
+            border-radius: var(--radius-md);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+            .itinerary-day span:first-child {
+                font-size: 0.75rem;
+                color: var(--color-gold);
+                text-transform: uppercase;
+            }
+
+            .itinerary-day span:last-child {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: var(--color-gold);
+            }
+
+        .itinerary-content h4 {
+            font-size: 1rem;
+            margin-bottom: var(--space-2);
+        }
+
+        .itinerary-content p {
+            font-size: 0.875rem;
+            color: var(--color-silver);
+        }
+
+        /* Reviews */
+        .reviews-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-5);
+        }
+
+        .rating-summary {
             display: flex;
             align-items: center;
             gap: var(--space-3);
         }
 
-            .highlight-item i {
-                color: var(--color-gold);
-                width: 20px;
+        .rating-big {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-gold);
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 2px;
+            color: var(--color-gold);
+        }
+
+        .rating-count {
+            font-size: 0.875rem;
+            color: var(--color-silver);
+        }
+
+        .review-item {
+            padding: var(--space-4) 0;
+            border-bottom: 1px solid var(--color-slate);
+        }
+
+            .review-item:last-child {
+                border-bottom: none;
             }
 
-        /* Booking Card */
+        .review-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-3);
+        }
+
+        .review-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--color-gold-muted);
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-gold);
+            font-weight: 600;
+        }
+
+        .review-author {
+            font-weight: 500;
+        }
+
+        .review-date {
+            font-size: 0.8125rem;
+            color: var(--color-silver);
+        }
+
+        .review-rating {
+            margin-left: auto;
+            display: flex;
+            gap: 2px;
+            color: var(--color-gold);
+            font-size: 0.875rem;
+        }
+
+        .review-text {
+            color: var(--color-mist);
+            font-size: 0.9375rem;
+        }
+
+        /* Sidebar - Booking Card */
         .booking-card {
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-lg);
-            padding: var(--space-5);
             position: sticky;
             top: 100px;
         }
 
-        .price-section {
+        .price-display {
             text-align: center;
-            margin-bottom: var(--space-5);
-        }
-
-        .price-original {
-            font-size: 1.125rem;
-            color: var(--color-text-muted);
-            text-decoration: line-through;
+            padding-bottom: var(--space-4);
+            border-bottom: 1px solid var(--color-slate);
+            margin-bottom: var(--space-4);
         }
 
         .price-current {
@@ -397,56 +504,54 @@
             color: var(--color-gold);
         }
 
-        .price-unit {
+        .price-period {
+            color: var(--color-silver);
+            font-size: 0.9375rem;
+        }
+
+        .price-original {
+            text-decoration: line-through;
+            color: var(--color-steel);
             font-size: 1rem;
-            color: var(--color-text-muted);
+            margin-right: var(--space-2);
         }
 
-        .availability {
-            text-align: center;
+        .sold-out-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
             padding: var(--space-3);
+            background: rgba(248, 81, 73, 0.15);
+            border: 1px solid rgba(248, 81, 73, 0.3);
             border-radius: var(--radius-md);
-            margin-bottom: var(--space-4);
+            color: var(--color-error);
             font-weight: 500;
+            margin-bottom: var(--space-4);
         }
-
-            .availability.available {
-                background: rgba(63, 185, 80, 0.1);
-                color: var(--color-success);
-            }
-
-            .availability.limited {
-                background: rgba(212, 168, 83, 0.1);
-                color: var(--color-gold);
-            }
-
-            .availability.sold-out {
-                background: rgba(248, 81, 73, 0.1);
-                color: var(--color-danger);
-            }
 
         .booking-details {
             margin-bottom: var(--space-5);
         }
 
-        .booking-row {
+        .booking-detail-row {
             display: flex;
             justify-content: space-between;
             padding: var(--space-3) 0;
-            border-bottom: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-slate);
         }
 
-            .booking-row:last-child {
+            .booking-detail-row:last-child {
                 border-bottom: none;
             }
 
-            .booking-row .label {
-                color: var(--color-text-muted);
-            }
+        .booking-detail-label {
+            color: var(--color-silver);
+        }
 
-            .booking-row .value {
-                font-weight: 500;
-            }
+        .booking-detail-value {
+            font-weight: 500;
+        }
 
         .booking-actions {
             display: flex;
@@ -454,111 +559,29 @@
             gap: var(--space-3);
         }
 
-        /* Reviews */
-        .reviews-section {
-            margin-top: var(--space-4);
-        }
-
-        .reviews-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--space-5);
-        }
-
-        .rating-large {
-            font-family: var(--font-display);
-            font-size: 3rem;
-            font-weight: 600;
-            color: var(--color-gold);
-        }
-
-        .rating-stars {
-            color: var(--color-gold);
-        }
-
-        .rating-count {
-            color: var(--color-text-muted);
-            font-size: 0.875rem;
-        }
-
-        .review-card {
-            background: var(--color-surface-2);
-            border-radius: var(--radius-md);
-            padding: var(--space-4);
-            margin-bottom: var(--space-4);
-        }
-
-        .review-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: var(--space-3);
-        }
-
-        .reviewer-name {
-            font-weight: 500;
-        }
-
-        .review-date {
-            color: var(--color-text-muted);
-            font-size: 0.875rem;
-        }
-
-        .review-rating {
-            color: var(--color-gold);
-            margin-bottom: var(--space-3);
-        }
-
-        .review-comment {
-            color: var(--color-text-muted);
-            line-height: 1.6;
-        }
-
-        /* Write Review */
-        .write-review {
-            background: var(--color-surface-2);
-            border-radius: var(--radius-md);
-            padding: var(--space-5);
-            margin-top: var(--space-5);
-        }
-
-            .write-review h4 {
-                margin-bottom: var(--space-4);
-            }
-
-        .star-rating {
-            display: flex;
+        /* Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
             gap: var(--space-3);
-            margin-bottom: var(--space-4);
         }
 
-            .star-rating i {
-                font-size: 1.5rem;
-                color: var(--color-border);
-                cursor: pointer;
-                transition: color 0.2s;
+        .gallery-item {
+            aspect-ratio: 1;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+            .gallery-item img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform var(--transition-normal);
             }
 
-                .star-rating i:hover, .star-rating i.active {
-                    color: var(--color-gold);
-                }
-
-        .review-textarea {
-            width: 100%;
-            min-height: 100px;
-            padding: var(--space-4);
-            background: var(--color-bg);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-md);
-            color: var(--color-text);
-            font-family: var(--font-body);
-            resize: vertical;
-            margin-bottom: var(--space-4);
-        }
-
-            .review-textarea:focus {
-                outline: none;
-                border-color: var(--color-gold);
+            .gallery-item:hover img {
+                transform: scale(1.1);
             }
 
         /* Toast */
@@ -566,16 +589,16 @@
             position: fixed;
             bottom: var(--space-5);
             right: var(--space-5);
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            padding: var(--space-4) var(--space-5);
             border-radius: var(--radius-md);
-            padding: var(--space-3) var(--space-5);
             display: flex;
             align-items: center;
             gap: var(--space-3);
             transform: translateY(100px);
             opacity: 0;
-            transition: all 0.3s;
+            transition: all var(--transition-normal);
             z-index: 2000;
         }
 
@@ -584,28 +607,36 @@
                 opacity: 1;
             }
 
-            .toast.success i {
-                color: var(--color-success);
+            .toast.success {
+                border-color: var(--color-success);
             }
 
-            .toast.error i {
-                color: var(--color-danger);
+                .toast.success i {
+                    color: var(--color-success);
+                }
+
+            .toast.error {
+                border-color: var(--color-error);
             }
 
-        /* Loading */
-        .loading {
+                .toast.error i {
+                    color: var(--color-error);
+                }
+
+        /* Loading State */
+        .loading-state {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 50vh;
+            min-height: 60vh;
             gap: var(--space-4);
         }
 
         .spinner {
             width: 48px;
             height: 48px;
-            border: 3px solid var(--color-border);
+            border: 3px solid var(--color-slate);
             border-top-color: var(--color-gold);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
@@ -617,94 +648,143 @@
             }
         }
 
+        /* Error State */
+        .error-state {
+            text-align: center;
+            padding: var(--space-8);
+        }
+
+            .error-state i {
+                font-size: 4rem;
+                color: var(--color-error);
+                margin-bottom: var(--space-4);
+            }
+
+            .error-state h3 {
+                font-family: var(--font-display);
+                font-size: 1.5rem;
+                margin-bottom: var(--space-2);
+            }
+
+            .error-state p {
+                color: var(--color-silver);
+                margin-bottom: var(--space-5);
+            }
+
+        /* Empty Reviews */
+        .empty-reviews {
+            text-align: center;
+            padding: var(--space-6);
+            color: var(--color-silver);
+        }
+
+            .empty-reviews i {
+                font-size: 2rem;
+                margin-bottom: var(--space-3);
+                color: var(--color-steel);
+            }
+
         /* Responsive */
         @@media (max-width: 1024px) {
-            .gallery-container {
-                grid-template-columns: 1fr;
-            }
-
-            .main-image {
-                height: 350px;
-            }
-
-            .thumbnail-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-
-            .details-grid {
+            .details-container {
                 grid-template-columns: 1fr;
             }
 
             .booking-card {
-                position: static;
+                position: relative;
+                top: 0;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
             }
         }
 
         @@media (max-width: 768px) {
+            .header {
+                padding: var(--space-3) var(--space-4);
+            }
+
             .nav-links {
                 display: none;
             }
 
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .hero {
+                height: 50vh;
             }
 
-            .highlights-grid {
+            .hero-content {
+                padding: 0 var(--space-4);
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .details-section {
+                padding: var(--space-5) var(--space-4);
+            }
+
+            .features-grid {
                 grid-template-columns: 1fr;
             }
 
-            .thumbnail-grid {
+            .gallery-grid {
                 grid-template-columns: repeat(2, 1fr);
-            }
-
-            .package-title {
-                font-size: 1.75rem;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <header class="header">
-        <a href="/" class="logo"><i class="fas fa-compass"></i> TRAVEL</a>
-        <nav class="nav-links">
-            <a href="/">Home</a>
-            <a href="/packages">Packages</a>
-            <a href="/#about">About</a>
-            <a href="/#contact">Contact</a>
-        </nav>
-        <div class="header-actions" id="navAuth">
-            <a href="/account/login" class="btn btn-outline">Sign In</a>
-            <a href="/account/register" class="btn btn-primary">Get Started</a>
+        <div class="header-content">
+            <a href="/" class="logo">
+                <div class="logo-icon"><i class="fas fa-compass"></i></div>
+                <span class="logo-text">TRAVEL</span>
+            </a>
+            <nav class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/packages" class="nav-link">Packages</a>
+                <a href="/destinations" class="nav-link">Destinations</a>
+                <a href="/about" class="nav-link">About</a>
+                <a href="/account/login" class="btn btn-outline" id="loginBtn">Sign In</a>
+                <a href="/account/dashboard" class="btn btn-primary" id="dashboardBtn" style="display: none;">
+                    <i class="fas fa-user"></i> Dashboard
+                </a>
+            </nav>
         </div>
     </header>
 
+    <!-- Main Content -->
     <main class="main-content" id="mainContent">
-        <div class="loading">
+        <div class="loading-state" id="loadingState">
             <div class="spinner"></div>
-            <p>Loading package...</p>
+            <p>Loading package details...</p>
         </div>
     </main>
 
+    <!-- Toast -->
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
-        <span id="toastMessage"></span>
+        <span id="toastMessage">Success!</span>
     </div>
 
     <script>
+        var packageId = @(ViewData["PackageId"] ?? 0);
         var packageData = null;
-        var reviews = [];
-        var avgRating = 0;
-        var selectedRating = 0;
-        var categoryNames = ['Family', 'Honeymoon', 'Adventure', 'Cruise', 'Luxury', 'Budget', 'Cultural', 'Beach'];
+        var isWishlisted = false;
 
-        // Default fallback images
-        var defaultImages = [
-            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800',
-            'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800',
-            'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800',
-            'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800'
-        ];
+        // Check auth
+        function checkAuth() {
+            var token = localStorage.getItem('token');
+            if (token) {
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('dashboardBtn').style.display = 'inline-flex';
+            }
+        }
 
+        // Show toast
         function showToast(message, type) {
             type = type || 'success';
             var toast = document.getElementById('toast');
@@ -715,409 +795,280 @@
             setTimeout(function() { toast.classList.remove('show'); }, 3000);
         }
 
-        function updateNav() {
-            var token = localStorage.getItem('token');
-            var user = localStorage.getItem('user');
-            var nav = document.getElementById('navAuth');
-
-            if (token && user) {
-                try {
-                    var userData = JSON.parse(user);
-                    var isAdmin = userData.role === 0 || userData.role === '0' || userData.role === 'Admin';
-                    var dashUrl = isAdmin ? '/admin/dashboard' : '/account/dashboard';
-                    nav.innerHTML = '<a href="' + dashUrl + '" class="btn btn-outline"><i class="fas fa-user"></i> Dashboard</a>';
-                } catch (e) { }
-            }
-        }
-
-        function getPackageId() {
-            var path = window.location.pathname;
-            var match = path.match(/\/packages\/(\d+)/i) || path.match(/\/travelpackage\/details\/(\d+)/i);
-            if (match) return parseInt(match[1]);
-            var params = new URLSearchParams(window.location.search);
-            return parseInt(params.get('id')) || 0;
-        }
-
+        // Format date
         function formatDate(dateStr) {
             if (!dateStr) return 'N/A';
-            var date = new Date(dateStr);
-            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         }
 
-        function calcDuration(start, end) {
-            if (!start || !end) return 1;
-            var s = new Date(start);
-            var e = new Date(end);
-            var days = Math.ceil((e - s) / (1000 * 60 * 60 * 24)) + 1;
-            return days > 0 ? days : 1;
+        // Calculate duration
+        function calculateDuration(start, end) {
+            if (!start || !end) return 0;
+            return Math.ceil((new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24));
         }
 
-        function renderStars(rating, interactive) {
-            var html = '';
-            for (var i = 1; i <= 5; i++) {
-                if (interactive) {
-                    html += '<i class="' + (i <= rating ? 'fas' : 'far') + ' fa-star ' + (i <= rating ? 'active' : '') + '" data-rating="' + i + '" onclick="setRating(' + i + ')"></i>';
-                } else {
-                    html += '<i class="' + (i <= rating ? 'fas' : 'far') + ' fa-star"></i>';
-                }
-            }
-            return html;
+        // Get package type name
+        function getPackageTypeName(type) {
+            var types = ['Adventure', 'Beach', 'Cultural', 'Cruise', 'Safari', 'Ski', 'City Break', 'Honeymoon', 'Family', 'Luxury'];
+            return types[type] || 'Travel';
         }
 
-        function setRating(rating) {
-            selectedRating = rating;
-            var stars = document.querySelectorAll('.star-rating i');
-            stars.forEach(function(star, index) {
-                if (index < rating) {
-                    star.classList.remove('far');
-                    star.classList.add('fas', 'active');
-                } else {
-                    star.classList.remove('fas', 'active');
-                    star.classList.add('far');
-                }
-            });
+        // Show error
+        function showError(message) {
+            document.getElementById('mainContent').innerHTML =
+                '<div class="error-state">' +
+                    '<i class="fas fa-exclamation-circle"></i>' +
+                    '<h3>Error</h3>' +
+                    '<p>' + message + '</p>' +
+                    '<a href="/packages" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back to Packages</a>' +
+                '</div>';
         }
 
-        // FIX: Properly extract images from database response
-        function getPackageImages(pkg) {
-            var images = [];
-
-            // Check for images array (from API - array of image objects with imageUrl property)
-            if (pkg.images && pkg.images.length > 0) {
-                for (var i = 0; i < pkg.images.length; i++) {
-                    var img = pkg.images[i];
-                    // Handle both object with imageUrl property and direct string
-                    var url = (typeof img === 'string') ? img : (img.imageUrl || img.url || img);
-                    if (url) images.push(url);
-                }
-            }
-
-            // Check for imageUrls array (direct URLs)
-            if (images.length === 0 && pkg.imageUrls && pkg.imageUrls.length > 0) {
-                for (var j = 0; j < pkg.imageUrls.length; j++) {
-                    if (pkg.imageUrls[j]) images.push(pkg.imageUrls[j]);
-                }
-            }
-
-            // Fallback to single imageUrl
-            if (images.length === 0 && pkg.imageUrl) {
-                images.push(pkg.imageUrl);
-            }
-
-            // Use defaults if still no images
-            if (images.length === 0) {
-                images = defaultImages.slice(0, 4);
-            }
-
-            // Ensure we have at least 4 images for the gallery
-            while (images.length < 4) {
-                images.push(defaultImages[images.length % defaultImages.length]);
-            }
-
-            return images;
-        }
-
+        // Load package
         async function loadPackage() {
-            var packageId = getPackageId();
-            if (!packageId) {
+            if (!packageId || packageId === 0) {
                 showError('Invalid package ID');
                 return;
             }
 
             try {
-                // Load package
                 var response = await fetch('/api/packages/' + packageId);
-                if (!response.ok) throw new Error('Package not found');
+
+                if (!response.ok) {
+                    showError('Package not found');
+                    return;
+                }
 
                 var result = await response.json();
                 packageData = result.data || result;
 
-                // Load reviews - CORRECT ENDPOINT: /api/review/package/{id} (singular)
-                try {
-                    var reviewResponse = await fetch('/api/review/package/' + packageId);
-                    if (reviewResponse.ok) {
-                        var reviewResult = await reviewResponse.json();
-                        reviews = reviewResult.data || [];
-                        avgRating = reviewResult.averageRating || 0;
-                    }
-                } catch (e) {
-                    console.log('Could not load reviews:', e);
+                if (!packageData) {
+                    showError('Package not found');
+                    return;
                 }
 
+                await checkWishlist();
                 renderPackage();
 
             } catch (error) {
                 console.error('Error:', error);
-                showError('Package not found');
+                showError('Failed to load package details');
             }
         }
 
-        function showError(message) {
-            document.getElementById('mainContent').innerHTML =
-                '<div class="container" style="padding: 100px 0; text-align: center;">' +
-                '<i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--color-text-muted); margin-bottom: 16px;"></i>' +
-                '<h2>' + message + '</h2>' +
-                '<p style="color: var(--color-text-muted);">The package you\'re looking for doesn\'t exist or has been removed.</p>' +
-                '<a href="/packages" class="btn btn-primary" style="margin-top: 24px;">Browse Packages</a></div>';
-        }
-
-        function renderPackage() {
-            var pkg = packageData;
-
-            // FIX: Get images properly from database
-            var images = getPackageImages(pkg);
-
-            var duration = calcDuration(pkg.startDate, pkg.endDate);
-            var hasDiscount = pkg.discountedPrice && pkg.discountedPrice < pkg.price;
-            var displayPrice = hasDiscount ? pkg.discountedPrice : pkg.price;
-            var discountPercent = hasDiscount ? Math.round((1 - pkg.discountedPrice / pkg.price) * 100) : 0;
-            var categoryName = categoryNames[pkg.packageType] || 'Travel';
+        // Check wishlist
+        async function checkWishlist() {
             var token = localStorage.getItem('token');
-
-            var availabilityClass = 'available';
-            var availabilityText = pkg.availableRooms + ' rooms available';
-            var availabilityIcon = 'check-circle';
-            if (pkg.availableRooms <= 0) {
-                availabilityClass = 'sold-out';
-                availabilityText = 'Sold Out';
-                availabilityIcon = 'times-circle';
-            } else if (pkg.availableRooms <= 3) {
-                availabilityClass = 'limited';
-                availabilityText = 'Only ' + pkg.availableRooms + ' rooms left!';
-                availabilityIcon = 'exclamation-circle';
-            }
-
-            var html = '';
-
-            // Gallery Section
-            html += '<section class="gallery-section">';
-            html += '<div class="gallery-container">';
-            html += '<div class="main-image">';
-            html += '<img id="mainImg" src="' + images[0] + '" alt="' + pkg.destination + '" onerror="this.src=\'' + defaultImages[0] + '\'">';
-            html += '<div class="image-badges">';
-            if (hasDiscount) {
-                html += '<span class="badge badge-sale">' + discountPercent + '% OFF</span>';
-            }
-            html += '<span class="badge badge-category">' + categoryName + '</span>';
-            html += '</div>';
-            html += '<button class="wishlist-btn" id="wishlistBtn" onclick="toggleWishlist()"><i class="far fa-heart"></i></button>';
-            html += '</div>';
-            html += '<div class="thumbnail-grid">';
-            for (var i = 0; i < 4; i++) {
-                html += '<div class="thumbnail ' + (i === 0 ? 'active' : '') + '" onclick="changeImage(' + i + ', \'' + images[i] + '\')">';
-                html += '<img src="' + images[i] + '" alt="Image ' + (i + 1) + '" onerror="this.src=\'' + defaultImages[i] + '\'">';
-                html += '</div>';
-            }
-            html += '</div></div></section>';
-
-            // Details Section
-            html += '<section class="details-section"><div class="container"><div class="details-grid">';
-
-            // Left Column
-            html += '<div>';
-
-            // Title Card
-            html += '<div class="info-card">';
-            html += '<h1 class="package-title">' + (pkg.destination || 'Travel Package') + '</h1>';
-            html += '<div class="package-location"><i class="fas fa-map-marker-alt"></i> ' + (pkg.country || 'Unknown') + '</div>';
-            html += '<p class="package-description">' + (pkg.description || 'Experience an unforgettable journey to ' + pkg.destination + '. This carefully curated package includes premium accommodation, guided tours, and authentic local experiences.') + '</p>';
-
-            // Stats
-            html += '<div class="stats-grid">';
-            html += '<div class="stat-box"><i class="far fa-clock"></i><span class="stat-value">' + duration + ' Days</span><span class="stat-label">Duration</span></div>';
-            html += '<div class="stat-box"><i class="fas fa-bed"></i><span class="stat-value">' + (pkg.availableRooms || 0) + '</span><span class="stat-label">Rooms</span></div>';
-            html += '<div class="stat-box"><i class="fas fa-star"></i><span class="stat-value">' + (avgRating > 0 ? avgRating.toFixed(1) : 'New') + '</span><span class="stat-label">Rating</span></div>';
-            html += '<div class="stat-box"><i class="fas fa-users"></i><span class="stat-value">' + reviews.length + '</span><span class="stat-label">Reviews</span></div>';
-            html += '</div></div>';
-
-            // Highlights
-            html += '<div class="info-card"><h2><i class="fas fa-check-circle"></i> Package Highlights</h2>';
-            html += '<div class="highlights-grid">';
-            html += '<div class="highlight-item"><i class="fas fa-calendar"></i><span>' + formatDate(pkg.startDate) + ' - ' + formatDate(pkg.endDate) + '</span></div>';
-            html += '<div class="highlight-item"><i class="fas fa-tag"></i><span>' + categoryName + ' Package</span></div>';
-            if (pkg.minimumAge || pkg.maximumAge) {
-                html += '<div class="highlight-item"><i class="fas fa-user-friends"></i><span>Ages ' + (pkg.minimumAge || 0) + ' - ' + (pkg.maximumAge || 99) + '</span></div>';
-            }
-            html += '<div class="highlight-item"><i class="fas fa-concierge-bell"></i><span>Premium Services</span></div>';
-            html += '</div></div>';
-
-            // Itinerary
-            if (pkg.itinerary) {
-                html += '<div class="info-card"><h2><i class="fas fa-route"></i> Itinerary</h2>';
-                html += '<p class="package-description">' + pkg.itinerary + '</p></div>';
-            }
-
-            // Reviews Section
-            html += '<div class="info-card reviews-section">';
-            html += '<div class="reviews-header">';
-            html += '<h2><i class="fas fa-star"></i> Reviews</h2>';
-            html += '<div><span class="rating-large">' + (avgRating > 0 ? avgRating.toFixed(1) : '—') + '</span>';
-            html += '<div class="rating-stars">' + renderStars(Math.round(avgRating), false) + '</div>';
-            html += '<span class="rating-count">' + reviews.length + ' reviews</span></div>';
-            html += '</div>';
-
-            if (reviews.length > 0) {
-                reviews.forEach(function(review) {
-                    html += '<div class="review-card">';
-                    html += '<div class="review-header"><span class="reviewer-name">' + (review.userName || 'Anonymous') + '</span>';
-                    html += '<span class="review-date">' + formatDate(review.createdAt) + '</span></div>';
-                    html += '<div class="review-rating">' + renderStars(review.rating, false) + '</div>';
-                    html += '<p class="review-comment">' + review.comment + '</p></div>';
-                });
-            } else {
-                html += '<p style="text-align: center; color: var(--color-text-muted); padding: 20px;">No reviews yet. Be the first to review!</p>';
-            }
-
-            // Write Review
-            if (token) {
-                html += '<div class="write-review">';
-                html += '<h4>Write a Review</h4>';
-                html += '<div class="star-rating">' + renderStars(0, true) + '</div>';
-                html += '<textarea id="reviewComment" class="review-textarea" placeholder="Share your experience..."></textarea>';
-                html += '<button class="btn btn-primary" onclick="submitReview()"><i class="fas fa-paper-plane"></i> Submit Review</button>';
-                html += '</div>';
-            }
-
-            html += '</div>'; // End reviews
-
-            html += '</div>'; // End left column
-
-            // Right Column - Booking Card
-            html += '<div>';
-            html += '<div class="booking-card">';
-            html += '<div class="price-section">';
-            if (hasDiscount) {
-                html += '<span class="price-original">$' + pkg.price.toLocaleString() + '</span> ';
-            }
-            html += '<span class="price-current">$' + displayPrice.toLocaleString() + '</span>';
-            html += '<span class="price-unit"> / person</span>';
-            html += '</div>';
-
-            html += '<div class="availability ' + availabilityClass + '"><i class="fas fa-' + availabilityIcon + '"></i> ' + availabilityText + '</div>';
-
-            html += '<div class="booking-details">';
-            html += '<div class="booking-row"><span class="label">Dates</span><span class="value">' + formatDate(pkg.startDate) + ' - ' + formatDate(pkg.endDate) + '</span></div>';
-            html += '<div class="booking-row"><span class="label">Duration</span><span class="value">' + duration + ' Days</span></div>';
-            html += '<div class="booking-row"><span class="label">Category</span><span class="value">' + categoryName + '</span></div>';
-            html += '</div>';
-
-            html += '<div class="booking-actions">';
-            if (pkg.availableRooms > 0) {
-                html += '<a href="/booking/create/' + pkg.packageId + '" class="btn btn-primary btn-block"><i class="fas fa-calendar-plus"></i> Book Now</a>';
-                html += '<button class="btn btn-success btn-block" onclick="addToCart(' + pkg.packageId + ')"><i class="fas fa-shopping-cart"></i> Add to Cart</button>';
-            } else {
-                html += '<button class="btn btn-outline btn-block" onclick="joinWaitlist(' + pkg.packageId + ')"><i class="fas fa-bell"></i> Join Waiting List</button>';
-            }
-            html += '<button class="btn btn-outline btn-block" onclick="toggleWishlist()"><i class="far fa-heart"></i> Add to Wishlist</button>';
-            html += '</div>';
-
-            html += '</div></div>'; // End booking card and right column
-
-            html += '</div></div></section>'; // End details grid and section
-
-            document.getElementById('mainContent').innerHTML = html;
-
-            // Check wishlist status
-            checkWishlistStatus();
-        }
-
-        function changeImage(index, src) {
-            document.getElementById('mainImg').src = src;
-            var thumbnails = document.querySelectorAll('.thumbnail');
-            thumbnails.forEach(function(thumb, i) {
-                thumb.classList.toggle('active', i === index);
-            });
-        }
-
-        async function checkWishlistStatus() {
-            var token = localStorage.getItem('token');
-            if (!token || !packageData) return;
+            if (!token) return;
 
             try {
-                var response = await fetch('/api/wishlist/check/' + packageData.packageId, {
+                var response = await fetch('/api/wishlist', {
                     headers: { 'Authorization': 'Bearer ' + token }
                 });
+
                 if (response.ok) {
                     var result = await response.json();
-                    if (result.inWishlist) {
-                        var btn = document.getElementById('wishlistBtn');
-                        var icon = btn.querySelector('i');
-                        btn.classList.add('active');
-                        icon.classList.remove('far');
-                        icon.classList.add('fas');
-                    }
-                }
-            } catch (e) { }
-        }
-
-        async function toggleWishlist() {
-            var token = localStorage.getItem('token');
-            if (!token) {
-                showToast('Please login to add to wishlist', 'error');
-                setTimeout(function() { window.location.href = '/account/login'; }, 1500);
-                return;
-            }
-
-            var btn = document.getElementById('wishlistBtn');
-            var icon = btn.querySelector('i');
-            var isInWishlist = btn.classList.contains('active');
-
-            try {
-                var response = await fetch('/api/wishlist/' + packageData.packageId, {
-                    method: isInWishlist ? 'DELETE' : 'POST',
-                    headers: {
-                        'Authorization': 'Bearer ' + token,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    if (isInWishlist) {
-                        btn.classList.remove('active');
-                        icon.classList.remove('fas');
-                        icon.classList.add('far');
-                        showToast('Removed from wishlist');
-                    } else {
-                        btn.classList.add('active');
-                        icon.classList.remove('far');
-                        icon.classList.add('fas');
-                        showToast('Added to wishlist!');
-                    }
-                } else {
-                    var error = await response.json();
-                    if (error.message && error.message.toLowerCase().indexOf('already') >= 0) {
-                        // Try DELETE
-                        var delResponse = await fetch('/api/wishlist/' + packageData.packageId, {
-                            method: 'DELETE',
-                            headers: { 'Authorization': 'Bearer ' + token }
-                        });
-                        if (delResponse.ok) {
-                            btn.classList.remove('active');
-                            icon.classList.remove('fas');
-                            icon.classList.add('far');
-                            showToast('Removed from wishlist');
-                        }
-                    } else {
-                        showToast(error.message || 'Failed to update wishlist', 'error');
-                    }
+                    var wishlist = (result.data || result || []).map(function(w) { return w.packageId; });
+                    isWishlisted = wishlist.includes(packageId);
                 }
             } catch (error) {
                 console.error('Wishlist error:', error);
-                showToast('Error updating wishlist', 'error');
             }
         }
 
-        // CORRECT ENDPOINT: /api/cart/add (not /api/cart)
-        async function addToCart(packageId) {
+        // Render package
+        function renderPackage() {
+            var pkg = packageData;
+            var duration = calculateDuration(pkg.startDate, pkg.endDate);
+            var hasDiscount = pkg.discountedPrice && pkg.discountedPrice < pkg.price;
+            var currentPrice = pkg.discountedPrice || pkg.price;
+            var isSoldOut = pkg.availableRooms <= 0;
+            var imageUrl = pkg.imageUrl || pkg.images?.[0]?.imageUrl || 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=1200&q=80';
+
+            var html = '';
+
+            // Hero Section
+            html += '<section class="hero">';
+            html += '<img src="' + imageUrl + '" alt="' + (pkg.destination || 'Package') + '" class="hero-image" onerror="this.src=\'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=1200&q=80\'">';
+            html += '<div class="hero-overlay"></div>';
+            html += '<div class="hero-content">';
+            html += '<div class="hero-inner">';
+            html += '<div class="breadcrumb">';
+            html += '<a href="/">Home</a>';
+            html += '<i class="fas fa-chevron-right"></i>';
+            html += '<a href="/packages">Packages</a>';
+            html += '<i class="fas fa-chevron-right"></i>';
+            html += '<span>' + (pkg.destination || 'Package') + '</span>';
+            html += '</div>';
+            html += '<h1 class="hero-title">' + (pkg.destination || 'Amazing Destination') + '</h1>';
+            html += '<div class="hero-location"><i class="fas fa-map-marker-alt"></i> ' + (pkg.country || 'Worldwide') + '</div>';
+            html += '</div>';
+            html += '</div>';
+            html += '</section>';
+
+            // Details Section
+            html += '<section class="details-section">';
+            html += '<div class="details-container">';
+
+            // Left Column
+            html += '<div class="details-main">';
+
+            // Description Card
+            html += '<div class="card" style="margin-bottom: var(--space-5);">';
+            html += '<div class="card-header"><i class="fas fa-info-circle"></i><h3>About This Trip</h3></div>';
+            html += '<div class="card-body">';
+            html += '<p class="description">' + (pkg.description || 'Experience an unforgettable journey to this amazing destination.') + '</p>';
+
+            // Features Grid
+            html += '<div class="features-grid">';
+            html += '<div class="feature-item"><div class="feature-icon"><i class="far fa-calendar"></i></div><div><div class="feature-label">Duration</div><div class="feature-value">' + duration + ' Days</div></div></div>';
+            html += '<div class="feature-item"><div class="feature-icon"><i class="fas fa-tag"></i></div><div><div class="feature-label">Category</div><div class="feature-value">' + getPackageTypeName(pkg.packageType) + '</div></div></div>';
+            html += '<div class="feature-item"><div class="feature-icon"><i class="fas fa-bed"></i></div><div><div class="feature-label">Available Rooms</div><div class="feature-value">' + (pkg.availableRooms || 0) + '</div></div></div>';
+            html += '<div class="feature-item"><div class="feature-icon"><i class="fas fa-users"></i></div><div><div class="feature-label">Age Limit</div><div class="feature-value">' + (pkg.minimumAge || 0) + '+ years</div></div></div>';
+            html += '</div>';
+            html += '</div>';
+            html += '</div>';
+
+            // Itinerary Card (if available)
+            if (pkg.itinerary) {
+                html += '<div class="card" style="margin-bottom: var(--space-5);">';
+                html += '<div class="card-header"><i class="fas fa-route"></i><h3>Itinerary</h3></div>';
+                html += '<div class="card-body">';
+                html += '<p class="description">' + pkg.itinerary + '</p>';
+                html += '</div>';
+                html += '</div>';
+            }
+
+            // Gallery Card (if images available)
+            if (pkg.images && pkg.images.length > 0) {
+                html += '<div class="card" style="margin-bottom: var(--space-5);">';
+                html += '<div class="card-header"><i class="fas fa-images"></i><h3>Gallery</h3></div>';
+                html += '<div class="card-body">';
+                html += '<div class="gallery-grid">';
+                for (var i = 0; i < Math.min(pkg.images.length, 8); i++) {
+                    html += '<div class="gallery-item"><img src="' + pkg.images[i].imageUrl + '" alt="Gallery ' + (i+1) + '"></div>';
+                }
+                html += '</div>';
+                html += '</div>';
+                html += '</div>';
+            }
+
+            // Reviews Card
+            html += '<div class="card" id="reviews">';
+            html += '<div class="card-header"><i class="fas fa-star"></i><h3>Reviews</h3></div>';
+            html += '<div class="card-body">';
+
+            if (pkg.reviews && pkg.reviews.length > 0) {
+                var avgRating = pkg.reviews.reduce(function(sum, r) { return sum + r.rating; }, 0) / pkg.reviews.length;
+
+                html += '<div class="reviews-header">';
+                html += '<div class="rating-summary">';
+                html += '<span class="rating-big">' + avgRating.toFixed(1) + '</span>';
+                html += '<div>';
+                html += '<div class="rating-stars">';
+                for (var s = 1; s <= 5; s++) {
+                    html += '<i class="' + (s <= Math.round(avgRating) ? 'fas' : 'far') + ' fa-star"></i>';
+                }
+                html += '</div>';
+                html += '<div class="rating-count">' + pkg.reviews.length + ' review' + (pkg.reviews.length > 1 ? 's' : '') + '</div>';
+                html += '</div>';
+                html += '</div>';
+                html += '</div>';
+
+                for (var r = 0; r < pkg.reviews.length; r++) {
+                    var review = pkg.reviews[r];
+                    html += '<div class="review-item">';
+                    html += '<div class="review-header">';
+                    html += '<div class="review-avatar">' + (review.userName ? review.userName.charAt(0).toUpperCase() : 'U') + '</div>';
+                    html += '<div><div class="review-author">' + (review.userName || 'Anonymous') + '</div><div class="review-date">' + formatDate(review.createdAt) + '</div></div>';
+                    html += '<div class="review-rating">';
+                    for (var rs = 1; rs <= 5; rs++) {
+                        html += '<i class="' + (rs <= review.rating ? 'fas' : 'far') + ' fa-star"></i>';
+                    }
+                    html += '</div>';
+                    html += '</div>';
+                    html += '<p class="review-text">' + (review.comment || '') + '</p>';
+                    html += '</div>';
+                }
+            } else {
+                html += '<div class="empty-reviews">';
+                html += '<i class="far fa-comment-dots"></i>';
+                html += '<p>No reviews yet. Be the first to review!</p>';
+                html += '</div>';
+            }
+
+            html += '</div>';
+            html += '</div>';
+
+            html += '</div>'; // End details-main
+
+            // Right Column - Booking Card
+            html += '<div>';
+            html += '<div class="card booking-card">';
+            html += '<div class="card-body">';
+
+            // Price Display
+            html += '<div class="price-display">';
+            if (hasDiscount) {
+                html += '<span class="price-original">$' + pkg.price.toLocaleString() + '</span>';
+            }
+            html += '<span class="price-current">$' + currentPrice.toLocaleString() + '</span>';
+            html += '<span class="price-period"> / person</span>';
+            html += '</div>';
+
+            // Sold Out Badge
+            if (isSoldOut) {
+                html += '<div class="sold-out-badge"><i class="fas fa-times-circle"></i> Sold Out</div>';
+            }
+
+            // Booking Details
+            html += '<div class="booking-details">';
+            html += '<div class="booking-detail-row"><span class="booking-detail-label">Dates</span><span class="booking-detail-value">' + formatDate(pkg.startDate) + ' - ' + formatDate(pkg.endDate) + '</span></div>';
+            html += '<div class="booking-detail-row"><span class="booking-detail-label">Duration</span><span class="booking-detail-value">' + duration + ' Days</span></div>';
+            html += '<div class="booking-detail-row"><span class="booking-detail-label">Category</span><span class="booking-detail-value">' + getPackageTypeName(pkg.packageType) + '</span></div>';
+            html += '</div>';
+
+            // Booking Actions
+            html += '<div class="booking-actions">';
+
+            if (isSoldOut) {
+                html += '<button class="btn btn-primary btn-lg btn-block" onclick="joinWaitingList()"><i class="fas fa-bell"></i> Join Waiting List</button>';
+            } else {
+                html += '<a href="/booking/buynow/' + packageId + '" class="btn btn-success btn-lg btn-block"><i class="fas fa-bolt"></i> Book Now</a>';
+                html += '<a href="/booking/create/' + packageId + '" class="btn btn-outline btn-lg btn-block"><i class="fas fa-calendar-plus"></i> Reserve</a>';
+            }
+
+            html += '<button class="btn btn-outline btn-block" onclick="toggleWishlist()">';
+            html += '<i class="' + (isWishlisted ? 'fas' : 'far') + ' fa-heart"></i> ' + (isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist');
+            html += '</button>';
+
+            html += '</div>';
+
+            html += '</div>';
+            html += '</div>';
+            html += '</div>'; // End right column
+
+            html += '</div>'; // End details-container
+            html += '</section>';
+
+            document.getElementById('mainContent').innerHTML = html;
+        }
+
+        // Join Waiting List - FIXED: Using correct API endpoint
+        async function joinWaitingList() {
             var token = localStorage.getItem('token');
+
             if (!token) {
-                showToast('Please login to add to cart', 'error');
-                setTimeout(function() { window.location.href = '/account/login'; }, 1500);
+                showToast('Please login to join the waiting list', 'error');
+                setTimeout(function() {
+                    window.location.href = '/account/login?returnUrl=/packages/' + packageId;
+                }, 1500);
                 return;
             }
 
             try {
-                var response = await fetch('/api/cart/add', {
+                // CORRECT API ENDPOINT: POST /api/booking/waiting-list with JSON body
+                var response = await fetch('/api/booking/waiting-list', {
                     method: 'POST',
                     headers: {
                         'Authorization': 'Bearer ' + token,
@@ -1125,99 +1076,58 @@
                     },
                     body: JSON.stringify({
                         packageId: packageId,
-                        quantity: 1,
-                        numberOfGuests: 1
+                        numberOfRooms: 1
                     })
                 });
 
-                if (response.ok) {
-                    showToast('Added to cart!');
+                var result = await response.json();
+
+                if (response.ok && result.success) {
+                    showToast(result.message || 'Added to waiting list!', 'success');
                 } else {
-                    var error = await response.json();
-                    showToast(error.message || 'Failed to add to cart', 'error');
+                    showToast(result.message || 'Failed to join waiting list', 'error');
                 }
             } catch (error) {
-                console.error('Cart error:', error);
-                showToast('Error adding to cart', 'error');
-            }
-        }
-
-        async function joinWaitlist(packageId) {
-            var token = localStorage.getItem('token');
-            if (!token) {
-                showToast('Please login to join waitlist', 'error');
-                setTimeout(function() { window.location.href = '/account/login'; }, 1500);
-                return;
-            }
-
-            try {
-                var response = await fetch('/api/waitlist/' + packageId, {
-                    method: 'POST',
-                    headers: { 'Authorization': 'Bearer ' + token }
-                });
-
-                if (response.ok) {
-                    showToast('Added to waiting list! We\'ll notify you when available.');
-                } else {
-                    var error = await response.json();
-                    showToast(error.message || 'Failed to join waitlist', 'error');
-                }
-            } catch (error) {
+                console.error('Error:', error);
                 showToast('Error joining waitlist', 'error');
             }
         }
 
-        // CORRECT ENDPOINT: /api/review/package (singular)
-        async function submitReview() {
+        // Toggle Wishlist
+        async function toggleWishlist() {
             var token = localStorage.getItem('token');
+
             if (!token) {
-                showToast('Please login to submit a review', 'error');
-                return;
-            }
-
-            if (selectedRating === 0) {
-                showToast('Please select a rating', 'error');
-                return;
-            }
-
-            var comment = document.getElementById('reviewComment').value.trim();
-            if (!comment) {
-                showToast('Please write a comment', 'error');
+                showToast('Please login to manage wishlist', 'error');
+                setTimeout(function() {
+                    window.location.href = '/account/login?returnUrl=/packages/' + packageId;
+                }, 1500);
                 return;
             }
 
             try {
-                var response = await fetch('/api/review/package', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': 'Bearer ' + token,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        packageId: packageData.packageId,
-                        rating: selectedRating,
-                        comment: comment
-                    })
+                var response = await fetch('/api/wishlist/' + packageId, {
+                    method: isWishlisted ? 'DELETE' : 'POST',
+                    headers: { 'Authorization': 'Bearer ' + token }
                 });
 
                 if (response.ok) {
-                    showToast('Review submitted successfully!');
-                    document.getElementById('reviewComment').value = '';
-                    selectedRating = 0;
-                    setTimeout(function() { location.reload(); }, 1500);
+                    isWishlisted = !isWishlisted;
+                    showToast(isWishlisted ? 'Added to wishlist' : 'Removed from wishlist', 'success');
+                    renderPackage(); // Re-render to update button
                 } else {
-                    var error = await response.json();
-                    showToast(error.message || 'Failed to submit review', 'error');
+                    var result = await response.json();
+                    showToast(result.message || 'Failed to update wishlist', 'error');
                 }
             } catch (error) {
-                console.error('Review error:', error);
-                showToast('Error submitting review', 'error');
+                console.error('Error:', error);
+                showToast('Error updating wishlist', 'error');
             }
         }
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            updateNav();
+            checkAuth();
             loadPackage();
         });
     </script>

@@ -25,6 +25,8 @@
             --color-gold: #d4a853;
             --color-gold-dark: #b8943f;
             --color-gold-muted: rgba(212, 168, 83, 0.15);
+            --color-success: #3fb950;
+            --color-error: #f85149;
             --font-display: 'Cormorant Garamond', serif;
             --font-body: 'Outfit', sans-serif;
             --space-1: 4px;
@@ -55,6 +57,11 @@
             line-height: 1.6;
         }
 
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
         /* Header */
         .header {
             position: fixed;
@@ -79,39 +86,35 @@
             display: flex;
             align-items: center;
             gap: var(--space-3);
-            text-decoration: none;
         }
 
         .logo-icon {
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
             border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.25rem;
             color: var(--color-midnight);
+            font-size: 1.25rem;
         }
 
         .logo-text {
             font-family: var(--font-display);
-            font-size: 1.75rem;
-            font-weight: 500;
-            color: var(--color-white);
-            letter-spacing: 0.1em;
+            font-size: 1.5rem;
+            font-weight: 600;
         }
 
-        .nav {
+        .nav-links {
             display: flex;
             align-items: center;
-            gap: var(--space-6);
+            gap: var(--space-5);
         }
 
         .nav-link {
-            color: var(--color-mist);
-            text-decoration: none;
-            font-size: 0.9375rem;
+            color: var(--color-silver);
+            font-weight: 500;
             transition: color var(--transition-fast);
         }
 
@@ -119,36 +122,18 @@
                 color: var(--color-gold);
             }
 
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: var(--space-4);
-        }
-
         .btn {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: var(--space-2);
             padding: var(--space-3) var(--space-5);
-            font-family: var(--font-body);
-            font-size: 0.9375rem;
-            font-weight: 500;
-            text-decoration: none;
             border-radius: var(--radius-md);
-            border: none;
+            font-weight: 500;
             cursor: pointer;
             transition: all var(--transition-fast);
+            border: none;
+            font-size: 0.9375rem;
         }
-
-        .btn-ghost {
-            background: transparent;
-            color: var(--color-mist);
-        }
-
-            .btn-ghost:hover {
-                color: var(--color-gold);
-            }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
@@ -157,17 +142,7 @@
 
             .btn-primary:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 4px 20px rgba(212, 168, 83, 0.3);
-            }
-
-        .btn-success {
-            background: #3fb950;
-            color: var(--color-white);
-        }
-
-            .btn-success:hover {
-                background: #2ea043;
-                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(212, 168, 83, 0.4);
             }
 
         .btn-outline {
@@ -181,85 +156,82 @@
                 color: var(--color-gold);
             }
 
+        .btn-success {
+            background: linear-gradient(135deg, var(--color-success), #2ea043);
+            color: var(--color-white);
+        }
+
         .btn-sm {
-            padding: var(--space-2) var(--space-3);
+            padding: var(--space-2) var(--space-4);
             font-size: 0.8125rem;
         }
 
-        /* Page Content */
-        .page-content {
-            padding-top: 80px;
-            min-height: 100vh;
+        /* Hero */
+        .hero {
+            padding: 140px var(--space-6) var(--space-7);
+            background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-midnight) 100%);
+            text-align: center;
+        }
+
+            .hero h1 {
+                font-family: var(--font-display);
+                font-size: 3rem;
+                margin-bottom: var(--space-3);
+            }
+
+            .hero p {
+                color: var(--color-silver);
+                font-size: 1.125rem;
+            }
+
+            .hero .packages-count {
+                color: var(--color-gold);
+                font-weight: 600;
+            }
+
+        /* Filters */
+        .filters-section {
+            background: var(--color-navy);
+            padding: var(--space-5) var(--space-6);
+            border-bottom: 1px solid var(--color-slate);
+            position: sticky;
+            top: 72px;
+            z-index: 100;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 var(--space-6);
-        }
-
-        /* Hero */
-        .page-hero {
-            padding: var(--space-7) 0;
-            text-align: center;
-            border-bottom: 1px solid var(--color-slate);
-        }
-
-            .page-hero h1 {
-                font-family: var(--font-display);
-                font-size: 3rem;
-                font-weight: 500;
-                margin-bottom: var(--space-3);
-            }
-
-            .page-hero p {
-                color: var(--color-silver);
-                max-width: 600px;
-                margin: 0 auto;
-            }
-
-            .page-hero .packages-count {
-                display: inline-flex;
-                align-items: center;
-                gap: var(--space-2);
-                background: var(--color-gold-muted);
-                color: var(--color-gold);
-                padding: var(--space-2) var(--space-4);
-                border-radius: var(--radius-full);
-                font-size: 0.875rem;
-                font-weight: 500;
-                margin-top: var(--space-4);
-            }
-
-        /* Filters */
-        .filters-section {
-            padding: var(--space-5) 0;
-            border-bottom: 1px solid var(--color-slate);
         }
 
         .filters-row {
             display: flex;
-            flex-wrap: wrap;
             gap: var(--space-4);
             align-items: center;
-            justify-content: space-between;
+            flex-wrap: wrap;
         }
 
         .search-box {
             flex: 1;
-            min-width: 300px;
-            max-width: 400px;
+            min-width: 250px;
             position: relative;
         }
+
+            .search-box i {
+                position: absolute;
+                left: var(--space-4);
+                top: 50%;
+                transform: translateY(-50%);
+                color: var(--color-silver);
+            }
 
             .search-box input {
                 width: 100%;
                 padding: var(--space-3) var(--space-4) var(--space-3) 44px;
-                background: var(--color-navy);
-                border: 1px solid var(--color-slate);
+                background: var(--color-slate);
+                border: 1px solid var(--color-charcoal);
                 border-radius: var(--radius-md);
                 color: var(--color-white);
-                font-family: var(--font-body);
                 font-size: 0.9375rem;
             }
 
@@ -268,29 +240,24 @@
                     border-color: var(--color-gold);
                 }
 
-            .search-box i {
-                position: absolute;
-                left: var(--space-4);
-                top: 50%;
-                transform: translateY(-50%);
-                color: var(--color-steel);
-            }
-
         .filter-group {
             display: flex;
             gap: var(--space-3);
-            flex-wrap: wrap;
         }
 
         .filter-select {
-            padding: var(--space-3) var(--space-4);
-            background: var(--color-navy);
-            border: 1px solid var(--color-slate);
+            padding: var(--space-3) var(--space-5) var(--space-3) var(--space-4);
+            background: var(--color-slate);
+            border: 1px solid var(--color-charcoal);
             border-radius: var(--radius-md);
-            color: var(--color-mist);
-            font-family: var(--font-body);
-            font-size: 0.875rem;
+            color: var(--color-white);
+            font-size: 0.9375rem;
             cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238b949e' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            min-width: 160px;
         }
 
             .filter-select:focus {
@@ -300,15 +267,16 @@
 
         /* Packages Grid */
         .packages-section {
-            padding: var(--space-6) 0;
+            padding: var(--space-7) var(--space-6);
         }
 
         .packages-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
             gap: var(--space-5);
         }
 
+        /* Package Card */
         .package-card {
             background: var(--color-navy);
             border: 1px solid var(--color-slate);
@@ -319,9 +287,9 @@
         }
 
             .package-card:hover {
-                transform: translateY(-8px);
-                border-color: var(--color-gold);
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+                transform: translateY(-4px);
+                border-color: var(--color-gold-dark);
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
             }
 
         .package-image {
@@ -343,20 +311,21 @@
 
         .package-badge {
             position: absolute;
-            top: var(--space-4);
-            left: var(--space-4);
-            background: var(--color-gold);
-            color: var(--color-midnight);
+            top: var(--space-3);
+            left: var(--space-3);
             padding: var(--space-1) var(--space-3);
-            border-radius: var(--radius-full);
+            background: var(--color-error);
+            color: var(--color-white);
             font-size: 0.75rem;
             font-weight: 600;
+            border-radius: var(--radius-sm);
+            text-transform: uppercase;
         }
 
         .package-wishlist {
             position: absolute;
-            top: var(--space-4);
-            right: var(--space-4);
+            top: var(--space-3);
+            right: var(--space-3);
             width: 36px;
             height: 36px;
             background: rgba(0, 0, 0, 0.5);
@@ -546,6 +515,11 @@
                 color: var(--color-midnight);
             }
 
+            .page-btn:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
         /* Toast */
         .toast {
             position: fixed;
@@ -553,8 +527,8 @@
             right: var(--space-5);
             background: var(--color-navy);
             border: 1px solid var(--color-slate);
-            border-radius: var(--radius-md);
             padding: var(--space-4) var(--space-5);
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             gap: var(--space-3);
@@ -569,23 +543,42 @@
                 opacity: 1;
             }
 
-            .toast.success i {
-                color: #3fb950;
+            .toast.success {
+                border-color: var(--color-success);
             }
 
-            .toast.error i {
-                color: #f85149;
+                .toast.success i {
+                    color: var(--color-success);
+                }
+
+            .toast.error {
+                border-color: var(--color-error);
             }
 
-        @@media (max-width: 1024px) {
-            .nav {
+                .toast.error i {
+                    color: var(--color-error);
+                }
+
+        /* Responsive */
+        @@media (max-width: 768px) {
+            .header {
+                padding: var(--space-3) var(--space-4);
+            }
+
+            .nav-links {
                 display: none;
             }
-        }
 
-        @@media (max-width: 768px) {
-            .page-hero h1 {
-                font-size: 2rem;
+            .hero {
+                padding: 120px var(--space-4) var(--space-5);
+            }
+
+                .hero h1 {
+                    font-size: 2rem;
+                }
+
+            .filters-section {
+                padding: var(--space-4);
             }
 
             .filters-row {
@@ -593,7 +586,19 @@
             }
 
             .search-box {
-                max-width: 100%;
+                min-width: 100%;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .filter-select {
+                flex: 1;
+            }
+
+            .packages-section {
+                padding: var(--space-5) var(--space-4);
             }
 
             .packages-grid {
@@ -603,34 +608,34 @@
     </style>
 </head>
 <body>
+    <!-- Header -->
     <header class="header">
         <div class="header-content">
             <a href="/" class="logo">
-                <div class="logo-icon"><i class="fas fa-paper-plane"></i></div>
+                <div class="logo-icon"><i class="fas fa-compass"></i></div>
                 <span class="logo-text">TRAVEL</span>
             </a>
-            <nav class="nav">
+            <nav class="nav-links">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/packages" class="nav-link active">Packages</a>
-                <a href="/home/privacy" class="nav-link">About</a>
+                <a href="/destinations" class="nav-link">Destinations</a>
+                <a href="/about" class="nav-link">About</a>
+                <a href="/account/login" class="btn btn-outline" id="loginBtn">Sign In</a>
+                <a href="/account/dashboard" class="btn btn-primary" id="dashboardBtn" style="display: none;">
+                    <i class="fas fa-user"></i> Dashboard
+                </a>
             </nav>
-            <div class="nav-actions">
-                <a href="/account/login" class="btn btn-ghost" id="loginBtn">Sign In</a>
-                <a href="/account/dashboard" class="btn btn-primary" id="dashboardBtn" style="display: none;"><i class="fas fa-user"></i> Dashboard</a>
-                <a href="/cart" class="btn btn-ghost" id="cartBtn"><i class="fas fa-shopping-cart"></i></a>
-            </div>
         </div>
     </header>
 
-    <main class="page-content">
-        <section class="page-hero">
-            <div class="container">
-                <h1>Explore Our Packages</h1>
-                <p>Discover handpicked travel experiences tailored for every type of adventurer</p>
-                <div class="packages-count"><i class="fas fa-suitcase"></i> <span id="packagesCount">0</span> packages available</div>
-            </div>
+    <main>
+        <!-- Hero -->
+        <section class="hero">
+            <h1>Explore Our Packages</h1>
+            <p>Discover <span class="packages-count" id="packagesCount">0</span> amazing travel experiences</p>
         </section>
 
+        <!-- Filters -->
         <section class="filters-section">
             <div class="container">
                 <div class="filters-row">
@@ -639,13 +644,19 @@
                         <input type="text" id="searchInput" placeholder="Search destinations, packages...">
                     </div>
                     <div class="filter-group">
+                        <!-- FIXED: Using numeric values matching PackageType enum -->
                         <select class="filter-select" id="categoryFilter">
                             <option value="">All Categories</option>
-                            <option value="Adventure">Adventure</option>
-                            <option value="Family">Family</option>
-                            <option value="Honeymoon">Honeymoon</option>
-                            <option value="Luxury">Luxury</option>
-                            <option value="Cruise">Cruise</option>
+                            <option value="0">Adventure</option>
+                            <option value="1">Beach</option>
+                            <option value="2">Cultural</option>
+                            <option value="3">Cruise</option>
+                            <option value="4">Safari</option>
+                            <option value="5">Ski</option>
+                            <option value="6">City Break</option>
+                            <option value="7">Honeymoon</option>
+                            <option value="8">Family</option>
+                            <option value="9">Luxury</option>
                         </select>
                         <select class="filter-select" id="sortFilter">
                             <option value="">Sort By</option>
@@ -659,6 +670,7 @@
             </div>
         </section>
 
+        <!-- Packages Grid -->
         <section class="packages-section">
             <div class="container">
                 <div class="packages-grid" id="packagesGrid">
@@ -669,13 +681,20 @@
         </section>
     </main>
 
-    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">Success!</span></div>
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Success!</span>
+    </div>
 
     <script>
         var allPackages = [];
         var currentPage = 1;
         var itemsPerPage = 9;
         var wishlist = [];
+
+        // Package type names for display
+        var packageTypeNames = ['Adventure', 'Beach', 'Cultural', 'Cruise', 'Safari', 'Ski', 'City Break', 'Honeymoon', 'Family', 'Luxury'];
 
         function checkAuth() {
             var token = localStorage.getItem('token');
@@ -726,18 +745,30 @@
             var sort = document.getElementById('sortFilter').value;
 
             var filtered = allPackages.filter(function(p) {
+                // Search filter
                 var matchesSearch = !search ||
                     (p.destination && p.destination.toLowerCase().includes(search)) ||
                     (p.country && p.country.toLowerCase().includes(search)) ||
                     (p.description && p.description.toLowerCase().includes(search));
-                var matchesCategory = !category || p.packageType === category;
+
+                // FIXED: Category filter - compare as numbers
+                // category is a string from dropdown ("0", "1", etc.)
+                // p.packageType is a number from API (0, 1, etc.)
+                var matchesCategory = !category || p.packageType === parseInt(category);
+
                 return matchesSearch && matchesCategory;
             });
 
-            if (sort === 'price-asc') filtered.sort(function(a, b) { return (a.discountedPrice || a.price) - (b.discountedPrice || b.price); });
-            else if (sort === 'price-desc') filtered.sort(function(a, b) { return (b.discountedPrice || b.price) - (a.discountedPrice || a.price); });
-            else if (sort === 'popular') filtered.sort(function(a, b) { return (b.bookingsCount || 0) - (a.bookingsCount || 0); });
-            else if (sort === 'date') filtered.sort(function(a, b) { return new Date(a.startDate) - new Date(b.startDate); });
+            // Sorting
+            if (sort === 'price-asc') {
+                filtered.sort(function(a, b) { return (a.discountedPrice || a.price) - (b.discountedPrice || b.price); });
+            } else if (sort === 'price-desc') {
+                filtered.sort(function(a, b) { return (b.discountedPrice || b.price) - (a.discountedPrice || a.price); });
+            } else if (sort === 'popular') {
+                filtered.sort(function(a, b) { return (b.bookingCount || 0) - (a.bookingCount || 0); });
+            } else if (sort === 'date') {
+                filtered.sort(function(a, b) { return new Date(a.startDate) - new Date(b.startDate); });
+            }
 
             return filtered;
         }
@@ -756,12 +787,13 @@
             }
 
             var html = pagePackages.map(function(pkg) {
-                var image = pkg.imageUrl || pkg.images?.[0]?.imageUrl || 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&q=80';
+                var image = pkg.imageUrl || (pkg.images && pkg.images[0] ? pkg.images[0].imageUrl : null) || 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&q=80';
                 var price = pkg.discountedPrice || pkg.price || 0;
                 var hasDiscount = pkg.discountedPrice && pkg.discountedPrice < pkg.price;
                 var rating = pkg.averageRating || 4.5;
                 var isWishlisted = wishlist.includes(pkg.packageId);
                 var startDate = pkg.startDate ? new Date(pkg.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+                var typeName = packageTypeNames[pkg.packageType] || 'Travel';
 
                 var actionsHtml = '<div class="package-actions">';
                 if (pkg.availableRooms > 0) {
@@ -776,10 +808,12 @@
                     '<div class="package-image">' +
                         '<img src="' + image + '" alt="' + (pkg.destination || 'Destination') + '" onerror="this.src=\'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&q=80\'">' +
                         (hasDiscount ? '<span class="package-badge">Sale</span>' : '') +
-                        '<button class="package-wishlist' + (isWishlisted ? ' active' : '') + '" onclick="toggleWishlist(event, ' + pkg.packageId + ')"><i class="' + (isWishlisted ? 'fas' : 'far') + ' fa-heart"></i></button>' +
+                        '<button class="package-wishlist' + (isWishlisted ? ' active' : '') + '" onclick="toggleWishlist(event, ' + pkg.packageId + ')">' +
+                            '<i class="' + (isWishlisted ? 'fas' : 'far') + ' fa-heart"></i>' +
+                        '</button>' +
                     '</div>' +
                     '<div class="package-content">' +
-                        '<div class="package-destination"><i class="fas fa-map-marker-alt"></i> ' + (pkg.country || 'Worldwide') + '</div>' +
+                        '<div class="package-destination"><i class="fas fa-map-marker-alt"></i> ' + (pkg.country || 'Worldwide') + ' • ' + typeName + '</div>' +
                         '<h3 class="package-title">' + (pkg.destination || 'Amazing Destination') + '</h3>' +
                         '<div class="package-meta">' +
                             '<span><i class="far fa-calendar"></i> ' + (startDate || 'Flexible') + '</span>' +
@@ -788,7 +822,8 @@
                         '<div class="package-footer">' +
                             '<div class="package-price">' +
                                 (hasDiscount ? '<span class="original">$' + pkg.price.toLocaleString() + '</span> ' : '') +
-                                '<span class="amount">$' + price.toLocaleString() + '</span><span class="period">/person</span>' +
+                                '<span class="amount">$' + price.toLocaleString() + '</span>' +
+                                '<span class="period">/person</span>' +
                             '</div>' +
                             '<div class="package-rating"><i class="fas fa-star"></i><span>' + rating.toFixed(1) + '</span></div>' +
                         '</div>' +
@@ -802,7 +837,7 @@
             // Card click handlers
             document.querySelectorAll('.package-card').forEach(function(card) {
                 card.addEventListener('click', function(e) {
-                    if (!e.target.closest('.package-wishlist')) {
+                    if (!e.target.closest('.package-wishlist') && !e.target.closest('.btn')) {
                         window.location.href = '/packages/' + this.dataset.id;
                     }
                 });
@@ -832,7 +867,11 @@
         async function toggleWishlist(event, packageId) {
             event.stopPropagation();
             var token = localStorage.getItem('token');
-            if (!token) { window.location.href = '/account/login'; return; }
+            if (!token) {
+                showToast('Please login to manage wishlist', 'error');
+                setTimeout(function() { window.location.href = '/account/login'; }, 1500);
+                return;
+            }
 
             var btn = event.target.closest('.package-wishlist');
             var isWishlisted = wishlist.includes(packageId);
@@ -855,6 +894,9 @@
                         btn.innerHTML = '<i class="fas fa-heart"></i>';
                         showToast('Added to wishlist', 'success');
                     }
+                } else {
+                    var result = await response.json();
+                    showToast(result.message || 'Failed to update wishlist', 'error');
                 }
             } catch (error) {
                 showToast('Error updating wishlist', 'error');
@@ -862,9 +904,20 @@
         }
 
         // Filter events
-        document.getElementById('searchInput').addEventListener('input', function() { currentPage = 1; renderPackages(); });
-        document.getElementById('categoryFilter').addEventListener('change', function() { currentPage = 1; renderPackages(); });
-        document.getElementById('sortFilter').addEventListener('change', function() { currentPage = 1; renderPackages(); });
+        document.getElementById('searchInput').addEventListener('input', function() {
+            currentPage = 1;
+            renderPackages();
+        });
+
+        document.getElementById('categoryFilter').addEventListener('change', function() {
+            currentPage = 1;
+            renderPackages();
+        });
+
+        document.getElementById('sortFilter').addEventListener('change', function() {
+            currentPage = 1;
+            renderPackages();
+        });
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {

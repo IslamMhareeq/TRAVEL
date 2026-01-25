@@ -24,6 +24,9 @@ namespace TRAVEL.Services
         Task<DashboardStats> GetDashboardStatsAsync();
         Task<List<TravelPackage>> GetDiscountedPackagesAsync();
         Task<List<TravelPackage>> GetPopularPackagesAsync(int count = 10);
+
+        // NEW: Method to check if rooms were increased
+        Task<(TravelPackage Package, bool RoomsIncreased, int PreviousRooms)> UpdatePackageWithRoomTrackingAsync(int packageId, TravelPackageDto dto);
     }
 
     public class TravelPackageService : ITravelPackageService
@@ -48,8 +51,6 @@ namespace TRAVEL.Services
 
         /// <summary>
         /// Gets active packages - shows packages that are active and haven't ended yet
-        /// FIXED: Changed from StartDate > UtcNow to EndDate >= UtcNow.Date
-        /// This allows packages to show even if they've already started
         /// </summary>
         public async Task<List<TravelPackage>> GetActivePackagesAsync()
         {
@@ -58,7 +59,7 @@ namespace TRAVEL.Services
             return await _context.TravelPackages
                 .Include(p => p.Images)
                 .Include(p => p.Reviews)
-                .Where(p => p.IsActive && p.EndDate >= today)  // FIXED: Show packages that haven't ended
+                .Where(p => p.IsActive && p.EndDate >= today)
                 .OrderBy(p => p.StartDate)
                 .ToListAsync();
         }
@@ -126,15 +127,23 @@ namespace TRAVEL.Services
             return package;
         }
 
-        public async Task<TravelPackage> UpdatePackageAsync(int packageId, TravelPackageDto dto)
+        /// <summary>
+        /// Updates package and tracks if rooms were increased (for waiting list processing)
+        /// </summary>
+        public async Task<(TravelPackage Package, bool RoomsIncreased, int PreviousRooms)> UpdatePackageWithRoomTrackingAsync(int packageId, TravelPackageDto dto)
         {
             var package = await _context.TravelPackages
                 .Include(p => p.Images)
                 .FirstOrDefaultAsync(p => p.PackageId == packageId);
 
             if (package == null)
-                return null;
+                return (null, false, 0);
 
+            // Track previous room count
+            int previousRooms = package.AvailableRooms;
+            bool roomsIncreased = dto.AvailableRooms > previousRooms;
+
+            // Update package fields
             package.Destination = dto.Destination;
             package.Country = dto.Country;
             package.StartDate = DateTime.SpecifyKind(dto.StartDate, DateTimeKind.Utc);
@@ -168,8 +177,19 @@ namespace TRAVEL.Services
 
             await _context.SaveChangesAsync();
 
+            if (roomsIncreased)
+            {
+                _logger.LogInformation($"Package {packageId} rooms increased from {previousRooms} to {dto.AvailableRooms}. Waiting list should be processed.");
+            }
+
             _logger.LogInformation($"Updated package: {package.Destination} (ID: {package.PackageId})");
-            return package;
+            return (package, roomsIncreased, previousRooms);
+        }
+
+        public async Task<TravelPackage> UpdatePackageAsync(int packageId, TravelPackageDto dto)
+        {
+            var result = await UpdatePackageWithRoomTrackingAsync(packageId, dto);
+            return result.Package;
         }
 
         public async Task<bool> DeletePackageAsync(int packageId)
@@ -203,7 +223,7 @@ namespace TRAVEL.Services
             var query = _context.TravelPackages
                 .Include(p => p.Images)
                 .Include(p => p.Reviews)
-                .Where(p => p.IsActive && p.EndDate >= DateTime.UtcNow.Date);  // FIXED: Same as GetActivePackagesAsync
+                .Where(p => p.IsActive && p.EndDate >= DateTime.UtcNow.Date);
 
             if (!string.IsNullOrEmpty(criteria.Destination))
                 query = query.Where(p => p.Destination.Contains(criteria.Destination));
@@ -241,9 +261,9 @@ namespace TRAVEL.Services
                 "date" => criteria.SortDescending
                     ? query.OrderByDescending(p => p.StartDate)
                     : query.OrderBy(p => p.StartDate),
-                "rating" => criteria.SortDescending
-                    ? query.OrderByDescending(p => p.Reviews.Any() ? p.Reviews.Average(r => r.Rating) : 0)
-                    : query.OrderBy(p => p.Reviews.Any() ? p.Reviews.Average(r => r.Rating) : 0),
+                "name" => criteria.SortDescending
+                    ? query.OrderByDescending(p => p.Destination)
+                    : query.OrderBy(p => p.Destination),
                 _ => query.OrderBy(p => p.StartDate)
             };
 
@@ -256,14 +276,6 @@ namespace TRAVEL.Services
             if (package == null)
                 return false;
 
-            // Validate discount
-            if (discountedPrice >= package.Price)
-                return false;
-
-            // Max 7 days discount period
-            if ((endDate - startDate).TotalDays > 7)
-                return false;
-
             package.DiscountedPrice = discountedPrice;
             package.DiscountStartDate = DateTime.SpecifyKind(startDate, DateTimeKind.Utc);
             package.DiscountEndDate = DateTime.SpecifyKind(endDate, DateTimeKind.Utc);
@@ -271,7 +283,7 @@ namespace TRAVEL.Services
 
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation($"Applied discount to package {packageId}: ${discountedPrice} from {startDate} to {endDate}");
+            _logger.LogInformation($"Discount applied to package {packageId}: ${discountedPrice} from {startDate} to {endDate}");
             return true;
         }
 
@@ -288,7 +300,7 @@ namespace TRAVEL.Services
 
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation($"Removed discount from package {packageId}");
+            _logger.LogInformation($"Discount removed from package {packageId}");
             return true;
         }
 
@@ -303,46 +315,55 @@ namespace TRAVEL.Services
 
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation($"Toggled package {packageId} status to {(package.IsActive ? "Active" : "Inactive")}");
+            _logger.LogInformation($"Package {packageId} status toggled to {package.IsActive}");
             return true;
         }
 
         public async Task<DashboardStats> GetDashboardStatsAsync()
         {
             var today = DateTime.UtcNow.Date;
+            var now = DateTime.UtcNow;
+
+            // Get all data for calculations
             var packages = await _context.TravelPackages.ToListAsync();
             var bookings = await _context.Bookings.ToListAsync();
             var users = await _context.Users.ToListAsync();
 
+            // Calculate revenue from confirmed bookings
+            var totalRevenue = bookings
+                .Where(b => b.Status == BookingStatus.Confirmed)
+                .Sum(b => b.TotalPrice);
+
             return new DashboardStats
             {
                 TotalPackages = packages.Count,
-                ActivePackages = packages.Count(p => p.IsActive && p.EndDate >= today),  // FIXED
+                ActivePackages = packages.Count(p => p.IsActive && p.EndDate >= today),
                 TotalBookings = bookings.Count,
                 ConfirmedBookings = bookings.Count(b => b.Status == BookingStatus.Confirmed),
                 PendingBookings = bookings.Count(b => b.Status == BookingStatus.Pending),
                 TotalUsers = users.Count,
                 ActiveUsers = users.Count(u => u.Status == UserStatus.Active),
                 FullyBookedPackages = packages.Count(p => p.AvailableRooms == 0 && p.IsActive),
-                TotalRevenue = bookings.Where(b => b.Status == BookingStatus.Confirmed).Sum(b => b.TotalPrice),
+                TotalRevenue = totalRevenue,
                 PackagesOnSale = packages.Count(p =>
                     p.DiscountedPrice.HasValue &&
-                    p.DiscountStartDate <= DateTime.UtcNow &&
-                    p.DiscountEndDate >= DateTime.UtcNow)
+                    p.DiscountStartDate <= now &&
+                    p.DiscountEndDate >= now)
             };
         }
 
         public async Task<List<TravelPackage>> GetDiscountedPackagesAsync()
         {
-            var now = DateTime.UtcNow;
+            var today = DateTime.UtcNow.Date;
+
             return await _context.TravelPackages
                 .Include(p => p.Images)
-                .Include(p => p.Reviews)
                 .Where(p => p.IsActive &&
+                           p.EndDate >= today &&
                            p.DiscountedPrice.HasValue &&
-                           p.DiscountStartDate <= now &&
-                           p.DiscountEndDate >= now)
-                .OrderByDescending(p => (p.Price - p.DiscountedPrice.Value) / p.Price)
+                           p.DiscountStartDate <= DateTime.UtcNow &&
+                           p.DiscountEndDate >= DateTime.UtcNow)
+                .OrderBy(p => p.DiscountedPrice)
                 .ToListAsync();
         }
 
@@ -352,18 +373,15 @@ namespace TRAVEL.Services
 
             return await _context.TravelPackages
                 .Include(p => p.Images)
-                .Include(p => p.Reviews)
                 .Include(p => p.Bookings)
-                .Where(p => p.IsActive && p.EndDate >= today)  // FIXED
+                .Where(p => p.IsActive && p.EndDate >= today)
                 .OrderByDescending(p => p.Bookings.Count)
-                .ThenByDescending(p => p.Reviews.Any() ? p.Reviews.Average(r => r.Rating) : 0)
                 .Take(count)
                 .ToListAsync();
         }
     }
 
-    // ===== DTOs =====
-
+    // DTO and helper classes
     public class TravelPackageDto
     {
         public string Destination { get; set; }
@@ -371,6 +389,9 @@ namespace TRAVEL.Services
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public decimal Price { get; set; }
+        public decimal? DiscountedPrice { get; set; }
+        public DateTime? DiscountStartDate { get; set; }
+        public DateTime? DiscountEndDate { get; set; }
         public int AvailableRooms { get; set; }
         public PackageType PackageType { get; set; }
         public int? MinimumAge { get; set; }
@@ -380,9 +401,6 @@ namespace TRAVEL.Services
         public string ImageUrl { get; set; }
         public List<string> ImageUrls { get; set; }
         public bool IsActive { get; set; } = true;
-        public decimal? DiscountedPrice { get; set; }
-        public DateTime? DiscountStartDate { get; set; }
-        public DateTime? DiscountEndDate { get; set; }
     }
 
     public class PackageSearchCriteria
@@ -403,19 +421,12 @@ namespace TRAVEL.Services
         public int TotalPackages { get; set; }
         public int ActivePackages { get; set; }
         public int TotalBookings { get; set; }
-        public int ConfirmedBookings { get; set; }
         public int PendingBookings { get; set; }
+        public int ConfirmedBookings { get; set; }
+        public decimal TotalRevenue { get; set; }
         public int TotalUsers { get; set; }
         public int ActiveUsers { get; set; }
         public int FullyBookedPackages { get; set; }
-        public decimal TotalRevenue { get; set; }
         public int PackagesOnSale { get; set; }
-    }
-
-    public class ApplyDiscountRequest
-    {
-        public decimal DiscountedPrice { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
     }
 }

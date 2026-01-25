@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,33 +16,34 @@ namespace TRAVEL.Controllers
     [Produces("application/json")]
     public class PaymentController : ControllerBase
     {
+        private readonly TravelDbContext _context;
         private readonly IPaymentService _paymentService;
         private readonly IBookingService _bookingService;
-        private readonly TravelDbContext _context;
+        private readonly IPayPalService _payPalService;
         private readonly ILogger<PaymentController> _logger;
 
         public PaymentController(
+            TravelDbContext context,
             IPaymentService paymentService,
             IBookingService bookingService,
-            TravelDbContext context,
+            IPayPalService payPalService,
             ILogger<PaymentController> logger)
         {
+            _context = context;
             _paymentService = paymentService;
             _bookingService = bookingService;
-            _context = context;
+            _payPalService = payPalService;
             _logger = logger;
         }
 
         private int GetUserId()
         {
-            var userIdClaim = User.FindFirst("UserId")?.Value
-                ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            var userIdClaim = User.FindFirst("UserId")?.Value;
             return int.TryParse(userIdClaim, out int userId) ? userId : 0;
         }
 
         /// <summary>
-        /// Process payment for a booking (Credit Card)
-        /// IMPORTANT: Card details are NOT stored
+        /// Process credit card payment
         /// </summary>
         [HttpPost]
         [Authorize]
@@ -50,18 +53,8 @@ namespace TRAVEL.Controllers
             if (userId == 0)
                 return Unauthorized(new { success = false, message = "User not authenticated" });
 
-            // Validate request
             if (request.BookingId <= 0)
                 return BadRequest(new { success = false, message = "Invalid booking ID" });
-
-            if (string.IsNullOrEmpty(request.CardNumber))
-                return BadRequest(new { success = false, message = "Card number is required" });
-
-            if (string.IsNullOrEmpty(request.CardHolderName))
-                return BadRequest(new { success = false, message = "Card holder name is required" });
-
-            if (string.IsNullOrEmpty(request.CVV))
-                return BadRequest(new { success = false, message = "CVV is required" });
 
             // Verify booking belongs to user
             var booking = await _bookingService.GetBookingByIdAsync(request.BookingId);
@@ -108,7 +101,7 @@ namespace TRAVEL.Controllers
         }
 
         /// <summary>
-        /// Initiate PayPal payment
+        /// Initiate PayPal payment - Returns approval URL for redirection
         /// </summary>
         [HttpPost("paypal/initiate")]
         [Authorize]
@@ -138,23 +131,43 @@ namespace TRAVEL.Controllers
 
             try
             {
-                // Generate PayPal order ID
-                var orderId = "PAYPAL-" + GenerateTransactionId();
                 var baseUrl = $"{Request.Scheme}://{Request.Host}";
+                var returnUrl = request.ReturnUrl ?? $"{baseUrl}/booking/payment/success?bookingId={request.BookingId}";
+                var cancelUrl = request.CancelUrl ?? $"{baseUrl}/booking/payment/{request.BookingId}?cancelled=true";
 
-                var returnUrl = request.ReturnUrl ?? $"{baseUrl}/booking/payment/success?bookingId={request.BookingId}&orderId={orderId}";
+                // Create PayPal order using PayPal Service
+                var paypalResponse = await _payPalService.CreateOrderAsync(
+                    booking.TotalPrice,
+                    "USD",
+                    booking.BookingReference,
+                    returnUrl,
+                    cancelUrl
+                );
 
-                _logger.LogInformation($"PayPal payment initiated for booking {request.BookingId}, Order: {orderId}");
+                if (!paypalResponse.Success)
+                {
+                    _logger.LogError($"PayPal order creation failed: {paypalResponse.ErrorMessage}");
+                    return StatusCode(500, new { success = false, message = paypalResponse.ErrorMessage ?? "Failed to create PayPal order" });
+                }
+
+                // Store PayPal order ID temporarily (you might want to save this to database)
+                // For now, we'll return it to the client
+
+                _logger.LogInformation($"PayPal payment initiated for booking {request.BookingId}, Order: {paypalResponse.OrderId}");
 
                 return Ok(new
                 {
                     success = true,
                     data = new
                     {
-                        orderId = orderId,
-                        approvalUrl = returnUrl,
-                        status = "CREATED"
-                    }
+                        orderId = paypalResponse.OrderId,
+                        approvalUrl = paypalResponse.ApprovalUrl,  // URL to redirect user to PayPal
+                        status = paypalResponse.Status,
+                        isSimulated = paypalResponse.IsSimulated
+                    },
+                    message = paypalResponse.IsSimulated
+                        ? "PayPal sandbox mode - Click approval URL to simulate payment"
+                        : "Redirect user to approvalUrl to complete payment"
                 });
             }
             catch (Exception ex)
@@ -165,7 +178,8 @@ namespace TRAVEL.Controllers
         }
 
         /// <summary>
-        /// Capture/Complete PayPal payment - handles directly without card validation
+        /// Capture/Complete PayPal payment after user approval
+        /// Called after user returns from PayPal
         /// </summary>
         [HttpPost("paypal/capture")]
         [Authorize]
@@ -183,7 +197,7 @@ namespace TRAVEL.Controllers
 
             try
             {
-                // Get booking directly from database
+                // Get booking
                 var booking = await _context.Bookings
                     .Include(b => b.TravelPackage)
                     .FirstOrDefaultAsync(b => b.BookingId == request.BookingId);
@@ -201,14 +215,23 @@ namespace TRAVEL.Controllers
                 if (existingPayment != null)
                     return BadRequest(new { success = false, message = "Booking already paid" });
 
-                // Create PayPal payment record directly (bypass card validation)
+                // Capture payment via PayPal
+                var captureResponse = await _payPalService.CaptureOrderAsync(request.OrderId);
+
+                if (!captureResponse.Success)
+                {
+                    _logger.LogError($"PayPal capture failed: {captureResponse.ErrorMessage}");
+                    return BadRequest(new { success = false, message = captureResponse.ErrorMessage ?? "PayPal capture failed" });
+                }
+
+                // Create payment record
                 var payment = new Payment
                 {
                     BookingId = request.BookingId,
                     Amount = booking.TotalPrice,
                     PaymentMethod = PaymentMethod.PayPal,
                     Status = PaymentStatus.Completed,
-                    TransactionId = request.OrderId,
+                    TransactionId = captureResponse.TransactionId ?? request.OrderId,
                     PaymentDate = DateTime.UtcNow,
                     CompletedDate = DateTime.UtcNow
                 };
@@ -228,7 +251,7 @@ namespace TRAVEL.Controllers
 
                 await _context.SaveChangesAsync();
 
-                _logger.LogInformation($"PayPal payment captured for booking {request.BookingId}, Order: {request.OrderId}");
+                _logger.LogInformation($"PayPal payment captured for booking {request.BookingId}, Transaction: {captureResponse.TransactionId}");
 
                 return Ok(new
                 {
@@ -237,7 +260,8 @@ namespace TRAVEL.Controllers
                     data = new
                     {
                         paymentId = payment.PaymentId,
-                        transactionId = request.OrderId,
+                        transactionId = captureResponse.TransactionId,
+                        orderId = request.OrderId,
                         amount = payment.Amount,
                         status = "Completed",
                         paymentDate = payment.PaymentDate
@@ -249,6 +273,33 @@ namespace TRAVEL.Controllers
                 _logger.LogError(ex, $"PayPal capture failed for booking {request.BookingId}");
                 return StatusCode(500, new { success = false, message = "Failed to capture PayPal payment", error = ex.Message });
             }
+        }
+
+        /// <summary>
+        /// Handle PayPal return - Called when user returns from PayPal
+        /// This is a GET endpoint for the redirect
+        /// </summary>
+        [HttpGet("paypal/return")]
+        public async Task<IActionResult> PayPalReturn([FromQuery] string token, [FromQuery] string PayerID, [FromQuery] int bookingId)
+        {
+            _logger.LogInformation($"PayPal return: token={token}, PayerID={PayerID}, bookingId={bookingId}");
+
+            // Redirect to payment success page with the order details
+            // The frontend will then call the capture endpoint
+            var redirectUrl = $"/booking/payment/success?bookingId={bookingId}&orderId={token}&payerId={PayerID}";
+
+            return Redirect(redirectUrl);
+        }
+
+        /// <summary>
+        /// Handle PayPal cancel - Called when user cancels on PayPal
+        /// </summary>
+        [HttpGet("paypal/cancel")]
+        public IActionResult PayPalCancel([FromQuery] int bookingId)
+        {
+            _logger.LogInformation($"PayPal payment cancelled for booking {bookingId}");
+
+            return Redirect($"/booking/payment/{bookingId}?cancelled=true");
         }
 
         /// <summary>
@@ -307,14 +358,9 @@ namespace TRAVEL.Controllers
 
             return Ok(new { success = true, message = result.Message });
         }
-
-        // Helper method
-        private string GenerateTransactionId()
-        {
-            return DateTime.UtcNow.ToString("yyyyMMddHHmmss") + new Random().Next(1000, 9999);
-        }
     }
 
+    // DTOs
     public class PaymentRequestDto
     {
         public int BookingId { get; set; }

@@ -17,13 +17,16 @@ namespace TRAVEL.Controllers
     public class TravelPackageController : ControllerBase
     {
         private readonly ITravelPackageService _packageService;
+        private readonly IBookingService _bookingService; // Added for waiting list processing
         private readonly ILogger<TravelPackageController> _logger;
 
         public TravelPackageController(
             ITravelPackageService packageService,
+            IBookingService bookingService, // Inject booking service
             ILogger<TravelPackageController> logger)
         {
             _packageService = packageService;
+            _bookingService = bookingService;
             _logger = logger;
         }
 
@@ -53,7 +56,6 @@ namespace TRAVEL.Controllers
                 imageUrl = p.ImageUrl,
                 createdAt = p.CreatedAt,
                 updatedAt = p.UpdatedAt,
-                // Map images without back-reference
                 images = p.Images?.Select(img => new
                 {
                     imageId = img.ImageId,
@@ -61,7 +63,6 @@ namespace TRAVEL.Controllers
                     altText = img.AltText,
                     displayOrder = img.DisplayOrder
                 }).ToList(),
-                // Map reviews without back-reference
                 reviews = p.Reviews?.Where(r => r.IsApproved).Select(r => new
                 {
                     reviewId = r.ReviewId,
@@ -71,87 +72,77 @@ namespace TRAVEL.Controllers
                     createdAt = r.CreatedAt,
                     isApproved = r.IsApproved
                 }).ToList(),
-                // Count bookings instead of including them (to avoid circular reference)
                 bookingCount = p.Bookings?.Count ?? 0
             };
         }
 
         /// <summary>
-        /// Get all active packages
+        /// Get all packages (public)
         /// </summary>
         [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetPackages()
+        public async Task<IActionResult> GetAllPackages()
         {
             var packages = await _packageService.GetActivePackagesAsync();
-            var result = packages.Select(p => MapPackageToDto(p)).ToList();
+            var result = packages.Select(MapPackageToDto).ToList();
             return Ok(new { success = true, data = result, count = result.Count });
         }
 
         /// <summary>
-        /// Get all packages (admin)
+        /// Get all packages including inactive (Admin only)
         /// </summary>
         [HttpGet("all")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetAllPackages()
+        public async Task<IActionResult> GetAllPackagesAdmin()
         {
             var packages = await _packageService.GetAllPackagesAsync();
-            var result = packages.Select(p => MapPackageToDto(p)).ToList();
+            var result = packages.Select(MapPackageToDto).ToList();
             return Ok(new { success = true, data = result, count = result.Count });
         }
 
         /// <summary>
-        /// Get package by ID - FIXED to return DTO without circular references
+        /// Get package by ID
         /// </summary>
         [HttpGet("{id}")]
-        [AllowAnonymous]
         public async Task<IActionResult> GetPackage(int id)
         {
             var package = await _packageService.GetPackageByIdAsync(id);
             if (package == null)
                 return NotFound(new { success = false, message = "Package not found" });
 
-            // Calculate average rating
-            double avgRating = 0;
-            int reviewCount = 0;
-            if (package.Reviews != null && package.Reviews.Count > 0)
-            {
-                double sum = 0;
-                int count = 0;
-                foreach (var review in package.Reviews)
-                {
-                    if (review.IsApproved)
-                    {
-                        sum += review.Rating;
-                        count++;
-                    }
-                }
-                if (count > 0)
-                    avgRating = sum / count;
-                reviewCount = count;
-            }
-
-            // Map to DTO to avoid circular reference
-            var packageDto = MapPackageToDto(package);
-
-            return Ok(new
-            {
-                success = true,
-                data = packageDto,
-                averageRating = Math.Round(avgRating, 1),
-                reviewCount = reviewCount
-            });
+            return Ok(new { success = true, data = MapPackageToDto(package) });
         }
 
         /// <summary>
-        /// Get popular packages
+        /// Search packages with filters
         /// </summary>
-        [HttpGet("popular")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetPopularPackages([FromQuery] int limit = 6)
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchPackages(
+            [FromQuery] string destination,
+            [FromQuery] string country,
+            [FromQuery] PackageType? type,
+            [FromQuery] decimal? minPrice,
+            [FromQuery] decimal? maxPrice,
+            [FromQuery] DateTime? startDate,
+            [FromQuery] DateTime? endDate,
+            [FromQuery] string sortBy,
+            [FromQuery] bool sortDesc = false)
         {
-            var packages = await _packageService.GetPopularPackagesAsync(limit);
-            var result = packages.Select(p => MapPackageToDto(p)).ToList();
+            var criteria = new PackageSearchCriteria
+            {
+                Destination = destination,
+                Country = country,
+                PackageType = type,
+                MinPrice = minPrice,
+                MaxPrice = maxPrice,
+                StartDate = startDate,
+                EndDate = endDate,
+                SortBy = sortBy,
+                SortDescending = sortDesc
+            };
+
+            var packages = await _packageService.SearchPackagesAsync(criteria);
+            var result = packages.Select(MapPackageToDto).ToList();
+
             return Ok(new { success = true, data = result, count = result.Count });
         }
 
@@ -159,58 +150,22 @@ namespace TRAVEL.Controllers
         /// Get discounted packages
         /// </summary>
         [HttpGet("discounted")]
-        [AllowAnonymous]
         public async Task<IActionResult> GetDiscountedPackages()
         {
             var packages = await _packageService.GetDiscountedPackagesAsync();
-            var result = packages.Select(p => MapPackageToDto(p)).ToList();
+            var result = packages.Select(MapPackageToDto).ToList();
             return Ok(new { success = true, data = result, count = result.Count });
         }
 
         /// <summary>
-        /// Search packages using criteria object
+        /// Get popular packages
         /// </summary>
-        [HttpPost("search")]
-        [AllowAnonymous]
-        public async Task<IActionResult> SearchPackages([FromBody] PackageSearchCriteria criteria)
+        [HttpGet("popular")]
+        public async Task<IActionResult> GetPopularPackages([FromQuery] int count = 10)
         {
-            var packages = await _packageService.SearchPackagesAsync(criteria);
-            var result = packages.Select(p => MapPackageToDto(p)).ToList();
+            var packages = await _packageService.GetPopularPackagesAsync(count);
+            var result = packages.Select(MapPackageToDto).ToList();
             return Ok(new { success = true, data = result, count = result.Count });
-        }
-
-        /// <summary>
-        /// Get unique countries
-        /// </summary>
-        [HttpGet("countries")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetCountries()
-        {
-            var packages = await _packageService.GetActivePackagesAsync();
-            var countries = packages
-                .Where(p => !string.IsNullOrEmpty(p.Country))
-                .Select(p => p.Country)
-                .Distinct()
-                .OrderBy(c => c)
-                .ToList();
-            return Ok(new { success = true, data = countries });
-        }
-
-        /// <summary>
-        /// Get unique destinations
-        /// </summary>
-        [HttpGet("destinations")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetDestinations()
-        {
-            var packages = await _packageService.GetActivePackagesAsync();
-            var destinations = packages
-                .Where(p => !string.IsNullOrEmpty(p.Destination))
-                .Select(p => p.Destination)
-                .Distinct()
-                .OrderBy(d => d)
-                .ToList();
-            return Ok(new { success = true, data = destinations });
         }
 
         /// <summary>
@@ -220,33 +175,17 @@ namespace TRAVEL.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreatePackage([FromBody] TravelPackageDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(new { success = false, message = "Invalid data", errors = ModelState });
+
             try
             {
-                if (!ModelState.IsValid)
-                    return BadRequest(new { success = false, message = "Invalid data", errors = ModelState });
+                var package = await _packageService.CreatePackageAsync(dto);
+                _logger.LogInformation($"Package created: {package.Destination}");
 
-                if (string.IsNullOrEmpty(dto.Destination))
-                    return BadRequest(new { success = false, message = "Destination is required" });
-
-                if (string.IsNullOrEmpty(dto.Country))
-                    return BadRequest(new { success = false, message = "Country is required" });
-
-                if (dto.Price <= 0)
-                    return BadRequest(new { success = false, message = "Price must be greater than zero" });
-
-                // Ensure dates are in UTC
-                dto.StartDate = DateTime.SpecifyKind(dto.StartDate, DateTimeKind.Utc);
-                dto.EndDate = DateTime.SpecifyKind(dto.EndDate, DateTimeKind.Utc);
-
-                if (dto.EndDate <= dto.StartDate)
-                    return BadRequest(new { success = false, message = "End date must be after start date" });
-
-                var createdPackage = await _packageService.CreatePackageAsync(dto);
-
-                _logger.LogInformation($"Package created: {createdPackage.PackageId} - {createdPackage.Destination}");
-
-                return CreatedAtAction(nameof(GetPackage), new { id = createdPackage.PackageId },
-                    new { success = true, message = "Package created successfully", data = MapPackageToDto(createdPackage) });
+                return CreatedAtAction(nameof(GetPackage),
+                    new { id = package.PackageId },
+                    new { success = true, message = "Package created successfully", data = MapPackageToDto(package) });
             }
             catch (Exception ex)
             {
@@ -256,30 +195,43 @@ namespace TRAVEL.Controllers
         }
 
         /// <summary>
-        /// Update package (Admin only)
+        /// Update package (Admin only) - NOW PROCESSES WAITING LIST WHEN ROOMS INCREASE
         /// </summary>
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdatePackage(int id, [FromBody] TravelPackageDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(new { success = false, message = "Invalid data", errors = ModelState });
+
             try
             {
-                var existing = await _packageService.GetPackageByIdAsync(id);
-                if (existing == null)
-                    return NotFound(new { success = false, message = "Package not found" });
-
-                // Ensure dates are in UTC
-                dto.StartDate = DateTime.SpecifyKind(dto.StartDate, DateTimeKind.Utc);
-                dto.EndDate = DateTime.SpecifyKind(dto.EndDate, DateTimeKind.Utc);
-
-                var updated = await _packageService.UpdatePackageAsync(id, dto);
+                // Use the new method that tracks room changes
+                var (updated, roomsIncreased, previousRooms) = await _packageService.UpdatePackageWithRoomTrackingAsync(id, dto);
 
                 if (updated == null)
                     return NotFound(new { success = false, message = "Package not found" });
 
-                _logger.LogInformation($"Package updated: {id}");
+                // **KEY FIX: Process waiting list if rooms were increased**
+                if (roomsIncreased && updated.AvailableRooms > 0)
+                {
+                    _logger.LogInformation($"Rooms increased for package {id} from {previousRooms} to {updated.AvailableRooms}. Processing waiting list...");
 
-                return Ok(new { success = true, message = "Package updated successfully", data = MapPackageToDto(updated) });
+                    // Process waiting list - this will send email notifications to users in the queue
+                    await _bookingService.ProcessWaitingListAsync(id);
+
+                    _logger.LogInformation($"Waiting list processed for package {id}");
+                }
+
+                return Ok(new
+                {
+                    success = true,
+                    message = roomsIncreased
+                        ? "Package updated successfully. Waiting list users have been notified."
+                        : "Package updated successfully",
+                    data = MapPackageToDto(updated),
+                    waitingListProcessed = roomsIncreased
+                });
             }
             catch (Exception ex)
             {
@@ -326,7 +278,7 @@ namespace TRAVEL.Controllers
             var package = await _packageService.GetPackageByIdAsync(id);
             _logger.LogInformation($"Package {id} active status toggled to {package?.IsActive}");
 
-            return Ok(new { success = true, message = $"Package {(package?.IsActive == true ? "activated" : "deactivated")} successfully", isActive = package?.IsActive });
+            return Ok(new { success = true, message = $"Package {(package?.IsActive == true ? "activated" : "deactivated")} successfully" });
         }
 
         /// <summary>
@@ -336,6 +288,9 @@ namespace TRAVEL.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ApplyDiscount(int id, [FromBody] ApplyDiscountRequest request)
         {
+            if (request.DiscountedPrice <= 0)
+                return BadRequest(new { success = false, message = "Discounted price must be greater than 0" });
+
             var package = await _packageService.GetPackageByIdAsync(id);
             if (package == null)
                 return NotFound(new { success = false, message = "Package not found" });
@@ -343,13 +298,18 @@ namespace TRAVEL.Controllers
             if (request.DiscountedPrice >= package.Price)
                 return BadRequest(new { success = false, message = "Discounted price must be less than original price" });
 
-            var startDate = DateTime.SpecifyKind(request.StartDate, DateTimeKind.Utc);
-            var endDate = DateTime.SpecifyKind(request.EndDate, DateTimeKind.Utc);
-
-            var result = await _packageService.ApplyDiscountAsync(id, request.DiscountedPrice, startDate, endDate);
+            var result = await _packageService.ApplyDiscountAsync(id, request.DiscountedPrice, request.StartDate, request.EndDate);
 
             if (!result)
-                return BadRequest(new { success = false, message = "Failed to apply discount. Discount duration may exceed 1 week." });
+                return StatusCode(500, new { success = false, message = "Failed to apply discount" });
+
+            // Check if discount duration exceeds 7 days
+            var duration = (request.EndDate - request.StartDate).TotalDays;
+            if (duration > 7)
+                _logger.LogWarning($"Discount duration for package {id} exceeds 7 days: {duration} days");
+
+            if (duration > 7)
+                return Ok(new { success = true, message = "Discount applied successfully", warning = "Discount duration may exceed 1 week." });
 
             _logger.LogInformation($"Discount applied to package {id}");
 
@@ -389,6 +349,36 @@ namespace TRAVEL.Controllers
             {
                 _logger.LogError(ex, "Error getting package stats");
                 return StatusCode(500, new { success = false, message = "An error occurred while fetching statistics" });
+            }
+        }
+
+        /// <summary>
+        /// Manually trigger waiting list processing (Admin only)
+        /// Useful when admin wants to manually notify waiting users
+        /// </summary>
+        [HttpPost("{id}/process-waiting-list")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ProcessWaitingList(int id)
+        {
+            try
+            {
+                var package = await _packageService.GetPackageByIdAsync(id);
+                if (package == null)
+                    return NotFound(new { success = false, message = "Package not found" });
+
+                if (package.AvailableRooms <= 0)
+                    return BadRequest(new { success = false, message = "No rooms available to process waiting list" });
+
+                await _bookingService.ProcessWaitingListAsync(id);
+
+                _logger.LogInformation($"Waiting list manually processed for package {id}");
+
+                return Ok(new { success = true, message = "Waiting list processed. Users have been notified if eligible." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error processing waiting list for package {id}");
+                return StatusCode(500, new { success = false, message = "An error occurred while processing the waiting list" });
             }
         }
     }
